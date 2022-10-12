@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 use Google\Client;
 use Revolution\Google\Sheets\Facades\Sheets;
@@ -18,6 +20,7 @@ use App\Models\Property;
 use App\Models\Event as EventModel;
 
 use Storage;
+use DB;
 
 class HomeController extends Controller
 {
@@ -40,24 +43,77 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index (Request $request) {
-
-        // $files = Storage::disk('google')->allFiles();
-        // dd($files);
-
-        $properties = Property::with('sheet', 'events');
         
+        $properties = [];
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $properties->whereHas('events', function(Builder $query) use ($request) {
-                $query->whereDate('start', '>=', date('Y-m-d H:i:s', strtotime($request->start_date)))
-                        ->whereDate('end', '<=', date('Y-m-d', strtotime($request->end_date)) . ' 23:59:59');
-            });
+            
+            $startDate = date('Y-m-d', strtotime($request->start_date));
+            $endDate = date('Y-m-d', strtotime($request->end_date));
+            $page = ($request->filled('page')) ? (int) $request->page : 1;
+            $paginate = 10;
+
+            $query = 'SELECT
+                    properties.id, 
+                    properties.name, 
+                    properties.property_id, 
+                    properties.account, 
+                    properties.description,
+                    sheets.name as sheet_name,
+                    SUM(IF((CAST("'.$startDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end) OR CAST("'.$endDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end)), 1, 0))  as total_bookings
+                FROM
+                    properties
+                LEFT JOIN `events` ON events.property_id = properties.id
+                LEFT JOIN `sheets` ON properties.sheet_id = sheets.id 
+                GROUP BY
+                    properties.id,properties.property_id
+                HAVING total_bookings = 0
+                ORDER BY `properties`.`id`  ASC';
+
+            $properties = DB::select(DB::raw($query));
+            $offset = ($page * $paginate) - $paginate ;
+            $itemstoshow = array_slice($properties , $offset , $paginate);
+            $properties = new LengthAwarePaginator($itemstoshow, count($properties), $paginate, $page, ['path' => $request->url() ]);
+            
+            
+            // DB::enableQueryLog();
+            // $properties = Property::select(
+            //                     'properties.*',
+            //                     DB::raw('IF((CAST("'. $startDate .'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end) OR CAST("'. $endDate .'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end)), 1, 0)  as total_bookings')
+            //                 )
+            //                 ->leftJoin('events', 'events.property_id', '=', 'properties.id')
+            //                 //->with('sheet')
+            //                 ->groupBy('properties.id', 'properties.property_id', 'properties.name')
+            //                 //->having('total_bookings', 0)
+            //                 ->get();
+            // dd(DB::getQueryLog());
+
+            //dd($properties->toArray());
         }
 
-        // $properties = $properties->get();
-        // dd($properties->toArray());
-        $properties = $properties->paginate(10);
-
         return view('properties', compact('properties'));
+    }
+    
+    public function paginate($items , $perpage ){
+        $total = count($items);
+        $currentpage = \Request::get('page', 1);
+        $offset = ($currentpage * $perpage) - $perpage ;
+        $itemstoshow = array_slice($items , $offset , $perpage);
+        $p = new LengthAwarePaginator($itemstoshow ,$total ,$perpage);
+        $p->setPath(\Request::url());
+
+        return $p;
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show ($id) {
+
+        $property = Property::with('sheet', 'events');
+
+        return view('property-detail', compact('property'));
     }
 
     /**

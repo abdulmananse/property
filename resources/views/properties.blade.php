@@ -65,17 +65,19 @@
                             </div>
                             </div>
                             <div class="col-md-9 col-lg-9 col-xl-9">
-                                <h5> {{ $property->name }} </h5>
+                                <h5><a href="javascript:void(0)" style="color:black;text-decoration: none;" > 
+                                    {{ $property->name }} 
+                                </a></h5>
 
                             <div class="mt-1 mb-0 text-muted small">
-                                <span>{{ str_replace('*', '',@$property->sheet->name) }}</span>
+                                <span>{{ str_replace('*', '',@$property->sheet_name) }}</span>
                                 <span class="text-primary"> • </span>
                                 <span>{{ $property->property_id }}</span>
                                 <span class="text-primary"> • </span>
                                 <span>{{ $property->account }}</span>
                             </div>
                             <p class="text-truncate1 mb-4 mb-md-0">
-                                {!! $property->short_description !!}
+                                {!! Str::words($property->description, 50, '...') !!}
                             </p>
 
                             </div>
@@ -117,10 +119,12 @@
                 </div>
                 @endforelse
 
+                @if($properties)
                 <div class="row justify-content-center float-end pt-3">
                     {!! $properties->appends($_GET)->links('pagination::bootstrap-4') !!}
+                    {{-- 'pagination::bootstrap-4' --}}
                 </div>
-
+                @endif
             </div>
 
         </section>

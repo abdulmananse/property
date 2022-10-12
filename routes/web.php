@@ -16,6 +16,7 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('detail/{id}', [HomeController::class, 'show']);
 Route::get('import-sheets', [HomeController::class, 'importSheets']);
 Route::get('import-properties/{sheetId?}', [HomeController::class, 'importProperties']);
 Route::get('import-calander/{propertyId?}', [HomeController::class, 'importCalander']);
