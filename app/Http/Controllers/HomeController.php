@@ -31,7 +31,7 @@ class HomeController extends Controller
      */
     public $spreadsheetId;
 
-    
+
     public function __construct()
     {
         $this->spreadsheetId = config('sheets.post_spreadsheet_id');
@@ -43,38 +43,48 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index (Request $request) {
-        
+
         $properties = [];
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            
-            $startDate = date('Y-m-d', strtotime($request->start_date));
-            $endDate = date('Y-m-d', strtotime($request->end_date));
+
+            $where = '';
+            if ($request->filled('city')) {
+                $city = $request->city;
+                $where = ' where city = "' . $city . '"';
+            }
+
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'); //m/d/Y
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d');
             $page = ($request->filled('page')) ? (int) $request->page : 1;
-            $paginate = 10;
+            $paginate = 50;
 
             $query = 'SELECT
-                    properties.id, 
-                    properties.name, 
-                    properties.property_id, 
-                    properties.account, 
-                    properties.description,
-                    sheets.name as sheet_name,
-                    SUM(IF((CAST("'.$startDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end) OR CAST("'.$endDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end)), 1, 0))  as total_bookings
-                FROM
-                    properties
+                    properties.id,
+                    properties.name,
+                    properties.property_id,
+                    properties.account,
+                    properties.country,
+                    properties.city,
+                    properties.property_type,
+                    properties.max_guests,
+                    properties.no_of_beds,
+                    properties.no_of_bathrooms,
+                    properties.no_of_bedrooms,
+                    SUM(IF((CAST("'.$startDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end)) OR (CAST("'.$endDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end)) OR (DATE(events.start) > CAST("'.$startDate.'" AS DATE) AND DATE(events.end) < CAST("'.$endDate.'" AS DATE)), 1, 0)) as total_bookings
+                FROM properties
                 LEFT JOIN `events` ON events.property_id = properties.id
-                LEFT JOIN `sheets` ON properties.sheet_id = sheets.id 
+                '. $where .'
                 GROUP BY
                     properties.id,properties.property_id
                 HAVING total_bookings = 0
-                ORDER BY `properties`.`id`  ASC';
+                ORDER BY `properties`.`name`  ASC';
 
             $properties = DB::select(DB::raw($query));
             $offset = ($page * $paginate) - $paginate ;
             $itemstoshow = array_slice($properties , $offset , $paginate);
             $properties = new LengthAwarePaginator($itemstoshow, count($properties), $paginate, $page, ['path' => $request->url() ]);
-            
-            
+
+
             // DB::enableQueryLog();
             // $properties = Property::select(
             //                     'properties.*',
@@ -90,9 +100,11 @@ class HomeController extends Controller
             //dd($properties->toArray());
         }
 
-        return view('properties', compact('properties'));
+        $cities = Property::whereNotNull('city')->groupBy('city')->orderBY('city', 'ASC')->pluck('city');
+
+        return view('properties', compact('cities', 'properties'));
     }
-    
+
     public function paginate($items , $perpage ){
         $total = count($items);
         $currentpage = \Request::get('page', 1);
@@ -141,7 +153,7 @@ class HomeController extends Controller
      */
     public function importProperties ($sheetId) {
         ini_set('max_execution_time', 180);
-        
+
         $spreadsheetId = $this->spreadsheetId;
 
         $sheet = Sheet::where('name', $sheetId)->first();
@@ -157,7 +169,7 @@ class HomeController extends Controller
 
         dd('Properties Imported');
     }
-    
+
     /**
      * Import Calander
      *
@@ -165,9 +177,9 @@ class HomeController extends Controller
      */
     public function importCalander ($propertyId = 0) {
         ini_set('max_execution_time', 180000);
-        
+
         $spreadsheetId = $this->spreadsheetId;
-        
+
         $property = Property::where('property_id', $propertyId)->first();
         if ($propertyId != 0 && $property) {
             $this->getEventsFromIcsFile($property);
@@ -189,19 +201,19 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     private function savePropertyData ($sheet) {
-        
+
         $sheetId = $sheet->name;
         $spreadsheetId = $this->spreadsheetId;
         $sheetData = Sheets::spreadsheet($spreadsheetId)
                         ->sheet($sheetId)
                         ->get();
-                
+
         $header = $sheetData->pull(0);
-        $properties = Sheets::collection($header, $sheetData);   
+        $properties = Sheets::collection($header, $sheetData);
 
         foreach($properties as $property) {
             if (isset($property['Property ID'])) {
-                
+
                 $propertyId = str_replace(" ", "", $property['Property ID']);
                 if ($propertyId != '') {
 
@@ -213,7 +225,7 @@ class HomeController extends Controller
                     //if (!$propertyDbEx) { // remove after import
                         $pisSheetId = $this->getPisId($property);
                         $propertyInformation = $this->getPropertyInformation($pisSheetId);
-                        
+
                         $propertyData = [
                             'name' => @$property['Property Name'],
                             'account' => @$property['Account'],
@@ -231,7 +243,7 @@ class HomeController extends Controller
                         $propertyCompleteData = array_merge($propertyData, $propertyInformation);
 
                         $propertyDb = Property::updateOrCreate($where,$propertyCompleteData);
-                        
+
                         if ($propertyDb) {
                             //$this->getEventsFromIcsFile($propertyDb);
                         }
@@ -290,7 +302,7 @@ class HomeController extends Controller
                 if(isset($sheetData[4][4]) && @$sheetData[4][3] == 'Youtube Embed Link') {
                     $response['youtube_embed_link'] = $sheetData[4][4];
                 }
-                
+
                 if(isset($sheetData[6][4]) && @$sheetData[6][3] == 'Public Google Calendar') {
                     $response['google_calendar_link'] = $googleCalendarLink = $sheetData[6][4];
                     $calendarIdArr = explode('?src=', $googleCalendarLink);
@@ -300,52 +312,52 @@ class HomeController extends Controller
                             $response['google_calendar_id'] = $calendarIdArr[0];
                         }
                     }
-                }        
-                
+                }
+
                 if(isset($sheetData[7][4]) && @$sheetData[7][3] == 'Internal iCal link') {
                     $response['ical_link'] = $sheetData[7][4];
-                } 
+                }
 
                 if(isset($sheetData[28][4]) && $this->like(@$sheetData[28][3], 'Rating')) {
                     $response['property_rating'] = $sheetData[28][4];
                 }
-                
+
                 if(isset($sheetData[29][4]) && @$sheetData[29][3] == 'Property Type') {
                     $response['property_type'] = $sheetData[29][4];
                 }
-                
+
                 if(isset($sheetData[30][4]) && $this->like(@$sheetData[30][3], 'Design')) {
                     $response['design_type'] = $sheetData[30][4];
                 }
-                
+
                 if(isset($sheetData[31][4]) && $this->like(@$sheetData[31][3], 'Owner')) {
                     $response['owner_name'] = $sheetData[31][4];
                 }
-                
+
                 if(isset($sheetData[32][4]) && $this->like(@$sheetData[32][3], 'Manager')) {
                     $response['property_manager'] = $sheetData[32][4];
                 }
-                
+
                 if(isset($sheetData[33][4]) && $this->like(@$sheetData[33][3], 'Guest')) {
                     $response['max_guests'] = $sheetData[33][4];
                 }
-                
+
                 if(isset($sheetData[34][4]) && $this->like(@$sheetData[34][3], 'Beds')) {
                     $response['no_of_beds'] = $sheetData[34][4];
                 }
-                
+
                 if(isset($sheetData[35][4]) && $this->like(@$sheetData[35][3], 'Bathrooms')) {
                     $response['no_of_bathrooms'] = $sheetData[35][4];
                 }
-                
+
                 if(isset($sheetData[36][4]) && $this->like(@$sheetData[36][3], 'Bedrooms')) {
                     $response['no_of_bedrooms'] = $sheetData[36][4];
                 }
-                
+
                 if(isset($sheetData[37][4]) && @$sheetData[37][3] == 'Descriptive Text') {
                     $response['description'] = $sheetData[37][4];
                 }
-                
+
                 if(isset($sheetData[38][4]) && $this->like(@$sheetData[37][3], 'tag')) {
                     $response['tag_line'] = $sheetData[38][4];
                 }
@@ -357,75 +369,75 @@ class HomeController extends Controller
                 if(isset($sheetData[40][4]) && $this->like(@$sheetData[40][3], 'Complex')) {
                     $response['hotel_complex'] = $sheetData[40][4];
                 }
-                
+
                 if(isset($sheetData[41][4]) && $this->like(@$sheetData[41][3], 'Gated Community')) {
                     $response['gated_community'] = $sheetData[41][4];
                 }
-                
+
                 if(isset($sheetData[42][4]) && $this->like(@$sheetData[42][3], 'Eco Friendly')) {
                     $response['eco_friendly'] = $sheetData[42][4];
                 }
-                
+
                 if(isset($sheetData[43][4]) && $this->like(@$sheetData[43][3], 'View Types')) {
                     $response['view_types'] = $sheetData[43][4];
                 }
-                
+
                 if(isset($sheetData[44][4]) && $this->like(@$sheetData[44][3], 'Placement')) {
                     $response['placement_types'] = $sheetData[44][4];
                 }
-                
+
                 if(isset($sheetData[45][4]) && $this->like(@$sheetData[45][3], 'Curator')) {
                     $response['curator'] = $sheetData[45][4];
                 }
-                
+
                 if(isset($sheetData[47][4]) && $this->like(@$sheetData[47][3], 'Events')) {
                     $response['parties_events'] = $sheetData[47][4];
                 }
-                
+
                 if(isset($sheetData[48][4]) && $this->like(@$sheetData[48][3], 'Smoking')) {
                     $response['smoking'] = $sheetData[48][4];
                 }
-                
+
                 if(isset($sheetData[49][4]) && $this->like(@$sheetData[49][3], 'Smoking')) {
                     $response['pets'] = $sheetData[49][4];
                 }
-                
+
                 if(isset($sheetData[50][4]) && $this->like(@$sheetData[50][3], 'Adults')) {
                     $response['adults'] = $sheetData[50][4];
                 }
-                
+
                 if(isset($sheetData[51][4]) && $this->like(@$sheetData[51][3], 'Good to know')) {
                     $response['good_to_know'] = $sheetData[51][4];
                 }
-                
+
                 if(isset($sheetData[52][4]) && $this->like(@$sheetData[52][3], 'Coordinates')) {
                     $response['coordinates'] = $sheetData[52][4];
                 }
-                
+
                 if(isset($sheetData[53][4]) && $this->like(@$sheetData[53][3], 'Street')) {
                     $response['street'] = $sheetData[53][4];
                 }
-                
+
                 if(isset($sheetData[54][4]) && $this->like(@$sheetData[54][3], 'Zip Code')) {
                     $response['zip_code'] = $sheetData[54][4];
                 }
-                
+
                 if(isset($sheetData[55][4]) && $this->like(@$sheetData[55][3], 'City')) {
                     $response['city'] = $sheetData[55][4];
                 }
-                
+
                 if(isset($sheetData[56][4]) && $this->like(@$sheetData[56][3], 'Country')) {
                     $response['country'] = $sheetData[56][4];
                 }
-                
+
                 if(isset($sheetData[57][4]) && $this->like(@$sheetData[57][3], 'Location')) {
                     $response['location_description'] = $sheetData[57][4];
                 }
-                
+
                 if(isset($sheetData[58][4]) && $this->like(@$sheetData[58][3], 'Airport')) {
                     $response['airport'] = $sheetData[58][4];
                 }
-                
+
                 if(isset($sheetData[67][4]) && $this->like(@$sheetData[67][3], 'Other Room details')) {
                     $response['other_room_details'] = $sheetData[67][4];
                 }
@@ -446,11 +458,11 @@ class HomeController extends Controller
     private function getEventsFromIcsFile ($property) {
 
             if (@$property->ical_link) {
-            
+
                 $icalLink = $property->ical_link;
 
                 try {
-                    $ical = new ICal($icalLink, 
+                    $ical = new ICal($icalLink,
                     [
                         'defaultSpan'                 => 2,     // Default value
                         'defaultTimeZone'             => 'UTC',
@@ -467,7 +479,7 @@ class HomeController extends Controller
                         $this->createOrUpdateEvents($events, $ical, $property);
                     }
                 } catch (\Exception $e) {
-                    
+
                 }
         }
     }
@@ -492,7 +504,7 @@ class HomeController extends Controller
 
             $eventDb = EventModel::where($where)->first();
             if(!$eventDb) {
-                EventModel::updateOrCreate($where, 
+                EventModel::updateOrCreate($where,
                 [
                     'name' => $event->summary,
                     'duration' => $event->duration,
@@ -504,7 +516,7 @@ class HomeController extends Controller
                     'transp' => $event->transp,
                 ]);
             }
-            
+
         }
     }
 
