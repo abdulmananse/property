@@ -54,9 +54,15 @@ class HomeController extends Controller
             }
 
             $startDate = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'); //m/d/Y
+<<<<<<< HEAD
             $endDate = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d'); 
             $page = ($request->filled('page')) ? (int) $request->page : 1;
             $paginate = 9;
+=======
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d');
+            $page = ($request->filled('page')) ? (int) $request->page : 1;
+            $paginate = 50;
+>>>>>>> 8d36b0b794e90babcfea291ab593c3e4f380ad78
 
             $query = 'SELECT
                     properties.id,
@@ -64,7 +70,10 @@ class HomeController extends Controller
                     properties.property_id,
                     properties.account,
                     properties.country,
+<<<<<<< HEAD
                     properties.destination,
+=======
+>>>>>>> 8d36b0b794e90babcfea291ab593c3e4f380ad78
                     properties.city,
                     properties.property_type,
                     properties.max_guests,
@@ -101,8 +110,13 @@ class HomeController extends Controller
             //dd($properties->toArray());
         }
 
+<<<<<<< HEAD
         $cities = Property::whereNotNull('destination')->groupBy('destination')->pluck('destination');
         
+=======
+        $cities = Property::whereNotNull('city')->groupBy('city')->orderBY('city', 'ASC')->pluck('city');
+
+>>>>>>> 8d36b0b794e90babcfea291ab593c3e4f380ad78
         return view('properties', compact('cities', 'properties'));
     }
 
@@ -201,14 +215,22 @@ class HomeController extends Controller
      * @param $sheet
      * @return \Illuminate\Http\Response
      */
+<<<<<<< HEAD
     public function savePropertyData ($sheet) {
+=======
+    private function savePropertyData ($sheet) {
+>>>>>>> 8d36b0b794e90babcfea291ab593c3e4f380ad78
 
         $sheetId = $sheet->name;
         $spreadsheetId = $this->spreadsheetId;
         $sheetData = Sheets::spreadsheet($spreadsheetId)
                         ->sheet($sheetId)
                         ->get();
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 8d36b0b794e90babcfea291ab593c3e4f380ad78
         $header = $sheetData->pull(0);
         $properties = Sheets::collection($header, $sheetData);
 
