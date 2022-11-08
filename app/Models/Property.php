@@ -57,6 +57,7 @@ class Property extends Model
         'coordinates',
         'street',
         'zip_code',
+        'destination',
         'city',
         'country',
         'location_description',
