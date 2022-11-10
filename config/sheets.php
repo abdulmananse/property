@@ -2,7 +2,6 @@
 
 return [
     'post_spreadsheet_id' => env('POST_SPREADSHEET_ID'),
-    'post_sheet_id'       => env('POST_SHEET_ID'),
     'keys' => [
         ['index' => 4, 'value_index' => 5, 'db_key' => 'images_folder_link'],
         ['index' => 5, 'db_key' => 'youtube_embed_link'],

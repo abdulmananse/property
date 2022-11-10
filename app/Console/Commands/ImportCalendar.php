@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Property;
 use App\Http\Controllers\HomeController;
+use Carbon\Carbon;
 
 class ImportCalendar extends Command
 {
@@ -39,7 +40,10 @@ class ImportCalendar extends Command
      */
     public function handle()
     {
-        ini_set('max_execution_time', 1800);
+        ini_set('max_execution_time', 0);
+
+        $startDateTime = Carbon::now();
+        $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $propertyId = $this->argument('property_id');
         $homeController = app()->make(HomeController::class);
@@ -57,6 +61,10 @@ class ImportCalendar extends Command
                 $this->info($property->name . ' Calendar Imported');
             }
         }
+        $endDateTime = Carbon::now();
+        $this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
+
+        $this->info('TimeTaken' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
 
         return 0;
     }

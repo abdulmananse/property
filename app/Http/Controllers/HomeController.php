@@ -187,7 +187,7 @@ class HomeController extends Controller
      * @param $sheet
      * @return \Illuminate\Http\Response
      */
-    private function savePropertyData ($sheet) {
+    public function savePropertyData ($sheet) {
 
         $sheetId = $sheet->name;
         $spreadsheetId = $this->spreadsheetId;
@@ -197,7 +197,7 @@ class HomeController extends Controller
         $header = $sheetData->pull(0);
         $properties = Sheets::collection($header, $sheetData);
 
-        foreach($properties as $property) {
+        foreach($properties as $key => $property) {
             if (isset($property['Property ID'])) {
 
                 $propertyId = str_replace(" ", "", $property['Property ID']);
@@ -235,6 +235,8 @@ class HomeController extends Controller
                         }
                     //}
                     //dd('done 1');
+                    if($key % 4 === 0)
+                        sleep(2);
                 }
             }
         }
