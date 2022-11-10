@@ -5,6 +5,7 @@
 /storage/*.json
 /vendor
 .env
+credentials.json
 .env.backup
 .phpunit.result.cache
 docker-compose.override.yml
