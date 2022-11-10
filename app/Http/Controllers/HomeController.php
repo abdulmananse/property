@@ -3,14 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use Google\Client;
 use Revolution\Google\Sheets\Facades\Sheets;
 
-use Spatie\GoogleCalendar\Event;
 use Carbon\Carbon;
 
 use ICal\ICal;
@@ -19,7 +15,6 @@ use App\Models\Sheet;
 use App\Models\Property;
 use App\Models\Event as EventModel;
 
-use Storage;
 use DB;
 
 class HomeController extends Controller
@@ -207,36 +202,26 @@ class HomeController extends Controller
                         'sheet_id' => $sheet->id,
                         'property_id' => $propertyId
                     ];
-                    //$propertyDbEx = Property::where($where)->first(); // remove after import
-                    //if (!$propertyDbEx) { // remove after import
-                        $pisSheetId = $this->getPisId($property);
-                        $propertyInformation = $this->getPropertyInformation($pisSheetId);
+                    $pisSheetId = $this->getPisId($property);
+                    $propertyInformation = $this->getPropertyInformation($pisSheetId);
 
-                        $propertyData = [
-                            'name' => @$property['Property Name'],
-                            'account' => @$property['Account'],
-                            'pis' => @$property['PIS'],
-                            'pis_sheet_id' => $pisSheetId,
-                            'calendar_fallback' => @$property['Calendar Fallback'],
-                            'comments' => @$property['Comments'],
-                            'slide_link' => @$property['Slide Link'],
-                            'pdf_link' => @$property['pdfLink'],
-                            'price_doc_link' => @$property['Price Doc Link'],
-                            'price_pdf_link' => @$property['Price PDF Link'],
-                            'property_pdf_notes' => @$property['PropertyPDF Notes'],
-                        ];
+                    $propertyData = [
+                        'name' => @$property['Property Name'],
+                        'account' => @$property['Account'],
+                        'pis' => @$property['PIS'],
+                        'pis_sheet_id' => $pisSheetId,
+                        'calendar_fallback' => @$property['Calendar Fallback'],
+                        'comments' => @$property['Comments'],
+                        'slide_link' => @$property['Slide Link'],
+                        'pdf_link' => @$property['pdfLink'],
+                        'price_doc_link' => @$property['Price Doc Link'],
+                        'price_pdf_link' => @$property['Price PDF Link'],
+                        'property_pdf_notes' => @$property['PropertyPDF Notes'],
+                    ];
 
-                        $propertyCompleteData = array_merge($propertyData, $propertyInformation);
+                    $propertyCompleteData = array_merge($propertyData, $propertyInformation);
 
-                        $propertyDb = Property::updateOrCreate($where,$propertyCompleteData);
-
-                        if ($propertyDb) {
-                            //$this->getEventsFromIcsFile($propertyDb);
-                        }
-                    //}
-                    //dd('done 1');
-                    if($key % 4 === 0)
-                        sleep(2);
+                    Property::updateOrCreate($where,$propertyCompleteData);
                 }
             }
         }

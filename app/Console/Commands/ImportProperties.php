@@ -70,7 +70,6 @@ class ImportProperties extends Command
                 $this->info($sheet->name . ' Sheet Property Importing');
                 $homeController->savePropertyData($sheet);
                 $this->info($sheet->name . ' Property Imported');
-                sleep(10);
             }
         }
         $endDateTime = Carbon::now();
