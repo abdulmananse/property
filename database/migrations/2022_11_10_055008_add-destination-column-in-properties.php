@@ -14,7 +14,7 @@ class AddDestinationColumnInProperties extends Migration
     public function up()
     {
         Schema::table('properties', function (Blueprint $table) {
-            $table->string('destination')->after('zip_code');
+            $table->string('destination')->after('zip_code')->nullable();
         });
     }
 
