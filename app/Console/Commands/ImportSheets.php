@@ -50,7 +50,7 @@ class ImportSheets extends Command
     public function handle()
     {
 
-
+        Sheet::truncate();
         $startDateTime = Carbon::now();
         $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
@@ -68,7 +68,7 @@ class ImportSheets extends Command
         $endDateTime = Carbon::now();
         $this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
-        $this->info('TimeTaken' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
+        $this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
 
         return 0;
     }

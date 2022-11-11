@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Event as EventModel;
 use App\Models\Property;
 use App\Http\Controllers\HomeController;
 use Carbon\Carbon;
@@ -48,6 +49,8 @@ class ImportCalendar extends Command
         $propertyId = $this->argument('property_id');
         $homeController = app()->make(HomeController::class);
 
+        EventModel::truncate();
+
         $property = Property::where('property_id', $propertyId)->first();
         if ($propertyId != 0 && $property) {
             $this->info($property->name . ' Calendar Importing');
@@ -64,7 +67,7 @@ class ImportCalendar extends Command
         $endDateTime = Carbon::now();
         $this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
-        $this->info('TimeTaken' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
+        $this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
 
         return 0;
     }

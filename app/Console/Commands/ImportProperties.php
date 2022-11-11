@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use App\Models\Property;
 use Revolution\Google\Sheets\Facades\Sheets;
 use App\Models\Sheet;
 use App\Http\Controllers\HomeController;
@@ -59,6 +59,8 @@ class ImportProperties extends Command
 
         $homeController = app()->make(HomeController::class);
 
+        Property::truncate();
+
         $sheet = Sheet::where('name', $sheetName)->first();
         if ($sheet) {
             $this->info($sheet->name . ' Sheet Property Importing');
@@ -75,7 +77,7 @@ class ImportProperties extends Command
         $endDateTime = Carbon::now();
         $this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
-        $this->info('TimeTaken' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
+        $this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
 
         return 0;
     }

@@ -16,6 +16,7 @@ use App\Models\Property;
 use App\Models\Event as EventModel;
 
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -116,16 +117,21 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function importSheets () {
-        $spreadsheetId = $this->spreadsheetId;
-        $sheets = Sheets::spreadsheet($spreadsheetId)
-            ->sheetList();
-            foreach ($sheets as $id => $value) {
-                $sheet = Sheet::updateOrCreate([
-                    'sheet_id' => $id,
-                    'name' => $value
-                ]);
-            }
-            exit('Sheets Imported');
+        try {
+            $spreadsheetId = $this->spreadsheetId;
+            $sheets = Sheets::spreadsheet($spreadsheetId)
+                ->sheetList();
+                foreach ($sheets as $id => $value) {
+                    Sheet::updateOrCreate([
+                        'sheet_id' => $id,
+                        'name' => $value
+                    ]);
+                }
+        } catch (\Exception $e) {
+
+        }
+
+        exit('Sheets Imported');
     }
 
     /**
@@ -133,10 +139,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function importProperties ($sheetId) {
-        ini_set('max_execution_time', 180);
-
-        $spreadsheetId = $this->spreadsheetId;
+    public function importProperties ($sheetId = '') {
+        ini_set('max_execution_time', 0);
 
         $sheet = Sheet::where('name', $sheetId)->first();
         if ($sheet) {
@@ -158,9 +162,7 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function importCalander ($propertyId = 0) {
-        ini_set('max_execution_time', 180000);
-
-        $spreadsheetId = $this->spreadsheetId;
+        ini_set('max_execution_time', 0);
 
         $property = Property::where('property_id', $propertyId)->first();
         if ($propertyId != 0 && $property) {
@@ -184,46 +186,51 @@ class HomeController extends Controller
      */
     public function savePropertyData ($sheet) {
 
-        $sheetId = $sheet->name;
-        $spreadsheetId = $this->spreadsheetId;
-        $sheetData = Sheets::spreadsheet($spreadsheetId)
-                        ->sheet($sheetId)
-                        ->get();
-        $header = $sheetData->pull(0);
-        $properties = Sheets::collection($header, $sheetData);
+        try {
+            $sheetId = $sheet->name;
+            $spreadsheetId = $this->spreadsheetId;
+            $sheetData = Sheets::spreadsheet($spreadsheetId)
+                            ->sheet($sheetId)
+                            ->get();
 
-        foreach($properties as $key => $property) {
-            if (isset($property['Property ID'])) {
+            $header = $sheetData->pull(0);
+            $properties = Sheets::collection($header, $sheetData);
 
-                $propertyId = str_replace(" ", "", $property['Property ID']);
-                if ($propertyId != '') {
+            foreach($properties as $key => $property) {
+                if (isset($property['Property ID'])) {
 
-                    $where = [
-                        'sheet_id' => $sheet->id,
-                        'property_id' => $propertyId
-                    ];
-                    $pisSheetId = $this->getPisId($property);
-                    $propertyInformation = $this->getPropertyInformation($pisSheetId);
+                    $propertyId = str_replace(" ", "", $property['Property ID']);
+                    if ($propertyId != '') {
 
-                    $propertyData = [
-                        'name' => @$property['Property Name'],
-                        'account' => @$property['Account'],
-                        'pis' => @$property['PIS'],
-                        'pis_sheet_id' => $pisSheetId,
-                        'calendar_fallback' => @$property['Calendar Fallback'],
-                        'comments' => @$property['Comments'],
-                        'slide_link' => @$property['Slide Link'],
-                        'pdf_link' => @$property['pdfLink'],
-                        'price_doc_link' => @$property['Price Doc Link'],
-                        'price_pdf_link' => @$property['Price PDF Link'],
-                        'property_pdf_notes' => @$property['PropertyPDF Notes'],
-                    ];
+                        $where = [
+                            'sheet_id' => $sheet->id,
+                            'property_id' => $propertyId
+                        ];
+                        $pisSheetId = $this->getPisId($property);
+                        $propertyInformation = $this->getPropertyInformation($pisSheetId);
 
-                    $propertyCompleteData = array_merge($propertyData, $propertyInformation);
+                        $propertyData = [
+                            'name' => @$property['Property Name'],
+                            'account' => @$property['Account'],
+                            'pis' => @$property['PIS'],
+                            'pis_sheet_id' => $pisSheetId,
+                            'calendar_fallback' => @$property['Calendar Fallback'],
+                            'comments' => @$property['Comments'],
+                            'slide_link' => @$property['Slide Link'],
+                            'pdf_link' => @$property['pdfLink'],
+                            'price_doc_link' => @$property['Price Doc Link'],
+                            'price_pdf_link' => @$property['Price PDF Link'],
+                            'property_pdf_notes' => @$property['PropertyPDF Notes'],
+                        ];
 
-                    Property::updateOrCreate($where,$propertyCompleteData);
+                        $propertyCompleteData = array_merge($propertyData, $propertyInformation);
+
+                        Property::updateOrCreate($where,$propertyCompleteData);
+                    }
                 }
             }
+        } catch (\Exception $e) {
+            Log::Error('savePropertyData', [$e]);
         }
     }
 
@@ -257,39 +264,45 @@ class HomeController extends Controller
      */
     private function getPropertyInformation ($pisSheetId) {
 
+        $response = [];
         if (!empty($pisSheetId)) {
             $spreadsheetId = $pisSheetId;
-            $sheets = Sheets::spreadsheet($spreadsheetId)
-                                    ->sheetList();
-            foreach ($sheets as $id => $value) {
-                $sheetId = $value;
-                $sheetData = Sheets::spreadsheet($spreadsheetId)
-                        ->sheet($sheetId)
-                        ->get();
 
-                $keys = config('sheets.keys');
-                foreach($keys as $key) {
-                    $index = $key['index'] - 1;
-                    $valueIndex = (isset($key['value_index']) ?  ($key['value_index'] - 1) : 4);
-                    $dbKey = $key['db_key'];
+            try {
+                $sheets = Sheets::spreadsheet($spreadsheetId)
+                                        ->sheetList();
+                foreach ($sheets as $id => $value) {
+                    $sheetId = $value;
+                    $sheetData = Sheets::spreadsheet($spreadsheetId)
+                            ->sheet($sheetId)
+                            ->get();
 
-                    if(isset($sheetData[$index][$valueIndex])) {
-                        $response[$dbKey] = trim($sheetData[$index][$valueIndex]);
+                    $keys = config('sheets.keys');
+                    foreach($keys as $key) {
+                        $index = $key['index'] - 1;
+                        $valueIndex = (isset($key['value_index']) ?  ($key['value_index'] - 1) : 4);
+                        $dbKey = $key['db_key'];
 
-                        if ($dbKey == 'google_calendar_link') {
-                            $googleCalendarLink = $sheetData[$index][$valueIndex];
-                            $calendarIdArr = explode('?src=', $googleCalendarLink);
-                            if (isset($calendarIdArr[1])) {
-                                $calendarIdArr = explode('%40group.calendar', $calendarIdArr[1]);
-                                if (isset($calendarIdArr[0])) {
-                                    $response['google_calendar_id'] = $calendarIdArr[0];
+                        if(isset($sheetData[$index][$valueIndex])) {
+                            $response[$dbKey] = $sheetData[$index][$valueIndex];
+
+                            if ($dbKey == 'google_calendar_link') {
+                                $googleCalendarLink = $sheetData[$index][$valueIndex];
+                                $calendarIdArr = explode('?src=', $googleCalendarLink);
+                                if (isset($calendarIdArr[1])) {
+                                    $calendarIdArr = explode('%40group.calendar', $calendarIdArr[1]);
+                                    if (isset($calendarIdArr[0])) {
+                                        $response['google_calendar_id'] = $calendarIdArr[0];
+                                    }
                                 }
                             }
                         }
-                    }
 
+                    }
+                    break;
                 }
-                break;
+            } catch (\Exception $e) {
+                Log::Error('getPropertyInformation', [$e]);
             }
         }
 
