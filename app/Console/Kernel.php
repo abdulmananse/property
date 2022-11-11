@@ -15,9 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('import:sheets')->timezone('EET')->twiceDailyAt(8, 16);
-        $schedule->command('import:properties')->timezone('EET')->twiceDailyAt(8, 16);
-        $schedule->command('import:calendar')->timezone('EET')->twiceDailyAt(8, 16);
+        $schedule->command('import:sheets')->timezone('EET')->dailyAt('07:00');
+        $schedule->command('import:properties')->timezone('EET')->dailyAt('07:15');
+        $schedule->command('import:calendar')->timezone('EET')->dailyAt('08:00');
     }
 
     /**

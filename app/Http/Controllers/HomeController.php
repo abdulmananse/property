@@ -44,8 +44,8 @@ class HomeController extends Controller
 
             $where = '';
             if ($request->filled('city')) {
-                $city = $request->city;
-                $where = ' where city = "' . $city . '"';
+                $destination = $request->city;
+                $where = ' where destination LIKE "%' . $destination . '%"';
             }
 
             $startDate = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'); //m/d/Y
@@ -274,7 +274,7 @@ class HomeController extends Controller
                     $dbKey = $key['db_key'];
 
                     if(isset($sheetData[$index][$valueIndex])) {
-                        $response[$dbKey] = $sheetData[$index][$valueIndex];
+                        $response[$dbKey] = trim($sheetData[$index][$valueIndex]);
 
                         if ($dbKey == 'google_calendar_link') {
                             $googleCalendarLink = $sheetData[$index][$valueIndex];
