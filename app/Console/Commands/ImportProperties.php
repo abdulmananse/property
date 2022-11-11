@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Property;
 use Revolution\Google\Sheets\Facades\Sheets;
 use App\Models\Sheet;
+use App\Models\Property;
 use App\Http\Controllers\HomeController;
 use Carbon\Carbon;
 

@@ -128,7 +128,7 @@ class HomeController extends Controller
                     ]);
                 }
         } catch (\Exception $e) {
-
+            Log:Error('importSheets', [$e])
         }
 
         exit('Sheets Imported');
