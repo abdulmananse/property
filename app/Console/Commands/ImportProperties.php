@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Property;
 use Revolution\Google\Sheets\Facades\Sheets;
 use App\Models\Sheet;
 use App\Models\Property;

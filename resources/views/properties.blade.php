@@ -94,9 +94,11 @@
                                 </div>
                                 </div> --}}
                                 <div class="col-md-12 col-lg-12 col-xl-12">
-                                    <h5><a href="javascript:void(0)" style="color:black;text-decoration: none;" >
-                                        {{ $property->name }}
-                                    </a></h5>
+                                    <h5>
+                                        <a href="javascript:void(0)" data-id="{{ $property->id }}" style="color:black;text-decoration: none;" >
+                                            {{ $property->name }}
+                                        </a>
+                                    </h5>
                                     <div class="row">
                                         <div class="mt-1 mb-0 text-muted small col-6">
                                             <b>Destination</b>
