@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Event as EventModel;
 use App\Models\Property;
 use App\Http\Controllers\HomeController;
 use Carbon\Carbon;
