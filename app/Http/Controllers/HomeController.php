@@ -43,10 +43,32 @@ class HomeController extends Controller
         $properties = [];
         if ($request->filled('start_date') && $request->filled('end_date')) {
 
-            $where = '';
+            $where = ' WHERE 1 AND properties.ical_link IS NOT NULL ';
             if ($request->filled('city')) {
                 $destination = $request->city;
-                $where = ' where destination LIKE "%' . $destination . '%"';
+                $where .= ' AND destination LIKE "%' . $destination . '%" ';
+            }
+            if ($request->filled('bedrooms')) {
+                $bedrooms = (int) $request->bedrooms;
+                $where .= ' AND no_of_bedrooms = ' . $bedrooms . ' ';
+            }
+            $orderBy = 'properties.name ASC';
+            if ($request->filled('sort_by')) {
+                $sortBy = $request->sort_by;
+                switch ($sortBy) {
+                    case 'Property Name A to Z':
+                        $orderBy = 'properties.name ASC';
+                        break;
+                    case 'No. of Bedrooms':
+                        $orderBy = 'CAST(properties.no_of_bedrooms AS UNSIGNED) ASC';
+                        break;
+                    case 'Property Type':
+                        $orderBy = 'properties.property_type ASC';
+                        break;
+                    default:
+                        $orderBy = 'properties.name ASC';
+                        break;
+                }
             }
 
             $startDate = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'); //m/d/Y
@@ -67,14 +89,14 @@ class HomeController extends Controller
                     properties.no_of_beds,
                     properties.no_of_bathrooms,
                     properties.no_of_bedrooms,
-                    SUM(IF((CAST("'.$startDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end)) OR (CAST("'.$endDate.'" AS DATE) BETWEEN DATE(events.start) and DATE(events.end)) OR (DATE(events.start) > CAST("'.$startDate.'" AS DATE) AND DATE(events.end) < CAST("'.$endDate.'" AS DATE)), 1, 0)) as total_bookings
+                    SUM(IF((CAST("'.$startDate.'" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (CAST("'.$endDate.'" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (DATE(events.start) > CAST("'.$startDate.'" AS DATE) AND DATE_SUB(DATE(events.end), INTERVAL 1 DAY) < CAST("'.$endDate.'" AS DATE)), 1, 0)) as total_bookings
                 FROM properties
                 LEFT JOIN `events` ON events.property_id = properties.id
                 '. $where .'
                 GROUP BY
                     properties.id,properties.property_id
                 HAVING total_bookings = 0
-                ORDER BY `properties`.`name`  ASC';
+                ORDER BY '.$orderBy;
 
             $properties = DB::select(DB::raw($query));
             $offset = ($page * $paginate) - $paginate ;
@@ -84,8 +106,9 @@ class HomeController extends Controller
         }
 
         $cities = Property::whereNotNull('destination')->groupBy('destination')->pluck('destination');
+        $maxBedrooms = Property::select(DB::raw('MAX(CAST(properties.no_of_bedrooms AS UNSIGNED)) as no_of_bedrooms'))->first()->no_of_bedrooms;
 
-        return view('properties', compact('cities', 'properties'));
+        return view('properties', compact('cities', 'properties', 'maxBedrooms'));
     }
 
     public function paginate($items , $perpage ){

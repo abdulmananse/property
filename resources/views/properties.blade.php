@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -12,6 +11,7 @@
         <!-- Styles -->
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
         <!-- Scripts -->
         <script type='text/javascript' src='{{ asset('js/jquery.min.js') }}'></script>
@@ -26,181 +26,223 @@
         </style>
     </head>
     <body class="antialiased">
+        <section>
+            <div class="container-header">
+                <div class="header">
+                    <div class="logo-class">
+                        <img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}">
+                        <p>Sales Platform</p>
+                    </div>
+                    <input type="search" id="search" name="search" placeholder="Search for a home">
+                </div>
+            </div>
+                <div class="sales-platform">
+                    <div class="search-sales">
+                        <div class="form-class">
+                            <h1>Find homes quickly for your clients</h1>
+                            <div class="form-wrapper">
+                                <form class="row g-3 form-input search-form">
 
+                                    <div class="col-auto description">
+                                        <div class="select">
+                                            <div class="select__trigger destination-label"><span>{{ (@request()->city) ? @request()->city : 'Destination' }}</span>
+                                                <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                            </div>
+                                            <div class="form-control custom-options">
+                                                <span selected class="custom-option select-destination-name" data-value="">Destination</span>
+                                                @foreach($cities as $city)
+                                                <span class="custom-option select-destination-name" data-value="{{ $city }}">{{ $city }}</span>
+                                                @endforeach
+                                                <input type="text" class="d-none" name="city" value="{{@request()->city}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto search-input">
+                                        <div class="col-auto">
+                                            <label for="start_date" class="visually-hidden">Start Date</label>
+                                            <input type="text" autocomplete="off" name="start_date" class="form-control datepicker" placeholder="Start Date" value="{{ @request()->start_date }}">
+                                            <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="end_date" class="visually-hidden">End Date</label>
+                                            <input type="text" autocomplete="off" name="end_date" class="form-control datepicker" placeholder="End Date" value="{{ @request()->end_date }}">
+                                            <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto baderooms">
+                                        <div class="select">
+                                            <div class="select__trigger bedrooms-label"><span>{{ (@request()->bedrooms) ? @request()->bedrooms : 'Bedrooms' }}</span>
+                                                <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                            </div>
+                                            <div class="form-control custom-options">
+                                                <span selected class="custom-option select-bedrooms" data-value="">Bedrooms</span>
+                                                @for($i=1; $i<=$maxBedrooms; $i++)
+                                                <span class="custom-option select-bedrooms" data-value="{{ $i }}">{{ $i }}</span>
+                                                @endfor
+                                                <input type="text" class="d-none" name="bedrooms" value="{{@request()->bedrooms}}" />
+                                                <input type="text" class="d-none" name="sort_by" value="{{@request()->sort_by}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto search-btn">
+                                    <button type="submit" class="btn btn-primary mb-3">Search</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-sort">
+                        <div class="select-wrapper sort">
+                            <div class="col-auto select-click">
+                                <div class="select">
+                                    <div class="select__trigger"><span>{{ (@request()->sort_by) ? @request()->sort_by : 'Sort by' }}</span>
+                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                    </div>
+                                    <div class="form-control custom-options">
+                                        <span selected class="custom-option select-sortby" data-value="Property Name A to Z">Property Name A to Z</span>
+                                        <span selected class="custom-option select-sortby" data-value="No. of Bedrooms">No. of Bedrooms</span>
+                                        <span selected class="custom-option select-sortby" data-value="Property Type">Property Type</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <section style="background-color: #eee;padding-bottom: 25px;" >
-
-            <div class="container py-5">
-
-                <div class="row justify-content-center mb-3">
-                    <div class="col-md-12 col-xl-10">
-                        <form class="row g-3">
-                            <div class="col-auto">
-                                <label for="end_date" class="visually-hidden">Destination</label>
-                                <select name="city" class="form-control select2" placeholder="City">
-                                    <option value="">Select Destination</option>
-                                    @foreach($cities as $city) 
-                                    <option {{ (@request()->city == $city) ? 'selected' : '' }} value="{{ $city }}">{{ $city }}</option>
-                                    @endforeach
-                                </select>
+                    <div class="container-search">
+                        <div class="row justify-content-center mobile-grid">
+                            @forelse($properties as $property)
+                            <div class="col-md-4 col-xl-4 col-sm-6 mb-3 ">
+                                <div class="card shadow-0 border rounded-3 card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 col-lg-12 col-xl-12 card-name">
+                                                <div class="info-top">
+                                                    <div class="des-ID">
+                                                        <a href="javascript:void(0)">{{ $property->name }}</a>
+                                                        <span class="property-ID">{{ $property->property_id }}</span>
+                                                    </div>
+                                                    <div class="bed">
+                                                        <img src="{{ asset('img/bed.png') }}">
+                                                        <span>{{ $property->no_of_bedrooms }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="info-bottom">
+                                                    <div>
+                                                        <div class="result">
+                                                            <b>Destination:</b>
+                                                            <span>{{ $property->destination }}</span>
+                                                        </div>
+                                                        <div class="result">
+                                                            <b>Max Guests:</b>
+                                                            <span>{{ $property->max_guests }}</span>
+                                                        </div>
+                                                        <div class="result">
+                                                            <b>No. of Bathrooms:</b>
+                                                            <span>{{ $property->no_of_bathrooms }}</span>
+                                                        </div>
+                                                        <div class="result">
+                                                            <b>Property Type:</b>
+                                                            <span>{{ $property->property_type }}</span>
+                                                        </div>
+                                                        <div class="result">
+                                                            <b>No. of Beds:</b>
+                                                            <span>{{ $property->no_of_beds }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="click-btn">
+                                                        <button>ClickUp</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <label for="start_date" class="visually-hidden">Start Date</label>
-                                <input type="text" autocomplete="off" name="start_date" class="form-control datepicker" placeholder="Start Date" value="{{ @request()->start_date }}">
-                            </div>
-                            <div class="col-auto">
-                                <label for="end_date" class="visually-hidden">End Date</label>
-                                <input type="text" autocomplete="off" name="end_date" class="form-control datepicker" placeholder="End Date" value="{{ @request()->end_date }}">
-                            </div>
-                            <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mb-3">Search</button>
-                            </div>
-                        </form>
+                            @empty
+                                <div class="col-md-12 col-xl-10 mb-3">
+                                    <div class="card shadow-0 border rounded-3">
+                                        <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 col-lg-6 col-xl-6">
+                                                <p class="text-truncate mb-4 mb-md-0">
+                                                    Data not found!
+                                                </p>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
-
-                <div class="row justify-content-center ">
-
-                    {{-- <ul class="list-unstyled ps-0">
-                        <li class="mb-1">
-                          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-                            Home
-                          </button>
-                          <div class="collapse show" id="home-collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                              <li><a href="#" class="link-dark rounded">Overview</a></li>
-                              <li><a href="#" class="link-dark rounded">Updates</a></li>
-                              <li><a href="#" class="link-dark rounded">Reports</a></li>
-                            </ul>
-                          </div>
-                        </li>
-                      </ul>     --}}
-
-                @forelse($properties as $property)
-
-                    <div class="col-md-4 col-xl-4 col-sm-6 mb-3">
-                        <div class="card shadow-0 border rounded-3">
-                            <div class="card-body">
-                            <div class="row">
-                                {{-- <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
-                                <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                    <img src="https://drive.google.com/uc?export=view&id=1Sn6W0tj7ICdyhiRrRHN_Mze5dVwFdZir"
-                                    class="w-100" />
-                                    <a href="#!">
-                                    <div class="hover-overlay">
-                                        <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                                    </div>
-                                    </a>
-                                </div>
-                                </div> --}}
-                                <div class="col-md-12 col-lg-12 col-xl-12">
-                                    <h5>
-                                        <a href="javascript:void(0)" data-id="{{ $property->id }}" style="color:black;text-decoration: none;" >
-                                            {{ $property->name }}
-                                        </a>
-                                    </h5>
-                                    <div class="row">
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>Destination</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->destination }}</span>
-                                        </div>
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>Country</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->country }}</span>
-                                        </div>
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>Property ID</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->property_id }}</span>
-                                        </div>
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>Property Type</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->property_type }}</span>
-                                        </div>
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>Max Guests</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->max_guests }}</span>
-                                        </div>
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>No. of Beds</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->no_of_beds }}</span>
-                                        </div>
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>No. of Bathrooms</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->no_of_bathrooms }}</span>
-                                        </div>
-                                        <div class="mt-1 mb-0 text-muted small col-6">
-                                            <b>No. of Bedrooms</b>
-                                            <span class="text-primary"> • </span>
-                                            <span>{{ $property->no_of_bedrooms }}</span>
-                                        </div>
-                                    </div>
-
-                                    {{-- <p class="text-truncate1 mb-4 mb-md-0">
-                                        {!! Str::words($property->description, 50, '...') !!}
-                                    </p> --}}
-
-                                </div>
-                                {{-- <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
-                                    <div class="d-flex flex-row align-items-center mb-1">
-                                        <h4 class="mb-1 me-1">$13.99</h4>
-                                        <span class="text-danger"><s>$20.99</s></span>
-                                    </div>
-                                    <h6 class="text-success">Free shipping</h6>
-                                    <div class="d-flex flex-column mt-4">
-                                        <button class="btn btn-primary btn-sm" type="button">Details</button>
-                                        <button class="btn btn-outline-primary btn-sm mt-2" type="button">
-                                        Add to wishlist
-                                        </button>
-                                    </div>
-                                </div> --}}
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-              
-                @empty
-                    <div class="col-md-12 col-xl-10 mb-3">
-                        <div class="card shadow-0 border rounded-3">
-                            <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xl-6">
-                                
-                                    <p class="text-truncate mb-4 mb-md-0">
-                                        Data not found!
-                                    </p>
-
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforelse
             </div>
 
-                @if($properties)
-                <div class="row justify-content-center float-end pt-3">
-                    {!! $properties->appends($_GET)->links('pagination::bootstrap-4') !!}
-                    {{-- 'pagination::bootstrap-4' --}}
-                </div>
-                @endif
+            @if($properties)
+            <div class="row justify-content-center float-end pt-3 pagina">
+                {!! $properties->appends($_GET)->links('pagination::bootstrap-4') !!}
+            </div>
+            @endif
             </div>
 
         </section>
 
         <script>
+            $(document).ready(function(){
+                $('.select-destination-name').click(function(){
+                    $('.destination-label span').html($(this).attr('data-value'));
+                    $('input[name=city]').val($(this).attr('data-value'));
+                });
+                $('.select-bedrooms').click(function(){
+                    $('.bedrooms-label span').html($(this).attr('data-value'));
+                    $('input[name=bedrooms]').val($(this).attr('data-value'));
+                });
+                $('.select-sortby').click(function(){
+                    $('input[name=sort_by]').val($(this).attr('data-value'));
+                    $('form.search-form').submit();
+                });
+            });
             $( function() {
                 $('.select2').select2();
                 $( ".datepicker" ).datepicker({
                 dateFormat: "dd-mm-yy"
               });
             } );
+        </script>
+        <script>
+            document.querySelector('.select-click').addEventListener('click', function() {
+                this.querySelector('.select').classList.toggle('open');
+            })
+
+            window.addEventListener('click', function(e) {
+                const select = document.querySelector('.select')
+                if (!select.contains(e.target)) {
+                    select.classList.remove('open');
+                }
+            });
+
+
+            document.querySelector('.description').addEventListener('click', function() {
+                this.querySelector('.select').classList.toggle('open');
+            })
+
+            window.addEventListener('click', function(e) {
+                const select = document.querySelector('.select')
+                if (!select.contains(e.target)) {
+                    select.classList.remove('open');
+                }
+            });
+
+            document.querySelector('.baderooms').addEventListener('click', function() {
+                this.querySelector('.select').classList.toggle('open');
+            })
+
+            window.addEventListener('click', function(e) {
+                const select = document.querySelector('.select')
+                if (!select.contains(e.target)) {
+                    select.classList.remove('open');
+                }
+            });
         </script>
     </body>
 </html>

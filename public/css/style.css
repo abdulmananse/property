@@ -1,0 +1,534 @@
+
+@font-face {
+    font-family: 'InriaSerif';
+    src: url('./Inria_Serif/InriaSerif-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Inter-Regular';
+    src: url('./Inter/static/Inter-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Inter-Regular_Medium';
+    src: url('./Inter/static/Inter-Medium.ttf') format('truetype');
+}
+body{
+    font-family: InriaSerif;
+}
+.header{
+    height: 45px;
+    background-color: white;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+.container-header{
+    margin: 0px 30px;
+}
+.search-sales{
+    padding: 0px 30px;
+}
+.logo-class{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: left;
+    align-items: center;
+}
+.logo-class img{
+    width: 73.3px;
+    height: 20px;
+}
+.logo-class p{
+    margin: 0px;
+    font-size: 13px;
+    margin: 3px 0px 0px 4.7px;
+    color: black;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.38;
+    letter-spacing: normal;
+    font-family: 'InriaSerif';
+}
+#search{
+    justify-self: right;
+    width: 169px!important;
+    height: 24px!important;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    border: solid 1px rgba(22, 50, 69, 0.1);
+    padding-left: 20px;
+    font-size: 13px;
+    margin-right: 45px;
+    color: #939393;
+    font-family: Inter-Regular;
+}
+.form-control{
+    border-radius: 3px;
+    border: solid 1px #8e8e93;
+    color: #636366;
+    font-size: 9px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    padding: 12px!important;
+    font-family: Inter-Regular_Medium;
+}
+.form-class h1{
+    color: white;
+    padding: 33px 0px 0px 0px;
+    margin-bottom: 29px;
+    font-size: 27px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    font-family: InriaSerif;
+}
+.search-sales{
+    text-align: center;
+    background-color: #1d3143;
+}
+select, input{
+    width: 150px!important;
+    height: 35px!important;
+
+}
+.search-input{
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 0px!important;
+}
+.description{
+    padding: 5px 3px 5px 5px!important;
+}
+.search-btn{
+    padding-right: 5px!important;
+}
+.btn-primary:hover{
+    background-color: #1fb797;
+}
+.form-input{
+    place-content: center;
+    align-items: center;
+    margin-top: 35px;
+    background-color: white;
+    width: max-content;
+    border-radius: 3px;
+    border: solid 1px #000;
+}
+.form-wrapper{
+    padding-bottom: 30px;
+    text-align: -webkit-center;
+    text-align: -moz-center;
+}
+.col-auto{
+    margin: 0px;
+    position: relative;
+    padding: 0px 3px;
+}
+.col-auto button{
+    background-color: #1fb797;
+    margin-bottom: 0px!important;
+    width: 151px;
+    height: 35px;
+    font-size: 9px;
+    font-weight: 600;
+    font-family: Inter-Regular;
+}
+.select2-container .select2-selection--single{
+    height: 56px!important;
+    border: 1px solid #a7a7ab!important;
+}
+.btn-primary{
+    border: none!important;
+}
+.downarrow{
+    position: absolute;
+    top: 13px;
+    right: 17px;
+    width: 9px;
+}
+.container-search{
+    margin: 0px 75px;
+}
+.container-sort{
+    text-align: -webkit-right;
+    text-align: -moz-right;
+    max-width: 814px;
+    margin: auto auto;
+}
+.sort-by{
+    padding: 11px!important;
+    width: 150px;
+    margin: 15px 0px;
+    font-size: 9px;
+    font-weight: 500;
+}
+.sort .downarrow{
+    top: 13px;
+    right: 12px;
+    width: 9px;
+}
+.description .select,
+.baderooms .select{
+    margin: 0px!important;
+}
+.description .select__trigger,
+.baderooms .select__trigger{
+    padding: 9px 12px;
+    font-family: InterRegular;
+    font-size: 9px;
+}
+/* sort */
+.select {
+    border-style: solid;
+    width: 150px;
+    height: 35px;
+    margin: 15px 0px;
+    border-radius: 3px;
+    border: solid 1px #8e8e93;
+    margin-right: 13px;
+    position: relative;
+}
+.select__trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 11px 0px 3px 10px;
+    font-size: 12px;
+    color: #3b3b3b;
+    background: #ffffff;
+    cursor: pointer;
+}
+.select__trigger span{
+    font-family: Inter-Regular;
+    color: #636366;
+    font-size: 9px;
+    font-weight: 500;
+}
+.custom-options {
+    position: absolute;
+    display: block;
+    top: -58px;
+    right: -159px;
+    border-radius: 3px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+    border: solid 1px #8e8e93;
+    background: #fff;
+    transition: all 0.5s;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 2;
+    width: 150px;
+    padding: 6px 12px;
+}
+.description .custom-options{
+    right: 0px;
+    top: 33px;
+    height: 230px;
+    overflow-y: scroll;
+    border-radius: 0px 0px 3px 3px;
+}
+.baderooms .custom-options{
+    right: -1px;
+    top: 33px;
+    border-radius: 0px 0px 3px 3px;
+    height: 230px;
+    overflow-y: scroll;
+}
+.select.open .custom-options,
+.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+.select-click{
+    width: 150px;
+    margin-right: 18px;
+}
+.custom-option {
+    position: relative;
+    display: block;
+    color: #636366;
+    cursor: pointer;
+    transition: all 0.5s;
+    font-size: 9px;
+    font-weight: 500;
+    font-family: Inter-Regular_Medium;
+    text-align: left;
+    line-height: 26px;
+}
+
+/* cart */
+.des-ID{
+    display: grid;
+}
+.card{
+    padding: 15px!important;
+    border-radius: 3px!important;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.05);
+    border: solid 1px rgba(0, 0, 0, 0.15)!important;
+    background-color: #fff!important;
+}
+.card:hover{
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.05);
+}
+.card-body{
+    padding: 0px!important;
+}
+.card-name a{
+    color: #163245;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    font-family: InriaSerif;
+    width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.property-ID{
+    font-size: 12px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: rgba(22, 50, 69, 0.5);
+    font-family: InriaSerif;
+
+}
+.bed{
+    justify-self: right;
+}
+.info-top{
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-bottom: 35px;
+}
+.bed span{
+    font-size: 18px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #000;
+    margin-left: 10px;
+}
+.bed img{
+    width: 20px;
+    margin-bottom: 5px;
+}
+.result b{
+    font-size: 12px;
+    letter-spacing: -0.1px;
+    font-family: Inter-Regular;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;   
+    color: #000000;
+}
+.result span{
+    color: #1fb797;
+    font-size: 12px;
+    font-family: Inter-Regular;
+}
+.result{
+    line-height: 15px;
+}
+.info-bottom{
+    display: grid;
+    grid-template-columns: 65% 35%;
+    align-items: self-end;
+}
+.click-btn{
+    text-align: right;
+}
+.click-btn button{
+    border-radius: 3px;
+    border: solid 1px #163245;
+    background-color: #163245;
+    color: white;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    font-family: Inter-Regular;
+    width: 90px;
+    height: 34px;
+}
+.page-item.active .page-link{
+    background-color: #163245;
+    border: solid 1px #163245;
+}
+.page-link{
+    color: #163245;
+}
+.col-xl-4{
+    width: 25%!important;
+    margin: 0px!important;
+    padding: 6px 6px!important;
+}
+.pagina{
+    margin: 0px 63px;
+}
+@media (max-width: 1430px) {
+    .col-xl-4{
+        width: 33.333333%!important;
+    }
+}
+
+@media (max-width: 1120px) {
+
+    .col-sm-6 {
+        flex: 0 0 auto;
+        width: 50%!important;
+    }
+
+}
+@media (max-width: 1200px) {
+    .col-auto button,
+    .description .select, 
+    .baderooms .select,
+    .select-click .select {
+        width: 113px;
+    }
+    select, input {
+        width: 113px!important;
+        height: 35px!important;
+    }
+    #search{
+        width: 169px!important;
+    }
+    .container-sort {
+        max-width: 626px;
+    }
+    .select-click {
+        margin-right: -4px;
+    }
+    .custom-options{
+        right: -157px;
+        width: 113px;
+    }
+    .select-click .select .custom-options{
+        width: 150px;
+    }
+    .description .custom-options{
+        right: -1px;
+    }
+}
+@media (max-width: 970px) {
+    .col-auto button,
+    .description .select, 
+    .baderooms .select,
+    .select-click .select {
+        width: 110px;
+    }
+    select, input {
+        width: 95px!important;
+    }
+    #search{
+        width: 169px!important;
+    }
+    .container-sort {
+        max-width: 580px;
+    }
+    .custom-options{
+        width: 110px;
+        right: -127px;
+    }
+    .select-click {
+        margin-right: -2px;
+    }
+    .select-click .select .custom-options{
+        width: 120px;
+    }
+}
+
+@media (max-width: 810px) {
+
+    .col-sm-6 {
+        flex: 0 0 auto;
+        width: 100%!important;
+    }
+    #search{
+        display: none;
+    }
+    .form-input{
+        display: block;
+        width: 100%;
+    }
+    .header{
+        grid-template-columns: 1fr;
+    }
+    select, input {
+        width: 100%!important;
+    }
+    .col-auto button,
+    .description .select, 
+    .baderooms .select,
+    .select-click .select,
+    .select-click {
+        width: 100%;
+    }
+    .container-sort{
+        max-width: 100%;
+        margin: 0px 30px;
+    }
+    .container-search{
+        margin: 0px 30px;
+    }
+    .form-class h1{
+        text-align: left;
+    }
+    .custom-options{
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+    }
+    .description,
+    .baderooms {
+        padding: 5px!important;
+    }
+    .search-input .col-auto{
+        padding: 0px;
+    }
+    .search-input{
+        grid-gap: 5px;
+        padding: 0px 5px!important;
+    }
+    .search-btn{
+        padding: 0px 5px 5px 5px!important;
+    }
+    .select-click{
+        margin: 0px;
+        padding: 0px;
+    }
+    .description .custom-options,
+    .baderooms .custom-options{
+        top: 33px;
+    }
+    .select-click .select .custom-options{
+        border-radius: 0px 0px 3px 3px;
+        width: 100%!important;
+    }
+    .col-xl-4{
+        padding: 6px 12px!important;
+    }
+    .bed span{
+        margin-left: 5px;
+    }
+
+}
+
+

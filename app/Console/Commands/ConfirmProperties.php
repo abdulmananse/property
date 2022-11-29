@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Event as EventModel;
 use App\Models\Property;
 use Illuminate\Console\Command;
 
@@ -39,9 +40,13 @@ class ConfirmProperties extends Command
     public function handle()
     {
         $totalProperties = Property::whereNotNull('destination')->groupBy('destination')->count();
-        if($$totalProperties < 25){
+        $totalEvents = EventModel::groupBy('property_id')->count();
+        if($totalProperties < 100){
             $this->call('import:sheets');
             $this->call('import:properties');
+        }
+
+        if($totalEvents < 400){
             $this->call('import:calendar');
         }
         return 0;
