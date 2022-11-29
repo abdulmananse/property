@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Property;
+use App\Models\Event as EventModel;
 use App\Http\Controllers\HomeController;
 use Carbon\Carbon;
 
@@ -46,16 +47,16 @@ class ImportCalendar extends Command
         $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $propertyId = $this->argument('property_id');
+        
         $homeController = app()->make(HomeController::class);
 
-        EventModel::truncate();
-
         $property = Property::where('property_id', $propertyId)->first();
-        if ($propertyId != 0 && $property) {
+        if ($propertyId !== 0 && $property) {
             $this->info($property->name . ' Calendar Importing');
             $homeController->getEventsFromIcsFile($property);
             $this->info($property->name . ' Calendar Imported');
         } else {
+            EventModel::truncate();
             $properties = Property::get();
             foreach($properties as $property) {
                 $this->info($property->name . ' Calendar Importing');
