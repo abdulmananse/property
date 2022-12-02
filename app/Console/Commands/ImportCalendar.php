@@ -47,7 +47,7 @@ class ImportCalendar extends Command
         $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $propertyId = $this->argument('property_id');
-        
+
         $homeController = app()->make(HomeController::class);
 
         $property = Property::where('property_id', $propertyId)->first();
@@ -56,7 +56,7 @@ class ImportCalendar extends Command
             $homeController->getEventsFromIcsFile($property);
             $this->info($property->name . ' Calendar Imported');
         } else {
-            EventModel::truncate();
+            //EventModel::truncate();
             $properties = Property::get();
             foreach($properties as $property) {
                 $this->info($property->name . ' Calendar Importing');

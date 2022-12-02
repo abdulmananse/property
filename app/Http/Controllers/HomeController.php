@@ -78,6 +78,7 @@ class HomeController extends Controller
 
             $query = 'SELECT
                     properties.id,
+                    properties.clickup_id,
                     properties.name,
                     properties.property_id,
                     properties.account,
@@ -233,6 +234,7 @@ class HomeController extends Controller
                         $propertyInformation = $this->getPropertyInformation($pisSheetId);
 
                         $propertyData = [
+                            'clickup_id' => @$property['Clickup ID'],
                             'name' => @$property['Property Name'],
                             'account' => @$property['Account'],
                             'pis' => @$property['PIS'],
@@ -245,6 +247,8 @@ class HomeController extends Controller
                             'price_pdf_link' => @$property['Price PDF Link'],
                             'property_pdf_notes' => @$property['PropertyPDF Notes'],
                         ];
+
+                        Log::Error('PropertyData', $propertyData);
 
                         $propertyCompleteData = array_merge($propertyData, $propertyInformation);
 

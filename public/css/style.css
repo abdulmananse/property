@@ -335,7 +335,7 @@ select, input{
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
-    line-height: normal;   
+    line-height: normal;
     color: #000000;
 }
 .result span{
@@ -354,7 +354,8 @@ select, input{
 .click-btn{
     text-align: right;
 }
-.click-btn button{
+.click-btn button,
+.click-btn a{
     border-radius: 3px;
     border: solid 1px #163245;
     background-color: #163245;
@@ -365,6 +366,9 @@ select, input{
     font-family: Inter-Regular;
     width: 90px;
     height: 34px;
+}
+button.disabled{
+    opacity: 0.6
 }
 .page-item.active .page-link{
     background-color: #163245;
@@ -397,7 +401,7 @@ select, input{
 }
 @media (max-width: 1200px) {
     .col-auto button,
-    .description .select, 
+    .description .select,
     .baderooms .select,
     .select-click .select {
         width: 113px;
@@ -428,7 +432,7 @@ select, input{
 }
 @media (max-width: 970px) {
     .col-auto button,
-    .description .select, 
+    .description .select,
     .baderooms .select,
     .select-click .select {
         width: 110px;
@@ -474,7 +478,7 @@ select, input{
         width: 100%!important;
     }
     .col-auto button,
-    .description .select, 
+    .description .select,
     .baderooms .select,
     .select-click .select,
     .select-click {

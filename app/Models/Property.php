@@ -21,6 +21,7 @@ class Property extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'clickup_id',
         'sheet_id',
         'property_id',
         'name',
@@ -72,15 +73,15 @@ class Property extends Model
     ];
 
     /**
-     * belongsTo 
+     * belongsTo
      */
     public function sheet()
     {
         return $this->belongsTo(Sheet::class);
     }
-    
+
     /**
-     * hasMany 
+     * hasMany
      */
     public function events()
     {

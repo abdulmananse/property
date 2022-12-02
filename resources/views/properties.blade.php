@@ -150,7 +150,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="click-btn">
-                                                        <button>ClickUp</button>
+                                                        <button class="{{ ($property->clickup_id) ? 'active' : 'disabled' }}" onclick="{{ ($property->clickup_id) ? 'window.open(\''.$property->clickup_id.'\', \'\', \'popup\')' : '' }}">ClickUp</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -207,7 +207,7 @@
                 $( ".datepicker" ).datepicker({
                 dateFormat: "dd-mm-yy"
               });
-            } );
+            });
         </script>
         <script>
             document.querySelector('.select-click').addEventListener('click', function() {
