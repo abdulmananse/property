@@ -2,6 +2,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
         <title>Property</title>
 
@@ -268,6 +269,8 @@
 
             searchOpen.addEventListener('click',function(){
                 searchDrop.classList.add('open')
+                document.getElementById("webSearchResults").innerHTML = '';
+                document.getElementById("mobileSearchResults").innerHTML = '';
             })
             loupe.addEventListener('click',function(){
                 openSearch();
@@ -281,6 +284,8 @@
             })
 
             function openSearch(){
+                document.getElementById("webSearchResults").innerHTML = '';
+                document.getElementById("mobileSearchResults").innerHTML = '';
                 logo.classList.add('open')
                 logoClass.classList.add('open')
                 searchMobile.classList.add('open')
@@ -297,7 +302,6 @@
             }
 
             function searchProperties(searchString){
-                console.log(searchString);
                 document.getElementById("webSearchResults").innerHTML = '';
                 document.getElementById("mobileSearchResults").innerHTML = '';
                 if (searchString === "") {
@@ -309,7 +313,7 @@
                     document.getElementById("webSearchResults").innerHTML = this.responseText;
                     document.getElementById("mobileSearchResults").innerHTML = this.responseText;
                 }
-                xhttp.open("GET", "search-properties?searchString="+searchString);
+                xhttp.open("GET", "index.php/search-properties?searchString="+searchString);
                 xhttp.send();
             }
 

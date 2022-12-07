@@ -55,7 +55,6 @@ class ImportSheets extends Command
         Sheet::truncate();
         $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
-        $this->info('Sheet Importing ' . $this->spreadsheetId);
         $spreadsheetId = $this->spreadsheetId;
         $sheets = Sheets::spreadsheet($spreadsheetId)
             ->sheetList();

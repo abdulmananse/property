@@ -417,6 +417,7 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     private function createOrUpdateEvents ($events, $ical, $propertyDb) {
+        $uIDs = [];
         foreach($events as $event) {
             $dtstart = $ical->iCalDateToDateTime($event->dtstart_array[3]);
             $dtend = $ical->iCalDateToDateTime($event->dtend_array[3]);
@@ -425,6 +426,8 @@ class HomeController extends Controller
                 'property_id' => $propertyDb->id,
                 'uid' => $event->uid
             ];
+
+            $uIDs[] = $event->uid;
 
             $eventDb = EventModel::where($where)->first();
             if(!$eventDb) {
@@ -440,8 +443,14 @@ class HomeController extends Controller
                     'transp' => $event->transp,
                 ]);
             }
-
         }
+        $eventsToBeDeleted = EventModel::where('property_id', $propertyDb->id)->whereNotIn('uid', $uIDs);
+        if($eventsToBeDeleted->count() > 0){
+            Log::Error('DeletingPropertyEvents', [$propertyDb]);
+            Log::Error('DeletingEvents', [$eventsToBeDeleted->get()]);
+            $eventsToBeDeleted->delete();
+        }
+
     }
 
 

@@ -66,13 +66,11 @@ class ImportProperties extends Command
         if ($sheet) {
             $this->info($sheet->name . ' Sheet Property Importing');
             $homeController->savePropertyData($sheet);
-            $this->info($sheet->name . ' Property Imported');
         } else {
             $sheets = Sheet::get();
             foreach ($sheets as $sheet) {
                 $this->info($sheet->name . ' Sheet Property Importing');
                 $homeController->savePropertyData($sheet);
-                $this->info($sheet->name . ' Property Imported');
             }
         }
         $endDateTime = Carbon::now();
