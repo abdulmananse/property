@@ -33,6 +33,43 @@ class HomeController extends Controller
         $this->spreadsheetId = config('sheets.post_spreadsheet_id');
     }
 
+    public function searchProperties(Request $request){
+        $searchString = $request->searchString;
+        if ($searchString) {
+            $where = ' WHERE 1 AND properties.ical_link IS NOT NULL AND (properties.name LIKE "%'.$searchString.'%" OR properties.property_id LIKE "%'.$searchString.'%")';
+            $orderBy = 'properties.name ASC';
+            $query = 'SELECT
+                    properties.clickup_id,
+                    properties.name,
+                    properties.property_id
+                FROM properties
+                LEFT JOIN `events` ON events.property_id = properties.id
+                '. $where .'
+                GROUP BY
+                    properties.id,properties.property_id
+                ORDER BY '.$orderBy.'
+                LIMIT 10 ';
+
+            $properties = DB::select(DB::raw($query));
+
+            $searchElements = '';
+            foreach($properties as $property){
+                $searchElements .= '<div class="search-element">
+                <div class="title-element">
+                    <h2>' . $property->name . ' </h2>
+                    <p>'. $property->property_id.'</p>
+                    </div>
+                    <div class="btnClick">
+                        <button class="'.($property->clickup_id ? 'active' : 'disabled').'" onclick="'.($property->clickup_id ? 'window.open(\''.$property->clickup_id.'\', \'\', \'popup\')' : '').'">ClickUp</button>
+                        </div>
+                    </div>';
+            }
+            return $searchElements;
+        }else{
+            return '';
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -3,11 +3,11 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Revolution\Google\Sheets\Facades\Sheets;
 use App\Models\Sheet;
 use App\Models\Property;
 use App\Http\Controllers\HomeController;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ImportProperties extends Command
 {
@@ -53,6 +53,7 @@ class ImportProperties extends Command
         ini_set('max_execution_time', 0);
 
         $startDateTime = Carbon::now();
+	    Log::error('Import Properties Started', [$startDateTime->format('d-m-Y h:i A')]);
         $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $sheetName = $this->argument('sheet');

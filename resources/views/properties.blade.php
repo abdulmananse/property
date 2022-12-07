@@ -30,10 +30,23 @@
             <div class="container-header">
                 <div class="header">
                     <div class="logo-class">
+                        <img class="droparrow" src="{{ asset('img/down-arrow-black.png') }}">
                         <img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}">
                         <p>Sales Platform</p>
                     </div>
-                    <input type="search" id="search" name="search" placeholder="Search for a home">
+                    <div class="searchHeader" id="searchHeader">
+                        <img class="loupe" src="{{ asset('img/loupe.png') }}">
+                        <input class="searchClass" onkeyup="searchProperties(this.value)" type="search" id="search" name="search" placeholder="Search Name/ID">
+                        <div class="search-dropdown" id="webSearchResults">
+                        </div>
+                    </div>
+                    <div class="searchMobile" id="mobileSearch">
+                        <div class="searchWrappMobile">
+                            <input class="searchClassMobile" onkeyup="searchProperties(this.value)" value="" type="search" id="searchMobile" name="search" placeholder="Search Name/ID">
+                        </div>
+                        <div class="dropdownSearchMobile" id="mobileSearchResults">
+                        </div>
+                    </div>
                 </div>
             </div>
                 <div class="sales-platform">
@@ -189,6 +202,7 @@
 
         <script>
             $(document).ready(function(){
+
                 $('.select-destination-name').click(function(){
                     $('.destination-label span').html($(this).attr('data-value'));
                     $('input[name=city]').val($(this).attr('data-value'));
@@ -243,6 +257,69 @@
                     select.classList.remove('open');
                 }
             });
+
+            let searchOpen = document.querySelector('.searchClass');
+            let searchDrop = document.querySelector('.search-dropdown');
+            let loupe = document.querySelector('.loupe');
+            let logo = document.querySelector('.logo');
+            let logoClass = document.querySelector('.logo-class');
+            let searchMobile = document.querySelector('.searchMobile');
+            let salesPlatform = document.querySelector('.sales-platform');
+
+            searchOpen.addEventListener('click',function(){
+                searchDrop.classList.add('open')
+            })
+            loupe.addEventListener('click',function(){
+                openSearch();
+            })
+
+            window.addEventListener('click', function(e){
+                if (!document.getElementById('searchHeader').contains(e.target) &&
+                    !document.getElementById('mobileSearch').contains(e.target)){
+                    closeSearch();
+                }
+            })
+
+            function openSearch(){
+                logo.classList.add('open')
+                logoClass.classList.add('open')
+                searchMobile.classList.add('open')
+                salesPlatform.classList.add('active')
+            }
+
+            function closeSearch(){
+                logo.classList.remove('open')
+                logoClass.classList.remove('open')
+                searchMobile.classList.remove('open')
+                salesPlatform.classList.remove('active')
+                searchDrop.classList.remove('open')
+                $('#search').val('');
+            }
+
+            function searchProperties(searchString){
+                console.log(searchString);
+                document.getElementById("webSearchResults").innerHTML = '';
+                document.getElementById("mobileSearchResults").innerHTML = '';
+                if (searchString === "") {
+                    document.getElementById("txtHint").innerHTML = "";
+                    return;
+                }
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    document.getElementById("webSearchResults").innerHTML = this.responseText;
+                    document.getElementById("mobileSearchResults").innerHTML = this.responseText;
+                }
+                xhttp.open("GET", "search-properties?searchString="+searchString);
+                xhttp.send();
+            }
+
+            let width = window.screen.availWidth;
+            let mobileWidth = '810';
+            if(width > mobileWidth){
+                salesPlatform.classList.remove('open')
+            }
+
+
         </script>
     </body>
 </html>
