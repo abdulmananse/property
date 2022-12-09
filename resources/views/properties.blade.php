@@ -164,7 +164,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="click-btn">
-                                                        <button class="{{ ($property->clickup_id) ? 'active' : 'disabled' }}" onclick="{{ ($property->clickup_id) ? 'window.open(\''.$property->clickup_id.'\', \'\', \'popup\')' : '' }}">ClickUp</button>
+                                                        <a class="{{ ($property->clickup_id) ? 'active' : 'disabled' }}" href="{{ ($property->clickup_id) ? $property->clickup_id : 'javascript:void(0)' }}" target="_blank">ClickUp</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -259,9 +259,13 @@
                 }
             });
 
+
+            let width = window.screen.availWidth;
+            let mobileWidth = '810';
             let searchOpen = document.querySelector('.searchClass');
             let searchDrop = document.querySelector('.search-dropdown');
             let loupe = document.querySelector('.loupe');
+            let droparrow = document.querySelector('.droparrow');
             let logo = document.querySelector('.logo');
             let logoClass = document.querySelector('.logo-class');
             let searchMobile = document.querySelector('.searchMobile');
@@ -286,18 +290,29 @@
             function openSearch(){
                 document.getElementById("webSearchResults").innerHTML = '';
                 document.getElementById("mobileSearchResults").innerHTML = '';
+                droparrow.classList.toggle('open')
                 logo.classList.add('open')
                 logoClass.classList.add('open')
                 searchMobile.classList.add('open')
                 salesPlatform.classList.add('active')
+                loupe.classList.add('d-none')
+                if(width < mobileWidth){
+                    loupe.classList.remove('d-block')
+                }
             }
 
             function closeSearch(){
+                droparrow.classList.remove('open')
                 logo.classList.remove('open')
                 logoClass.classList.remove('open')
                 searchMobile.classList.remove('open')
                 salesPlatform.classList.remove('active')
                 searchDrop.classList.remove('open')
+
+                if(width < mobileWidth){
+                    loupe.classList.remove('d-block')
+                }
+                loupe.classList.remove('d-none')
                 $('#search').val('');
             }
 
@@ -317,8 +332,6 @@
                 xhttp.send();
             }
 
-            let width = window.screen.availWidth;
-            let mobileWidth = '810';
             if(width > mobileWidth){
                 salesPlatform.classList.remove('open')
             }

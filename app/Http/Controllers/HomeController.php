@@ -60,7 +60,7 @@ class HomeController extends Controller
                     <p>'. $property->property_id.'</p>
                     </div>
                     <div class="btnClick">
-                        <button class="'.($property->clickup_id ? 'active' : 'disabled').'" onclick="'.($property->clickup_id ? 'window.open(\''.$property->clickup_id.'\', \'\', \'popup\')' : '').'">ClickUp</button>
+                        <a class="'.($property->clickup_id ? 'active' : 'disabled').'" href="'.($property->clickup_id ? $property->clickup_id : 'javascript:void(0)').'" target="_blank">ClickUp</a>
                         </div>
                     </div>';
             }

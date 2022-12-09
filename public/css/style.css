@@ -356,7 +356,8 @@ select, input{
     text-align: right;
 }
 .click-btn button,
-.click-btn a{
+.click-btn a,
+.btnClick a{
     border-radius: 3px;
     border: solid 1px #163245;
     background-color: #163245;
@@ -367,6 +368,11 @@ select, input{
     font-family: Inter-Regular;
     width: 90px;
     height: 34px;
+    padding: 8px 12px;
+    text-decoration: none;
+}
+.btnClick a{
+    padding: 5px 9px;
 }
 button.disabled{
     opacity: 0.6
