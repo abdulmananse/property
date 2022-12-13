@@ -420,4 +420,18 @@ class HomeController extends Controller
         else
             return true;
     }
+
+
+
+
+    public function edit($id) {
+
+
+        User::find(1);
+        User::where('id', 1)->first();
+
+
+        $user = User::find($id);
+        dd($user);
+    }
 }

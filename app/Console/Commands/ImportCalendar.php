@@ -52,6 +52,7 @@ class ImportCalendar extends Command
 
         $property = Property::where('property_id', $propertyId)->first();
         if ($propertyId !== 0 && $property) {
+            EventModel::where('property_id', $property->id)->delete();
             $this->info($property->name . ' Calendar Importing');
             $homeController->getEventsFromIcsFile($property);
             $this->info($property->name . ' Calendar Imported');
