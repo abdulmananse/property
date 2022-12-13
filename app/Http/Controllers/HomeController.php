@@ -17,6 +17,7 @@ use App\Models\Event as EventModel;
 
 use DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -483,5 +484,49 @@ class HomeController extends Controller
 
         $user = User::find($id);
         dd($user);
+    }
+
+    public function createTask(Request $request)
+    {
+        $this->validate($request, [
+            'property_id' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required'
+        ]);
+
+        $url = config('app.clickup_base_url').'list/'.config('app.clickup_list_id').'/task';
+        $requestData = [
+            'name' => $request->property_id . ' - Sales Platform Unavailability',
+            'status' => config('app.clickup_status'),
+            'custom_fields' => [
+                [
+                    'id' => config('app.clickup_custom_field_request_desc_id'),
+                    'value' => 'Please mark this house NOT available from ' . $request->start_date.' until ' . $request->end_date
+                ],
+                [
+                    'id' => config('app.clickup_custom_field_request_type_id'),
+                    'value' => config('app.clickup_custom_field_request_type_value')
+                ],
+                [
+                    'id' => config('app.clickup_custom_field_requestee_id'),
+                    'value' => config('app.clickup_custom_field_requestee_value')
+                ]
+            ]
+        ];
+        try {
+
+            $response = Http::withHeaders([
+                        'Content-Type' => 'application/json',
+                        'Authorization' => config('app.clickup_api_key')
+                    ])->post($url, $requestData);
+                
+            if ($response->status() == 200) {
+                return response()->json(['success' => true], 200);
+            } else {
+                return response()->json(['success' => false], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false], 200);
+        }
     }
 }

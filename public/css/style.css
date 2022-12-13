@@ -480,6 +480,118 @@ button.disabled{
     display: none;
 }
 
+/*header-right ticket*/
+
+.header-right{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-self: right;
+}
+.ticket{
+    width: 121px;
+    height: 30px;
+    margin-right: 12px;
+    place-self: center;
+    border-radius: 3px;
+    border: solid 1px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    margin: auto auto;
+    place-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-right: 12px;
+}
+.ticketbtn{
+    font-family: Inter-Regular;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.1px;
+    color: black;
+}
+.ticket img{
+    width: 13.8px;
+    height: 11px;
+}
+.ticket-dates{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 17px;
+}
+.ticket-dates input{
+    width: 96px!important;
+    height: 35px!important;
+    border-radius: 3px;
+    border: solid 1px #8e8e93;
+    background-color: #fff;
+    font-family: Inter-Regular;
+    color: #636366;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 9px 12px;
+}
+.ticket-form{
+    width: 235px;
+    height: 230px;
+    border-radius: 3px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+    border: solid 1px #8e8e93;
+    background-color: #fff;
+    position: absolute;
+    top: 51px;
+    z-index: 2;
+    padding: 16px;
+    display: none;
+}
+.ticket-form.open{
+    display: block;
+}
+.ticket-form p{
+    font-family: Inter-Regular;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.1px;
+    color: black;
+}
+.input-form{
+    position: relative;
+}
+.ticket-id input{
+    font-family: Inter-Regular;
+    color: #636366;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 9px 12px;
+    width: 100%!important;
+    border-radius: 3px;
+    border: solid 1px #8e8e93;
+}
+.ticket-send{
+    font-size: 9px;
+    font-weight: 600;
+    background-color: #1fb797;
+    font-weight: 600;
+    font-family: Inter-Regular;
+    color: white;
+    border: none!important;
+    width: 100%;
+    margin-bottom: 0px!important;
+    height: 35px;
+    margin-top: 14px;
+    border-radius: 3px;
+    border: solid 1px #1fb797;
+}
+.droparrow-wrapper{
+    display: none;
+}
 
 @media (max-width: 1430px) {
     .col-xl-4{

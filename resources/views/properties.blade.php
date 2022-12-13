@@ -18,6 +18,7 @@
         <script type='text/javascript' src='{{ asset('js/jquery.min.js') }}'></script>
         <script type='text/javascript' src="{{ asset('js/bootstrap.min.js') }}"></script>
         <script type='text/javascript' src="{{ asset('js/jquery-ui.min.js') }}"></script>
+        <script type='text/javascript' src="{{ asset('js/loadingoverlay.min.js') }}"></script>
 
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -35,10 +36,38 @@
                         <img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}">
                         <p>Sales Platform</p>
                     </div>
-                    <div class="searchHeader" id="searchHeader">
-                        <img class="loupe" src="{{ asset('img/loupe.png') }}">
-                        <input class="searchClass" onkeyup="searchProperties(this.value)" type="search" id="search" name="search" placeholder="Search Name/ID">
-                        <div class="search-dropdown" id="webSearchResults">
+
+                    <div class="header-right">
+                        <div class="ticket">
+                            <img src="{{ asset('img/ticket.png') }}">
+                            <div class="ticketbtn">Send ticket</div>
+                        </div>
+                        <div class="ticket-form">
+                            <form method="post" action="{{ url('create-task') }}" class="creteTicketForm" >
+                                @csrf
+                                <p>Please close the dates:</p>
+                                <div class="ticket-dates">
+                                    <div class="input-form">
+                                        <input type="text" autocomplete="off" name="start_date" placeholder="From" class="datepicker">
+                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                    </div>
+                                    <div class="input-form">
+                                        <input type="text" autocomplete="off" name="end_date" placeholder="To" class="datepicker">
+                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                    </div>
+                                </div>
+                                <p>Property ID</p>
+                                <div class="ticket-id">
+                                    <input id="property_id" name="property_id" placeholder="Property ID">
+                                </div>
+                                <button class="ticket-send">Send Ticket</button>
+                            </form>
+                        </div>
+                        <div class="searchHeader" id="searchHeader">
+                            <img class="loupe" src="{{ asset('img/loupe.png') }}">
+                            <input class="searchClass" onkeyup="searchProperties(this.value)" type="search" id="search" name="search" placeholder="Search Name/ID">
+                            <div class="search-dropdown" id="webSearchResults">
+                            </div>
                         </div>
                     </div>
                     <div class="searchMobile" id="mobileSearch">
@@ -201,7 +230,13 @@
 
         </section>
 
+        @include('notification')
+
         <script>
+            const ticketBtn = document.querySelector('.ticket');
+            const ticketForm = document.querySelector('.ticket-form');
+            const seacrhHeader = document.querySelector('.searchHeader');
+
             $(document).ready(function(){
 
                 $('.select-destination-name').click(function(){
@@ -216,12 +251,44 @@
                     $('input[name=sort_by]').val($(this).attr('data-value'));
                     $('form.search-form').submit();
                 });
-            });
-            $( function() {
+        
+                
                 $('.select2').select2();
                 $( ".datepicker" ).datepicker({
-                dateFormat: "dd-mm-yy"
-              });
+                    dateFormat: "dd-mm-yy"
+                });
+
+                $(".ticket-send").click(function(e){
+                    e.preventDefault();  
+                    let _self = $(this);
+                    let _form = $('.creteTicketForm');
+                    let formData = _form.serialize();
+                    _self.LoadingOverlay('show');
+                    $.ajax({
+                        type: _form.attr('method'),
+                        url: _form.attr('action'),
+                        processData: false,
+                        dataType: 'json',
+                        data: formData,
+                        success:function (res) {
+                            console.log(res);
+                            if (res.success) {
+                                successMessage('Task successfully created');
+                                ticketForm.classList.remove('open')
+                                $("#property_id").val('');
+                                $(".datepicker").val('');
+                            } else {
+                                errorMessage('Task not created');
+                            }
+                        },
+                        error: function (request, status, error) {
+                            showAjaxErrorMessage(request);      
+                        },
+                        complete:function (res) {
+                            _self.LoadingOverlay('hide');
+                        }
+                    });
+                });
             });
         </script>
         <script>
@@ -266,6 +333,7 @@
             let searchDrop = document.querySelector('.search-dropdown');
             let loupe = document.querySelector('.loupe');
             let droparrow = document.querySelector('.droparrow');
+            const droparrowWrapper = document.querySelector('.droparrow-wrapper');
             let logo = document.querySelector('.logo');
             let logoClass = document.querySelector('.logo-class');
             let searchMobile = document.querySelector('.searchMobile');
@@ -280,11 +348,36 @@
                 openSearch();
             })
 
+            droparrow.addEventListener('click',function(){
+                droparrow.classList.remove('open')
+                logo.classList.remove('open')
+                logoClass.classList.remove('open')
+                searchMobile.classList.remove('open')
+                salesPlatform.classList.remove('active')
+                ticketForm.classList.remove('open')
+                droparrowWrapper.classList.remove('open')
+                seacrhHeader.classList.remove('open')
+                ticketBtn.classList.remove('open')
+            })
+
             window.addEventListener('click', function(e){
                 if (!document.getElementById('searchHeader').contains(e.target) &&
                     !document.getElementById('mobileSearch').contains(e.target)){
                     closeSearch();
                 }
+            })
+
+            
+
+            ticketBtn.addEventListener('click', function(){
+                ticketForm.classList.toggle('open')
+                logo.classList.toggle('open')
+                logoClass.classList.toggle('open')
+                droparrow.classList.toggle('open')
+                droparrowWrapper.classList.toggle('open')
+                seacrhHeader.classList.toggle('open')
+                ticketBtn.classList.toggle('open')
+
             })
 
             function openSearch(){
@@ -294,6 +387,7 @@
                 logo.classList.add('open')
                 logoClass.classList.add('open')
                 searchMobile.classList.add('open')
+                droparrowWrapper.classList.toggle('open')
                 salesPlatform.classList.add('active')
                 loupe.classList.add('d-none')
                 if(width < mobileWidth){
@@ -336,6 +430,61 @@
                 salesPlatform.classList.remove('open')
             }
 
+
+            /**
+             * Show Ajax Error Message
+             * @param response
+             */
+            function showAjaxErrorMessage(response, form = false)
+            {
+                let responseJson = JSON.parse(response.responseText);
+                let errors = responseJson.errors;
+                
+                if (errors !== undefined) {
+                    Object.keys(errors).forEach(function (item) {
+                        for (let value of errors[item]) {
+                            errorMessage(value);
+                        }
+                    });
+                } else if (responseJson.message !== undefined) {
+                    errorMessage(responseJson.message);
+                }
+                
+            }    
+
+            /**
+             * Show Success Message
+             * @param message
+             * @param title
+             */
+            function successMessage(message, title)
+            {
+                if (!title) title = "Success!";
+                toastr.remove();
+                toastr.success(message, '', {
+                    closeButton: true,
+                    timeOut: 4000,
+                    progressBar: true,
+                    newestOnTop: true
+                }); 
+            }
+
+            /**
+             * Show Error Message
+             * @param message
+             * @param title
+             */
+            function errorMessage(message, title)
+            {
+                if (!title) title = "Error!";
+                toastr.remove();
+                toastr.error(message, '', {
+                    closeButton: true,
+                    timeOut: 4000,
+                    progressBar: true,
+                    newestOnTop: true
+                }); 
+            }  
 
         </script>
     </body>

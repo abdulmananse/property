@@ -122,6 +122,23 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Clickup Key
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'clickup_base_url' => env('CLICKUP_BASE_URL'),
+    'clickup_api_key' => env('CLICKUP_API_KEY'),
+    'clickup_list_id' => env('CLICKUP_LIST_ID'),
+    'clickup_status' => env('CLICKUP_STATUS'),
+    'clickup_custom_field_request_desc_id' => env('CLICKUP_CUSTOM_FIELD_REQUEST_DESCRIPTION_ID'),
+    'clickup_custom_field_request_type_id' => env('CLICKUP_CUSTOM_FIELD_REQUEST_TYPE_ID'),
+    'clickup_custom_field_request_type_value' => env('CLICKUP_CUSTOM_FIELD_REQUEST_TYPE_VALUE'),
+    'clickup_custom_field_requestee_id' => env('CLICKUP_CUSTOM_FIELD_REQUESTEE_ID'),
+    'clickup_custom_field_requestee_value' => env('CLICKUP_CUSTOM_FIELD_REQUESTEE_VALUE'),
 
     /*
     |--------------------------------------------------------------------------
