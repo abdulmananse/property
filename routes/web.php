@@ -16,6 +16,7 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('search-properties', [HomeController::class, 'searchProperties']);
 Route::get('detail/{id}', [HomeController::class, 'show']);
 Route::get('import-sheets', [HomeController::class, 'importSheets']);
 Route::get('import-properties/{sheetId?}', [HomeController::class, 'importProperties']);

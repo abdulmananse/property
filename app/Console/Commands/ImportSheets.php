@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Revolution\Google\Sheets\Facades\Sheets;
 use App\Models\Sheet;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ImportSheets extends Command
 {
@@ -49,12 +50,11 @@ class ImportSheets extends Command
      */
     public function handle()
     {
-
-        Sheet::truncate();
         $startDateTime = Carbon::now();
+	    Log::error('Import Sheets Started', [$startDateTime->format('d-m-Y h:i A')]);
+        Sheet::truncate();
         $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
-        $this->info('Sheet Importing ' . $this->spreadsheetId);
         $spreadsheetId = $this->spreadsheetId;
         $sheets = Sheets::spreadsheet($spreadsheetId)
             ->sheetList();

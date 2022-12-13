@@ -4,9 +4,10 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Property;
-use App\Models\Event as EventModel;
 use App\Http\Controllers\HomeController;
+use App\Models\Event as EventModel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ImportCalendar extends Command
 {
@@ -44,10 +45,11 @@ class ImportCalendar extends Command
         ini_set('max_execution_time', 0);
 
         $startDateTime = Carbon::now();
+	    Log::error('Import Calendars Started', [$startDateTime->format('d-m-Y h:i A')]);
         $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $propertyId = $this->argument('property_id');
-        
+
         $homeController = app()->make(HomeController::class);
 
         $property = Property::where('property_id', $propertyId)->first();
@@ -57,12 +59,11 @@ class ImportCalendar extends Command
             $homeController->getEventsFromIcsFile($property);
             $this->info($property->name . ' Calendar Imported');
         } else {
-            EventModel::truncate();
             $properties = Property::get();
             foreach($properties as $property) {
+                //EventModel::where('property_id', $property->id)->delete();
                 $this->info($property->name . ' Calendar Importing');
                 $homeController->getEventsFromIcsFile($property);
-                $this->info($property->name . ' Calendar Imported');
             }
         }
         $endDateTime = Carbon::now();

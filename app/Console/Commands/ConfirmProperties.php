@@ -39,14 +39,15 @@ class ConfirmProperties extends Command
      */
     public function handle()
     {
+        ini_set('max_execution_time', 0);
+
         $totalProperties = Property::whereNotNull('destination')->groupBy('destination')->count();
         $totalEvents = EventModel::groupBy('property_id')->count();
         if($totalProperties < 100){
             $this->call('import:sheets');
             $this->call('import:properties');
         }
-
-        if($totalEvents < 400){
+        if($totalEvents < 40){
             $this->call('import:calendar');
         }
         return 0;

@@ -2,6 +2,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
         <title>Property</title>
 
@@ -30,10 +31,23 @@
             <div class="container-header">
                 <div class="header">
                     <div class="logo-class">
+                        <img class="droparrow" src="{{ asset('img/down-arrow-black.png') }}">
                         <img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}">
                         <p>Sales Platform</p>
                     </div>
-                    <input type="search" id="search" name="search" placeholder="Search for a home">
+                    <div class="searchHeader" id="searchHeader">
+                        <img class="loupe" src="{{ asset('img/loupe.png') }}">
+                        <input class="searchClass" onkeyup="searchProperties(this.value)" type="search" id="search" name="search" placeholder="Search Name/ID">
+                        <div class="search-dropdown" id="webSearchResults">
+                        </div>
+                    </div>
+                    <div class="searchMobile" id="mobileSearch">
+                        <div class="searchWrappMobile">
+                            <input class="searchClassMobile" onkeyup="searchProperties(this.value)" value="" type="search" id="searchMobile" name="search" placeholder="Search Name/ID">
+                        </div>
+                        <div class="dropdownSearchMobile" id="mobileSearchResults">
+                        </div>
+                    </div>
                 </div>
             </div>
                 <div class="sales-platform">
@@ -150,7 +164,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="click-btn">
-                                                        <button>ClickUp</button>
+                                                        <a class="{{ ($property->clickup_id) ? 'active' : 'disabled' }}" href="{{ ($property->clickup_id) ? $property->clickup_id : 'javascript:void(0)' }}" target="_blank">ClickUp</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -189,6 +203,7 @@
 
         <script>
             $(document).ready(function(){
+
                 $('.select-destination-name').click(function(){
                     $('.destination-label span').html($(this).attr('data-value'));
                     $('input[name=city]').val($(this).attr('data-value'));
@@ -207,7 +222,7 @@
                 $( ".datepicker" ).datepicker({
                 dateFormat: "dd-mm-yy"
               });
-            } );
+            });
         </script>
         <script>
             document.querySelector('.select-click').addEventListener('click', function() {
@@ -243,6 +258,85 @@
                     select.classList.remove('open');
                 }
             });
+
+
+            let width = window.screen.availWidth;
+            let mobileWidth = '810';
+            let searchOpen = document.querySelector('.searchClass');
+            let searchDrop = document.querySelector('.search-dropdown');
+            let loupe = document.querySelector('.loupe');
+            let droparrow = document.querySelector('.droparrow');
+            let logo = document.querySelector('.logo');
+            let logoClass = document.querySelector('.logo-class');
+            let searchMobile = document.querySelector('.searchMobile');
+            let salesPlatform = document.querySelector('.sales-platform');
+
+            searchOpen.addEventListener('click',function(){
+                searchDrop.classList.add('open')
+                document.getElementById("webSearchResults").innerHTML = '';
+                document.getElementById("mobileSearchResults").innerHTML = '';
+            })
+            loupe.addEventListener('click',function(){
+                openSearch();
+            })
+
+            window.addEventListener('click', function(e){
+                if (!document.getElementById('searchHeader').contains(e.target) &&
+                    !document.getElementById('mobileSearch').contains(e.target)){
+                    closeSearch();
+                }
+            })
+
+            function openSearch(){
+                document.getElementById("webSearchResults").innerHTML = '';
+                document.getElementById("mobileSearchResults").innerHTML = '';
+                droparrow.classList.toggle('open')
+                logo.classList.add('open')
+                logoClass.classList.add('open')
+                searchMobile.classList.add('open')
+                salesPlatform.classList.add('active')
+                loupe.classList.add('d-none')
+                if(width < mobileWidth){
+                    loupe.classList.remove('d-block')
+                }
+            }
+
+            function closeSearch(){
+                droparrow.classList.remove('open')
+                logo.classList.remove('open')
+                logoClass.classList.remove('open')
+                searchMobile.classList.remove('open')
+                salesPlatform.classList.remove('active')
+                searchDrop.classList.remove('open')
+
+                if(width < mobileWidth){
+                    loupe.classList.remove('d-block')
+                }
+                loupe.classList.remove('d-none')
+                $('#search').val('');
+            }
+
+            function searchProperties(searchString){
+                document.getElementById("webSearchResults").innerHTML = '';
+                document.getElementById("mobileSearchResults").innerHTML = '';
+                if (searchString === "") {
+                    document.getElementById("txtHint").innerHTML = "";
+                    return;
+                }
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    document.getElementById("webSearchResults").innerHTML = this.responseText;
+                    document.getElementById("mobileSearchResults").innerHTML = this.responseText;
+                }
+                xhttp.open("GET", "index.php/search-properties?searchString="+searchString);
+                xhttp.send();
+            }
+
+            if(width > mobileWidth){
+                salesPlatform.classList.remove('open')
+            }
+
+
         </script>
     </body>
 </html>

@@ -48,6 +48,7 @@ body{
     line-height: 1.38;
     letter-spacing: normal;
     font-family: 'InriaSerif';
+    width: 100px;
 }
 #search{
     justify-self: right;
@@ -335,7 +336,7 @@ select, input{
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
-    line-height: normal;   
+    line-height: normal;
     color: #000000;
 }
 .result span{
@@ -354,7 +355,9 @@ select, input{
 .click-btn{
     text-align: right;
 }
-.click-btn button{
+.click-btn button,
+.click-btn a,
+.btnClick a{
     border-radius: 3px;
     border: solid 1px #163245;
     background-color: #163245;
@@ -365,6 +368,14 @@ select, input{
     font-family: Inter-Regular;
     width: 90px;
     height: 34px;
+    padding: 8px 12px;
+    text-decoration: none;
+}
+.btnClick a{
+    padding: 5px 9px;
+}
+button.disabled{
+    opacity: 0.6
 }
 .page-item.active .page-link{
     background-color: #163245;
@@ -381,6 +392,95 @@ select, input{
 .pagina{
     margin: 0px 63px;
 }
+
+/* SEARCH DOROPDOWN */
+.searchHeader{
+    position: relative;
+    text-align: right;
+}
+.search-dropdown{
+    position: absolute;
+    background-color: white;
+    right: 45px;
+    top: 32px;
+    height: 211px;
+    border-radius: 3px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+    border: solid 1px #8e8e93;
+    overflow: auto;
+    width: 235px;
+    display: none;
+    z-index: 1;
+}
+.search-dropdown.open{
+    display: block;
+}
+.search-element{
+    display: grid;
+    grid-template-columns: 70% 30%;
+    justify-items: flex-start;
+    padding: 12px;
+    height: 52px;
+}
+.search-element:hover{
+    background-color: rgba(22, 50, 69, 0.1);
+}
+.title-element h2{
+    font-family: Inter-Regular;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 116px;
+    margin-bottom: 3px;
+    text-align: left;
+}
+.title-element p{
+    font-family: Inter-Regular;
+    font-size: 9px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #636366;
+    float: left;
+}
+.btnClick{
+    justify-self: right;
+}
+.btnClick button{
+    width: 52px;
+    height: 20px;
+    border-radius: 3px;
+    background-color: #163245;
+    font-family: 'Inter-Regular';
+    font-size: 7px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    border: 0px;
+}
+.droparrow{
+    display: none;
+}
+.searchMobile{
+    display: none;
+}
+.loupe{
+    display: none;
+}
+
+
 @media (max-width: 1430px) {
     .col-xl-4{
         width: 33.333333%!important;
@@ -397,7 +497,7 @@ select, input{
 }
 @media (max-width: 1200px) {
     .col-auto button,
-    .description .select, 
+    .description .select,
     .baderooms .select,
     .select-click .select {
         width: 113px;
@@ -428,7 +528,7 @@ select, input{
 }
 @media (max-width: 970px) {
     .col-auto button,
-    .description .select, 
+    .description .select,
     .baderooms .select,
     .select-click .select {
         width: 110px;
@@ -467,14 +567,11 @@ select, input{
         display: block;
         width: 100%;
     }
-    .header{
-        grid-template-columns: 1fr;
-    }
     select, input {
         width: 100%!important;
     }
     .col-auto button,
-    .description .select, 
+    .description .select,
     .baderooms .select,
     .select-click .select,
     .select-click {
@@ -499,6 +596,9 @@ select, input{
     .description,
     .baderooms {
         padding: 5px!important;
+    }
+    .search-dropdown{
+        display: none!important;
     }
     .search-input .col-auto{
         padding: 0px;
@@ -528,6 +628,87 @@ select, input{
     .bed span{
         margin-left: 5px;
     }
+    .loupe{
+        display: block;
+        width: 11.4px;
+        height: 11.5px;
+    }
+    .searchHeader{
+        justify-self: right;
+    }
+    .droparrow.open{
+        display: block;
+        width: 10.6px!important;
+        height: 10.9px!important;
+    }
+    .logo.open,
+    .logo-class.open p{
+        display: none;
+    }
+    .searchClass.open{
+        display: block!important;
+    }
+    .searchMobile.open{
+        display: block;
+        position: absolute;
+        top: 44px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f9f9f9;
+        z-index: 99;
+    }
+    .searchClassMobile{
+        display: block;
+        height: 32px!important;
+        border-radius: 16px;
+        border: solid 1px rgba(22, 50, 69, 0.1);
+        background-color: #f9f9f9;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.3);
+        font-family: Inter-Regular;
+        text-align: center;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: -0.12px;
+    }
+    .searchWrappMobile{
+        background-color: white;
+        padding: 24px 30px 17px 30px;
+    }
+    .dropdownSearchMobile{
+        overflow: auto;
+    }
+    .dropdownSearchMobile .search-element .title-element h2{
+        font-size: 14px;
+        letter-spacing: -0.12px;
+        width: 146px;
+        margin-bottom: 1px;
+    }
+    .dropdownSearchMobile .search-element .btnClick button{
+        width: 83px;
+        height: 28.1px;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+    .dropdownSearchMobile .search-element{
+        height: 73px;
+        padding: 10px 30px 0px 30px;
+        background-color: white;
+        margin: 3px 0px;
+    }
+    .dropdownSearchMobile .search-element:hover{
+        background-color: rgba(22, 50, 69, 0.1);
+    }
+    .header{
+        height: 44px;
+    }
+    .sales-platform.active{
+        display: none;
+    }
+
 
 }
 
