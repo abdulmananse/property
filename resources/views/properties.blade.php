@@ -32,17 +32,18 @@
             <div class="container-header">
                 <div class="header">
                     <div class="logo-class">
-                        <img class="droparrow" src="{{ asset('img/down-arrow-black.png') }}">
+                        <div class="droparrow-wrapper">
+                            <img class="droparrow" src="{{ asset('img/down-arrow-black.png') }}">
+                        </div>
                         <img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}">
-                        <p>Sales Platform</p>
                     </div>
 
                     <div class="header-right">
-                        <div class="ticket">
+                        <div class="ticket" id="ticket-btn">
                             <img src="{{ asset('img/ticket.png') }}">
-                            <div class="ticketbtn">Send ticket</div>
+                            <div class="ticketbtn" role="button">Send ticket</div>
                         </div>
-                        <div class="ticket-form">
+                        <div class="ticket-form" id="ticket-form">
                             <form method="post" action="{{ url('create-task') }}" class="creteTicketForm" >
                                 @csrf
                                 <p>Please close the dates:</p>
@@ -63,6 +64,12 @@
                                 <button class="ticket-send">Send Ticket</button>
                             </form>
                         </div>
+                        <div class="ticket-form class-thanks" id="ticket-thanks">
+                            <img src="{{ asset('img/bitmap@3x.png') }}">
+                            <h2>Thanks!</h2>
+                            <p>We have received the ticket and will update the availability accordingly.</p>
+                            <button class="closeThanksBtn" onclick="closeTicket()">Close</button>
+                        </div>
                         <div class="searchHeader" id="searchHeader">
                             <img class="loupe" src="{{ asset('img/loupe.png') }}">
                             <input class="searchClass" onkeyup="searchProperties(this.value)" type="search" id="search" name="search" placeholder="Search Name/ID">
@@ -79,155 +86,188 @@
                     </div>
                 </div>
             </div>
-                <div class="sales-platform">
-                    <div class="search-sales">
-                        <div class="form-class">
-                            <h1>Find homes quickly for your clients</h1>
-                            <div class="form-wrapper">
-                                <form class="row g-3 form-input search-form">
-
-                                    <div class="col-auto description">
-                                        <div class="select">
-                                            <div class="select__trigger destination-label"><span>{{ (@request()->city) ? @request()->city : 'Destination' }}</span>
-                                                <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
-                                            </div>
-                                            <div class="form-control custom-options">
-                                                <span selected class="custom-option select-destination-name" data-value="">Destination</span>
-                                                @foreach($cities as $city)
-                                                <span class="custom-option select-destination-name" data-value="{{ $city }}">{{ $city }}</span>
-                                                @endforeach
-                                                <input type="text" class="d-none" name="city" value="{{@request()->city}}" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto search-input">
-                                        <div class="col-auto">
-                                            <label for="start_date" class="visually-hidden">Start Date</label>
-                                            <input type="text" autocomplete="off" name="start_date" class="form-control datepicker" placeholder="Start Date" value="{{ @request()->start_date }}">
+            <div class="sales-platform">
+                <div class="search-sales">
+                    <div class="form-class">
+                        <h1>Find homes quickly</h1>
+                        <div class="form-wrapper">
+                            <form class="row g-3 form-input search-form">
+                                <div class="col-auto description">
+                                    <div class="select">
+                                        <div class="select__trigger destination-label">
+                                            <span>{{ (@request()->city) ? @request()->city : 'Destination' }}</span>
                                             <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                                         </div>
-                                        <div class="col-auto">
-                                            <label for="end_date" class="visually-hidden">End Date</label>
-                                            <input type="text" autocomplete="off" name="end_date" class="form-control datepicker" placeholder="End Date" value="{{ @request()->end_date }}">
-                                            <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                        <div class="form-control custom-options">
+                                            <span selected class="custom-option select-destination-name" data-value="">Destination</span>
+                                            @foreach($cities as $city)
+                                            <span class="custom-option select-destination-name" data-value="{{ $city }}">{{ $city }}</span>
+                                            @endforeach
+                                            <input type="text" class="d-none" name="city" value="{{@request()->city}}" />
                                         </div>
                                     </div>
-                                    <div class="col-auto baderooms">
-                                        <div class="select">
-                                            <div class="select__trigger bedrooms-label"><span>{{ (@request()->bedrooms) ? @request()->bedrooms : 'Bedrooms' }}</span>
-                                                <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
-                                            </div>
-                                            <div class="form-control custom-options">
-                                                <span selected class="custom-option select-bedrooms" data-value="">Bedrooms</span>
-                                                @for($i=1; $i<=$maxBedrooms; $i++)
-                                                <span class="custom-option select-bedrooms" data-value="{{ $i }}">{{ $i }}</span>
-                                                @endfor
-                                                <input type="text" class="d-none" name="bedrooms" value="{{@request()->bedrooms}}" />
-                                                <input type="text" class="d-none" name="sort_by" value="{{@request()->sort_by}}" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto search-btn">
-                                    <button type="submit" class="btn btn-primary mb-3">Search</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container-sort">
-                        <div class="select-wrapper sort">
-                            <div class="col-auto select-click">
-                                <div class="select">
-                                    <div class="select__trigger"><span>{{ (@request()->sort_by) ? @request()->sort_by : 'Sort by' }}</span>
+                                </div>
+                                <div class="col-auto search-input">
+                                    <div class="col-auto">
+                                        <label for="start_date" class="visually-hidden">Start Date</label>
+                                        <input type="text" autocomplete="off" name="start_date" class="form-control datepicker" placeholder="Start Date" value="{{ @request()->start_date }}">
                                         <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                                     </div>
-                                    <div class="form-control custom-options">
-                                        <span selected class="custom-option select-sortby" data-value="Property Name A to Z">Property Name A to Z</span>
-                                        <span selected class="custom-option select-sortby" data-value="No. of Bedrooms">No. of Bedrooms</span>
-                                        <span selected class="custom-option select-sortby" data-value="Property Type">Property Type</span>
+                                    <div class="col-auto">
+                                        <label for="end_date" class="visually-hidden">End Date</label>
+                                        <input type="text" autocomplete="off" name="end_date" class="form-control datepicker" placeholder="End Date" value="{{ @request()->end_date }}">
+                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="container-search">
-                        <div class="row justify-content-center mobile-grid">
-                            @forelse($properties as $property)
-                            <div class="col-md-4 col-xl-4 col-sm-6 mb-3 ">
-                                <div class="card shadow-0 border rounded-3 card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-12 col-lg-12 col-xl-12 card-name">
-                                                <div class="info-top">
-                                                    <div class="des-ID">
-                                                        <a href="javascript:void(0)">{{ $property->name }}</a>
-                                                        <span class="property-ID">{{ $property->property_id }}</span>
-                                                    </div>
-                                                    <div class="bed">
-                                                        <img src="{{ asset('img/bed.png') }}">
-                                                        <span>{{ $property->no_of_bedrooms }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="info-bottom">
-                                                    <div>
-                                                        <div class="result">
-                                                            <b>Destination:</b>
-                                                            <span>{{ $property->destination }}</span>
-                                                        </div>
-                                                        <div class="result">
-                                                            <b>Max Guests:</b>
-                                                            <span>{{ $property->max_guests }}</span>
-                                                        </div>
-                                                        <div class="result">
-                                                            <b>No. of Bathrooms:</b>
-                                                            <span>{{ $property->no_of_bathrooms }}</span>
-                                                        </div>
-                                                        <div class="result">
-                                                            <b>Property Type:</b>
-                                                            <span>{{ $property->property_type }}</span>
-                                                        </div>
-                                                        <div class="result">
-                                                            <b>No. of Beds:</b>
-                                                            <span>{{ $property->no_of_beds }}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="click-btn">
-                                                        <a class="{{ ($property->clickup_id) ? 'active' : 'disabled' }}" href="{{ ($property->clickup_id) ? $property->clickup_id : 'javascript:void(0)' }}" target="_blank">ClickUp</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div class="col-auto baderooms">
+                                    <div class="select">
+                                        <div class="select__trigger bedrooms-label"><span>{{ (@request()->bedrooms) ? @request()->bedrooms : 'Bedrooms' }}</span>
+                                            <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                        </div>
+                                        <div class="form-control custom-options">
+                                            <span selected class="custom-option select-bedrooms" data-value="">Bedrooms</span>
+                                            @for($i=1; $i<=$maxBedrooms; $i++)
+                                            <span class="custom-option select-bedrooms" data-value="{{ $i }}">{{ $i }}</span>
+                                            @endfor
+                                            <input type="text" class="d-none" name="bedrooms" value="{{@request()->bedrooms}}" />
+                                            <input type="text" class="d-none" name="sort_by" value="{{@request()->sort_by}}" />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            @empty
-                                <div class="col-md-12 col-xl-10 mb-3">
-                                    <div class="card shadow-0 border rounded-3">
-                                        <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-6 col-xl-6">
-                                                <p class="text-truncate mb-4 mb-md-0">
-                                                    Data not found!
-                                                </p>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
+                                <div class="col-auto search-btn">
+                                    <button type="submit" class="btn btn-primary mb-3">Search</button>
                                 </div>
-                            @endforelse
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="container-sort">
+                    <div class="select-wrapper sort">
+                        <div class="col-auto select-click">
+                            <div class="select">
+                                <div class="select__trigger"><span>{{ (@request()->sort_by) ? @request()->sort_by : 'Sort by' }}</span>
+                                    <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                </div>
+                                <div class="form-control custom-options">
+                                    <span selected class="custom-option select-sortby" data-value="Property Name A to Z">Property Name A to Z</span>
+                                    <span selected class="custom-option select-sortby" data-value="No. of Bedrooms">No. of Bedrooms</span>
+                                    <span selected class="custom-option select-sortby" data-value="Property Type">Property Type</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            @if($properties)
-            <div class="row justify-content-center float-end pt-3 pagina">
-                {!! $properties->appends($_GET)->links('pagination::bootstrap-4') !!}
-            </div>
-            @endif
-            </div>
+                <div class="container-search{{ ($properties ? ' open' : '')}}">
+                    <div class="row justify-content-center mobile-grid">
+                        @forelse($properties as $property)
+                        <div class="col-md-4 col-xl-4 col-sm-6 mb-3 ">
+                            <div class="card shadow-0 border rounded-3 card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-12 col-xl-12 card-name">
+                                            <div class="info-top">
+                                                <div class="des-ID">
+                                                    <a href="javascript:void(0)">{{ $property->name }}</a>
+                                                    <span class="property-ID">{{ $property->property_id }}</span>
+                                                </div>
+                                                <div class="bed">
+                                                    <img src="{{ asset('img/bed.png') }}">
+                                                    <span>{{ $property->no_of_bedrooms }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="info-bottom">
+                                                <div>
+                                                    <div class="result">
+                                                        <b>Destination:</b>
+                                                        <span>{{ $property->destination }}</span>
+                                                    </div>
+                                                    <div class="result">
+                                                        <b>Max Guests:</b>
+                                                        <span>{{ $property->max_guests }}</span>
+                                                    </div>
+                                                    <div class="result">
+                                                        <b>No. of Bathrooms:</b>
+                                                        <span>{{ $property->no_of_bathrooms }}</span>
+                                                    </div>
+                                                    <div class="result">
+                                                        <b>Property Type:</b>
+                                                        <span>{{ $property->property_type }}</span>
+                                                    </div>
+                                                    <div class="result">
+                                                        <b>No. of Beds:</b>
+                                                        <span>{{ $property->no_of_beds }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="click-btn">
+                                                    <a class="{{ ($property->clickup_id) ? 'active' : 'disabled' }}" href="{{ ($property->clickup_id) ? $property->clickup_id : 'javascript:void(0)' }}" target="_blank">ClickUp</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                        @endforelse
+                    </div>
+                </div>
 
+                @if($properties)
+                <div class="row justify-content-center float-end pt-3 pagina">
+                    {!! $properties->appends($_GET)->links('pagination::bootstrap-4') !!}
+                </div>
+                @endif
+
+                @if(!$properties)
+                <div class="container-default">
+                    <h2>Useful links</h2>
+                    <div class="default-page">
+                        <a href="#" target="_blank" role="button">
+                            <div class="box">
+                                <img src="{{ asset('img/box-1.png') }}">
+                                <div class="box-right">
+                                    <img src="{{ asset('img/invalid-name@3x.png') }}">
+                                    <h2>Our Collection</h2>
+                                    <p>See all our best homes</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://doc.clickup.com/4656098/d/h/4e2z2-8080/ceef9f6e09ea4e1" target="_blank" role="button">
+                            <div class="box">
+                                <img src="{{ asset('img/screenshot-2022-12-09-at-12-28-55@3x.png') }}">
+                                <div class="box-right">
+                                    <img src="{{ asset('img/simpol-2.png') }}">
+                                    <h2>Our Collection</h2>
+                                    <p>See all our best homes</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://sharing.clickup.com/4656098/tl/h/4e2z2-8060/db7242fdd0ba935" target="_blank" role="button">
+                            <div class="box">
+                                <img src="{{ asset('img/box-3.png') }}">
+                                <div class="box-right">
+                                    <img src="{{ asset('img/simbol-3.png') }}">
+                                    <h2>Our Collection</h2>
+                                    <p>See all our best homes</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://forms.clickup.com/4656098/f/4e2z2-8040/D676DELAIT01WNQR3F" target="_blank" role="button">
+                            <div class="box">
+                                <img src="{{ asset('img/box-4.png') }}">
+                                <div class="box-right">
+                                    <img src="{{ asset('img/simpol-4.png') }}">
+                                    <h2>Our Collection</h2>
+                                    <p>See all our best homes</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                @endif
+            </div>
         </section>
 
         @include('notification')
@@ -235,6 +275,7 @@
         <script>
             const ticketBtn = document.querySelector('.ticket');
             const ticketForm = document.querySelector('.ticket-form');
+            const ticketFormThanks = document.querySelector('.class-thanks');
             const seacrhHeader = document.querySelector('.searchHeader');
 
             $(document).ready(function(){
@@ -251,18 +292,18 @@
                     $('input[name=sort_by]').val($(this).attr('data-value'));
                     $('form.search-form').submit();
                 });
-        
-                
+
+
                 $('.select2').select2();
                 $( ".datepicker" ).datepicker({
                     dateFormat: "dd-mm-yy"
                 });
 
                 $(".ticket-send").click(function(e){
-                    e.preventDefault();  
-                    let _self = $(this);
-                    let _form = $('.creteTicketForm');
-                    let formData = _form.serialize();
+                    e.preventDefault();
+                    const _self = $(this);
+                    const _form = $('.creteTicketForm');
+                    const formData = _form.serialize();
                     _self.LoadingOverlay('show');
                     $.ajax({
                         type: _form.attr('method'),
@@ -271,10 +312,10 @@
                         dataType: 'json',
                         data: formData,
                         success:function (res) {
-                            console.log(res);
                             if (res.success) {
                                 successMessage('Task successfully created');
                                 ticketForm.classList.remove('open')
+                                ticketFormThanks.classList.add('open')
                                 $("#property_id").val('');
                                 $(".datepicker").val('');
                             } else {
@@ -282,7 +323,7 @@
                             }
                         },
                         error: function (request, status, error) {
-                            showAjaxErrorMessage(request);      
+                            showAjaxErrorMessage(request);
                         },
                         complete:function (res) {
                             _self.LoadingOverlay('hide');
@@ -328,16 +369,17 @@
 
 
             let width = window.screen.availWidth;
-            let mobileWidth = '810';
-            let searchOpen = document.querySelector('.searchClass');
-            let searchDrop = document.querySelector('.search-dropdown');
-            let loupe = document.querySelector('.loupe');
-            let droparrow = document.querySelector('.droparrow');
+            const mobileWidth = '810';
+            const searchOpen = document.querySelector('.searchClass');
+            const searchDrop = document.querySelector('.search-dropdown');
+            const loupe = document.querySelector('.loupe');
+            const loupeParent = document.querySelector('.searchHeader');
+            const droparrow = document.querySelector('.droparrow');
             const droparrowWrapper = document.querySelector('.droparrow-wrapper');
-            let logo = document.querySelector('.logo');
-            let logoClass = document.querySelector('.logo-class');
-            let searchMobile = document.querySelector('.searchMobile');
-            let salesPlatform = document.querySelector('.sales-platform');
+            const logo = document.querySelector('.logo');
+            const logoClass = document.querySelector('.logo-class');
+            const searchMobile = document.querySelector('.searchMobile');
+            const salesPlatform = document.querySelector('.sales-platform');
 
             searchOpen.addEventListener('click',function(){
                 searchDrop.classList.add('open')
@@ -348,38 +390,6 @@
                 openSearch();
             })
 
-            droparrow.addEventListener('click',function(){
-                droparrow.classList.remove('open')
-                logo.classList.remove('open')
-                logoClass.classList.remove('open')
-                searchMobile.classList.remove('open')
-                salesPlatform.classList.remove('active')
-                ticketForm.classList.remove('open')
-                droparrowWrapper.classList.remove('open')
-                seacrhHeader.classList.remove('open')
-                ticketBtn.classList.remove('open')
-            })
-
-            window.addEventListener('click', function(e){
-                if (!document.getElementById('searchHeader').contains(e.target) &&
-                    !document.getElementById('mobileSearch').contains(e.target)){
-                    closeSearch();
-                }
-            })
-
-            
-
-            ticketBtn.addEventListener('click', function(){
-                ticketForm.classList.toggle('open')
-                logo.classList.toggle('open')
-                logoClass.classList.toggle('open')
-                droparrow.classList.toggle('open')
-                droparrowWrapper.classList.toggle('open')
-                seacrhHeader.classList.toggle('open')
-                ticketBtn.classList.toggle('open')
-
-            })
-
             function openSearch(){
                 document.getElementById("webSearchResults").innerHTML = '';
                 document.getElementById("mobileSearchResults").innerHTML = '';
@@ -388,10 +398,16 @@
                 logoClass.classList.add('open')
                 searchMobile.classList.add('open')
                 droparrowWrapper.classList.toggle('open')
-                salesPlatform.classList.add('active')
-                loupe.classList.add('d-none')
                 if(width < mobileWidth){
-                    loupe.classList.remove('d-block')
+                    salesPlatform.classList.add('d-none')
+                }
+                loupeParent.classList.add('d-none')
+                ticketBtn.classList.remove('open')
+                ticketBtn.classList.add('d-none')
+                ticketFormThanks.classList.remove('open')
+                ticketForm.classList.remove('open')
+                if(width < mobileWidth){
+                    loupeParent.classList.add('d-none')
                 }
             }
 
@@ -400,14 +416,85 @@
                 logo.classList.remove('open')
                 logoClass.classList.remove('open')
                 searchMobile.classList.remove('open')
-                salesPlatform.classList.remove('active')
                 searchDrop.classList.remove('open')
+                salesPlatform.classList.remove('d-none')
 
                 if(width < mobileWidth){
-                    loupe.classList.remove('d-block')
+                    loupe.classList.remove('d-none')
                 }
                 loupe.classList.remove('d-none')
                 $('#search').val('');
+            }
+
+            droparrow.addEventListener('click',function(){
+                droparrowWrapper.classList.remove('open')
+                seacrhHeader.classList.remove('open')
+                loupeParent.classList.remove('d-none')
+                ticketBtn.classList.remove('d-none')
+                closeSearch()
+            })
+
+            window.addEventListener('click', function(e){
+                width = window.screen.availWidth;
+                if(width < mobileWidth){
+                    if (!document.getElementById('searchHeader').contains(e.target) &&
+                        !document.getElementById('mobileSearch').contains(e.target) &&
+                        !document.getElementById('ticket-btn').contains(e.target) &&
+                        !document.getElementById('ticket-form').contains(e.target) &&
+                        !document.getElementById('ticket-thanks').contains(e.target) &&
+                        !document.getElementById('ui-datepicker-div').contains(e.target)){
+                        closeSearch();
+                        closeTicket();
+                    }
+                }else{
+                    if (!document.getElementById('searchHeader').contains(e.target) &&
+                        !document.getElementById('mobileSearch').contains(e.target)){
+                        closeSearch();
+                    }
+                    if(!document.getElementById('ticket-btn').contains(e.target) &&
+                        !document.getElementById('ticket-form').contains(e.target) &&
+                        !document.getElementById('ticket-thanks').contains(e.target) &&
+                        !document.getElementById('ui-datepicker-div').contains(e.target)){
+                        closeTicket();
+                    }
+                }
+            })
+
+
+
+            ticketBtn.addEventListener('click', function(){
+                openTicket()
+            })
+
+            function closeTicket(){
+                droparrow.classList.remove('open')
+                logo.classList.remove('open')
+                logoClass.classList.remove('open')
+                droparrowWrapper.classList.remove('open')
+                ticketBtn.classList.remove('open')
+                ticketFormThanks.classList.remove('open')
+                ticketForm.classList.remove('open')
+                salesPlatform.classList.remove('d-none')
+                loupeParent.classList.remove('d-none')
+                $('#ticket-form form')[0].reset()
+            }
+
+            function openTicket(){
+                droparrow.classList.add('open')
+                logo.classList.add('open')
+                logoClass.classList.add('open')
+                droparrowWrapper.classList.add('open')
+                ticketBtn.classList.add('open')
+                ticketFormThanks.classList.remove('open')
+                ticketForm.classList.add('open')
+
+                if(width < mobileWidth){
+                    searchMobile.classList.remove('open')
+                    loupeParent.classList.add('d-none')
+                    salesPlatform.classList.add('d-none')
+                    loupeParent.classList.add('d-none')
+                }
+                $('#ticket-form form')[0].reset()
             }
 
             function searchProperties(searchString){
@@ -437,9 +524,9 @@
              */
             function showAjaxErrorMessage(response, form = false)
             {
-                let responseJson = JSON.parse(response.responseText);
-                let errors = responseJson.errors;
-                
+                const responseJson = JSON.parse(response.responseText);
+                const errors = responseJson.errors;
+
                 if (errors !== undefined) {
                     Object.keys(errors).forEach(function (item) {
                         for (let value of errors[item]) {
@@ -449,8 +536,8 @@
                 } else if (responseJson.message !== undefined) {
                     errorMessage(responseJson.message);
                 }
-                
-            }    
+
+            }
 
             /**
              * Show Success Message
@@ -466,7 +553,7 @@
                     timeOut: 4000,
                     progressBar: true,
                     newestOnTop: true
-                }); 
+                });
             }
 
             /**
@@ -483,8 +570,8 @@
                     timeOut: 4000,
                     progressBar: true,
                     newestOnTop: true
-                }); 
-            }  
+                });
+            }
 
         </script>
     </body>

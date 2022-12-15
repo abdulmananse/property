@@ -55,8 +55,8 @@ class HomeController extends Controller
 
             $searchElements = '';
             foreach($properties as $property){
-                $searchElements .= '<div class="search-element">
-                <div class="title-element">
+                $searchElements .= '<div class="search-element w-100 d-flex">
+                <div class="title-element w-75 text-left">
                     <h2>' . $property->name . ' </h2>
                     <p>'. $property->property_id.'</p>
                     </div>
@@ -519,14 +519,14 @@ class HomeController extends Controller
                         'Content-Type' => 'application/json',
                         'Authorization' => config('app.clickup_api_key')
                     ])->post($url, $requestData);
-                
+
             if ($response->status() == 200) {
                 return response()->json(['success' => true], 200);
             } else {
-                return response()->json(['success' => false], 200);
+                return response()->json(['success' => false, 'error' => $response], 200);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false], 200);
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 200);
         }
     }
 }
