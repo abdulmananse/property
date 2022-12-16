@@ -4,6 +4,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+
         <title>Property</title>
 
         <!-- Fonts -->
@@ -35,7 +40,7 @@
                         <div class="droparrow-wrapper">
                             <img class="droparrow" src="{{ asset('img/down-arrow-black.png') }}">
                         </div>
-                        <img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}">
+                        <a href="{{ config('app.url') }}"><img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}"></a>
                     </div>
 
                     <div class="header-right">
@@ -44,7 +49,7 @@
                             <div class="ticketbtn" role="button">Send ticket</div>
                         </div>
                         <div class="ticket-form" id="ticket-form">
-                            <form method="post" action="{{ url('create-task') }}" class="creteTicketForm" >
+                            <form method="post" action="{{ url('index.php/create-task') }}" class="creteTicketForm" >
                                 @csrf
                                 <p>Please close the dates:</p>
                                 <div class="ticket-dates">
@@ -141,7 +146,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="container-sort">
+                <div class="container-sort{{ ($properties ? ' d-block' : '')}}">
                     <div class="select-wrapper sort">
                         <div class="col-auto select-click">
                             <div class="select">
@@ -239,7 +244,7 @@
                                 <img src="{{ asset('img/screenshot-2022-12-09-at-12-28-55@3x.png') }}">
                                 <div class="box-right">
                                     <img src="{{ asset('img/simpol-2.png') }}">
-                                    <h2>Our Collection</h2>
+                                    <h2>Clickup Views</h2>
                                     <p>See all our best homes</p>
                                 </div>
                             </div>
@@ -249,7 +254,7 @@
                                 <img src="{{ asset('img/box-3.png') }}">
                                 <div class="box-right">
                                     <img src="{{ asset('img/simbol-3.png') }}">
-                                    <h2>Our Collection</h2>
+                                    <h2>Product Roadmap</h2>
                                     <p>See all our best homes</p>
                                 </div>
                             </div>
@@ -259,7 +264,7 @@
                                 <img src="{{ asset('img/box-4.png') }}">
                                 <div class="box-right">
                                     <img src="{{ asset('img/simpol-4.png') }}">
-                                    <h2>Our Collection</h2>
+                                    <h2>Request Feature</h2>
                                     <p>See all our best homes</p>
                                 </div>
                             </div>
@@ -313,7 +318,7 @@
                         data: formData,
                         success:function (res) {
                             if (res.success) {
-                                successMessage('Task successfully created');
+                                //successMessage('Task successfully created');
                                 ticketForm.classList.remove('open')
                                 ticketFormThanks.classList.add('open')
                                 $("#property_id").val('');
@@ -380,6 +385,7 @@
             const logoClass = document.querySelector('.logo-class');
             const searchMobile = document.querySelector('.searchMobile');
             const salesPlatform = document.querySelector('.sales-platform');
+            const body = document.querySelector('body');
 
             searchOpen.addEventListener('click',function(){
                 searchDrop.classList.add('open')
@@ -477,6 +483,7 @@
                 salesPlatform.classList.remove('d-none')
                 loupeParent.classList.remove('d-none')
                 $('#ticket-form form')[0].reset()
+                body.classList.remove('open');
             }
 
             function openTicket(){
@@ -493,6 +500,7 @@
                     loupeParent.classList.add('d-none')
                     salesPlatform.classList.add('d-none')
                     loupeParent.classList.add('d-none')
+                    body.classList.add('open');
                 }
                 $('#ticket-form form')[0].reset()
             }

@@ -523,10 +523,10 @@ class HomeController extends Controller
             if ($response->status() == 200) {
                 return response()->json(['success' => true], 200);
             } else {
-                return response()->json(['success' => false, 'error' => $response], 200);
+                return response()->json(['success' => false], 200);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 200);
+            return response()->json(['success' => false], 200);
         }
     }
 }

@@ -226,7 +226,7 @@ select, input{
 .custom-options {
     position: absolute;
     display: block;
-    top: -58px;
+    top: -69px;
     right: -159px;
     border-radius: 3px;
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
@@ -385,9 +385,10 @@ select, input{
     text-decoration: none;
 }
 .btnClick a{
-    padding: 5px 9px;
+    padding: 3px 4px;padding: 3px 4px;
 }
-button.disabled{
+button.disabled,
+a.disabled{
     opacity: 0.6
 }
 .page-item.active .page-link{
