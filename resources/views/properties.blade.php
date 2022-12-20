@@ -30,6 +30,21 @@
         <style>
             .select2-selection--single {height: 38px !important;padding-top: 4px;}
             .select2-container--default .select2-selection--single .select2-selection__arrow{top:6px;}
+
+            .select-form select {
+                font-family: Inter-Regular;
+                color: #636366;
+                font-size: 9px;
+                font-weight: 500;
+                padding: 9px 12px;
+                width: 100%!important;
+                border-radius: 3px;
+                border: solid 1px #8e8e93;
+                margin-bottom: 10px;
+            }
+            .ticket-form{
+                height: 270px;
+            }
         </style>
     </head>
     <body class="antialiased">
@@ -61,6 +76,14 @@
                                         <input type="text" autocomplete="off" name="end_date" placeholder="To" class="datepicker">
                                         <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                                     </div>
+                                </div>
+                                <div class="select-form">
+                                    <select name="requestee_id">
+                                        <option value="">Select Sales Person</option>
+                                        @foreach($salesPersonsList as $salesPerson)
+                                        <option value="{{ $salesPerson->id }}">{{ $salesPerson->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <p>Property ID</p>
                                 <div class="ticket-id">
