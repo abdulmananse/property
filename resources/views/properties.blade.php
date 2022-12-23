@@ -30,21 +30,6 @@
         <style>
             .select2-selection--single {height: 38px !important;padding-top: 4px;}
             .select2-container--default .select2-selection--single .select2-selection__arrow{top:6px;}
-
-            .select-form select {
-                font-family: Inter-Regular;
-                color: #636366;
-                font-size: 9px;
-                font-weight: 500;
-                padding: 9px 12px;
-                width: 100%!important;
-                border-radius: 3px;
-                border: solid 1px #8e8e93;
-                margin-bottom: 10px;
-            }
-            .ticket-form{
-                height: 270px;
-            }
         </style>
     </head>
     <body class="antialiased">
@@ -77,17 +62,17 @@
                                         <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                                     </div>
                                 </div>
+                                <p>Property ID</p>
+                                <div class="ticket-id">
+                                    <input id="property_id" name="property_id" placeholder="Property ID">
+                                </div>
                                 <div class="select-form">
                                     <select name="requestee_id">
-                                        <option value="">Select Sales Person</option>
+                                        <option value="">Requestee</option>
                                         @foreach($salesPersonsList as $salesPerson)
                                         <option value="{{ $salesPerson->id }}">{{ $salesPerson->name }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                                <p>Property ID</p>
-                                <div class="ticket-id">
-                                    <input id="property_id" name="property_id" placeholder="Property ID">
                                 </div>
                                 <button class="ticket-send">Send Ticket</button>
                             </form>
@@ -257,7 +242,7 @@
                                 <div class="box-right">
                                     <img src="{{ asset('img/invalid-name@3x.png') }}">
                                     <h2>Our Collection</h2>
-                                    <p>See all our best homes</p>
+                                    <p>See all our best homes soon...</p>
                                 </div>
                             </div>
                         </a>
@@ -268,7 +253,7 @@
                                 <div class="box-right">
                                     <img src="{{ asset('img/simpol-2.png') }}">
                                     <h2>Clickup Views</h2>
-                                    <p>See all our best homes</p>
+                                    <p>See all of our homes in Clickup table views.</p>
                                 </div>
                             </div>
                         </a>
@@ -278,7 +263,7 @@
                                 <div class="box-right">
                                     <img src="{{ asset('img/simbol-3.png') }}">
                                     <h2>Product Roadmap</h2>
-                                    <p>See all our best homes</p>
+                                    <p>See whats coming next for the Sales Platform.</p>
                                 </div>
                             </div>
                         </a>
@@ -288,7 +273,7 @@
                                 <div class="box-right">
                                     <img src="{{ asset('img/simpol-4.png') }}">
                                     <h2>Request Feature</h2>
-                                    <p>See all our best homes</p>
+                                    <p>Ask for feature or request bugs on the Sales Platform.</p>
                                 </div>
                             </div>
                         </a>

@@ -550,9 +550,23 @@ a.disabled{
     font-weight: 500;
     padding: 9px 12px;
 }
+.select-form select {
+    font-family: Inter-Regular;
+    color: #636366;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 9px 12px;
+    width: 100%!important;
+    border-radius: 3px;
+    border: solid 1px #8e8e93;
+    margin-bottom: 10px;
+}
+.ticket-id{
+    margin-bottom: 17px;
+}
 .ticket-form{
     width: 235px;
-    height: 230px;
+    height: 315px;
     border-radius: 3px;
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
     border: solid 1px #8e8e93;
