@@ -27,6 +27,12 @@
 
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
         <style>
             .select2-selection--single {height: 38px !important;padding-top: 4px;}
             .select2-container--default .select2-selection--single .select2-selection__arrow{top:6px;}
@@ -120,17 +126,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-auto search-input">
-                                    <div class="col-auto">
-                                        <label for="start_date" class="visually-hidden">Start Date</label>
-                                        <input type="text" autocomplete="off" name="start_date" class="form-control datepicker" placeholder="Start Date" value="{{ @request()->start_date }}">
-                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
-                                    </div>
-                                    <div class="col-auto">
-                                        <label for="end_date" class="visually-hidden">End Date</label>
-                                        <input type="text" autocomplete="off" name="end_date" class="form-control datepicker" placeholder="End Date" value="{{ @request()->end_date }}">
-                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
-                                    </div>
+                                <div class="col-auto search-input d-flex">
+                                    <input class="calendar" type="text" name="daterange" value="{{ @request()->start_date ?? date('m/d/Y') }} - {{ @request()->end_date ?? date('m/d/Y') }}"
+                                            style="color: #636366; font-size: 9px; font-weight: 500; font-family: Inter-Regular;
+                                                    border: 1px solid #8e8e93; border-radius: 3px;     padding: 9px 12px;"/>
                                 </div>
                                 <div class="col-auto baderooms">
                                     <div class="select">
@@ -306,8 +305,6 @@
                     $('form.search-form').submit();
                 });
 
-
-                $('.select2').select2();
                 $( ".datepicker" ).datepicker({
                     dateFormat: "dd-mm-yy"
                 });
@@ -396,7 +393,7 @@
             const body = document.querySelector('body');
 
             searchOpen.addEventListener('click',function(){
-                searchDrop.classList.add('open')
+                searchDrop.classList.toggle('open')
                 document.getElementById("webSearchResults").innerHTML = '';
                 document.getElementById("mobileSearchResults").innerHTML = '';
             })
@@ -407,11 +404,11 @@
             function openSearch(){
                 document.getElementById("webSearchResults").innerHTML = '';
                 document.getElementById("mobileSearchResults").innerHTML = '';
-                droparrow.classList.toggle('open')
+                droparrow.classList.add('open')
                 logo.classList.add('open')
                 logoClass.classList.add('open')
                 searchMobile.classList.add('open')
-                droparrowWrapper.classList.toggle('open')
+                droparrowWrapper.classList.add('open')
                 if(width < mobileWidth){
                     salesPlatform.classList.add('d-none')
                 }
@@ -446,38 +443,13 @@
                 loupeParent.classList.remove('d-none')
                 ticketBtn.classList.remove('d-none')
                 closeSearch()
-            })
-
-            window.addEventListener('click', function(e){
-                width = window.screen.availWidth;
-                if(width < mobileWidth){
-                    if (!document.getElementById('searchHeader').contains(e.target) &&
-                        !document.getElementById('mobileSearch').contains(e.target) &&
-                        !document.getElementById('ticket-btn').contains(e.target) &&
-                        !document.getElementById('ticket-form').contains(e.target) &&
-                        !document.getElementById('ticket-thanks').contains(e.target) &&
-                        !document.getElementById('ui-datepicker-div').contains(e.target)){
-                        closeSearch();
-                        closeTicket();
-                    }
-                }else{
-                    if (!document.getElementById('searchHeader').contains(e.target) &&
-                        !document.getElementById('mobileSearch').contains(e.target)){
-                        closeSearch();
-                    }
-                    if(!document.getElementById('ticket-btn').contains(e.target) &&
-                        !document.getElementById('ticket-form').contains(e.target) &&
-                        !document.getElementById('ticket-thanks').contains(e.target) &&
-                        !document.getElementById('ui-datepicker-div').contains(e.target)){
-                        closeTicket();
-                    }
-                }
+                closeTicket()
             })
 
 
 
             ticketBtn.addEventListener('click', function(){
-                openTicket()
+                toggleTicket()
             })
 
             function closeTicket(){
@@ -492,6 +464,25 @@
                 loupeParent.classList.remove('d-none')
                 $('#ticket-form form')[0].reset()
                 body.classList.remove('open');
+            }
+
+            function toggleTicket(){
+                droparrow.classList.toggle('open')
+                logo.classList.toggle('open')
+                logoClass.classList.toggle('open')
+                droparrowWrapper.classList.toggle('open')
+                ticketBtn.classList.toggle('open')
+                ticketFormThanks.classList.remove('open')
+                ticketForm.classList.toggle('open')
+
+                if(width < mobileWidth){
+                    searchMobile.classList.remove('open')
+                    loupeParent.classList.add('d-none')
+                    salesPlatform.classList.add('d-none')
+                    loupeParent.classList.toggle('d-none')
+                    body.classList.toggle('open');
+                }
+                $('#ticket-form form')[0].reset()
             }
 
             function openTicket(){
@@ -588,6 +579,18 @@
                     newestOnTop: true
                 });
             }
+
+        </script>
+        <script>
+            $('input[name="dates"]').daterangepicker();
+
+
+            $(function() {
+                $('input[name="daterange"]').daterangepicker({
+                    opens: 'left'
+                }, function(start, end, label) {
+                });
+            });
 
         </script>
     </body>

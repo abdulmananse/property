@@ -35,7 +35,7 @@ class HomeController extends Controller
         $this->spreadsheetId = config('sheets.post_spreadsheet_id');
 
         $this->salesPersons = json_decode('{"id":"f800b11f-b48b-42df-bb10-5a0b85e322fb","name":"Requestee","type":"drop_down","type_config":{"default":0,"placeholder":null,"new_drop_down":true,"options":[{"id":"54e3071e-b89d-4da6-896b-8c6d904e4f55","name":"Miguel","value":"Miguel","type":"text","color":"#81B1FF","orderindex":0,"workspace_id":null},{"id":"a8711b82-e426-430c-a9f5-0e95250b5dd3","name":"Lisa ","value":"Lisa ","type":"text","color":"#81B1FF","orderindex":1,"workspace_id":null},{"id":"70faa27b-25e0-47e9-8839-318827d397de","name":"Deb","value":"Deb","type":"text","color":"#81B1FF","orderindex":2,"workspace_id":null},{"id":"9694edf1-142d-45b1-b79d-7e9b9cc17175","name":"Julia","value":"Julia","type":"text","color":"#81B1FF","orderindex":3,"workspace_id":null},{"id":"71c358d1-f602-474e-90c9-b79243dfa88d","name":"Luiz","value":"Luiz","type":"text","color":"#81B1FF","orderindex":4,"workspace_id":null},{"id":"00d24ba5-99c8-4530-88ae-5ea94c4fac59","name":"Jo","value":"Jo","type":"text","color":"#81B1FF","orderindex":5,"workspace_id":null},{"id":"b77a9a35-b723-494d-aa9b-ab39843902eb","name":"Joana","value":"Joana","type":"text","color":"#81B1FF","orderindex":6,"workspace_id":null},{"id":"4ef9ea16-da80-4fae-a418-5fe4fae5690a","name":"Ali","value":"Ali","type":"text","color":"#81B1FF","orderindex":7,"workspace_id":null},{"id":"8fc565e1-2819-4b93-b2a5-f00217a95e3c","name":"Sonia","value":"Sonia","type":"text","color":"#81B1FF","orderindex":8,"workspace_id":null},{"id":"5d937092-1fd5-4015-8b5c-316b5198d91b","name":"Lucia","value":"Lucia","type":"text","color":"#81B1FF","orderindex":9,"workspace_id":null},{"id":"129625a5-799e-40da-941e-9d14531f63dd","name":"Bibas","value":"Bibas","type":"text","color":"#81B1FF","orderindex":10,"workspace_id":null},{"id":"27532980-1f79-40fd-b9c0-17fedc3446d8","name":"Melanie","value":"Melanie","type":"text","color":"#81B1FF","orderindex":11,"workspace_id":null},{"id":"2ae60d9d-3c2a-4fb5-87f9-62a293dc054e","name":"Roberto","value":"Roberto","type":"text","color":"#81B1FF","orderindex":12,"workspace_id":null},{"id":"37ec2459-72df-470d-9100-2ecbd0e87b23","name":"Lidia","value":"Lidia","type":"text","color":"#81B1FF","orderindex":13,"workspace_id":null},{"id":"ba0cabd9-d021-49dc-8325-48e4e6c4b4b1","name":"Valerie","value":"Valerie","type":"text","color":"#81B1FF","orderindex":14,"workspace_id":null},{"id":"f192e197-d300-4edf-aadf-712a22524337","name":"Margarida","value":"Margarida","type":"text","color":"#81B1FF","orderindex":15,"workspace_id":null},{"id":"d9abbc6b-252b-4f22-a4c8-a313a8194a20","name":"Angelica","value":"Angelica","type":"text","color":"#81B1FF","orderindex":16,"workspace_id":null},{"id":"c0fc6229-2fc6-4e09-a86f-ea8e9636eda9","name":"Berenice","value":"Berenice","type":"text","color":"#81B1FF","orderindex":17,"workspace_id":null},{"id":"c7fce691-bdf6-4bbf-88a6-cda7bdc56f1b","name":"Rita","value":"Rita","type":"text","color":"#81B1FF","orderindex":18,"workspace_id":"4656098"},{"id":"53630545-9351-41c0-9701-37c3cc40a7a8","name":"Danielle","value":"Danielle","type":"text","color":"#81B1FF","orderindex":19,"workspace_id":"4656098"},{"id":"f1c6daa9-6457-4fb1-ac85-190768811e9b","name":"Other","value":"Other","type":"text","color":"#81B1FF","orderindex":20,"workspace_id":null},{"id":"ff7872b0-b778-43ba-8d8e-be3094113f2e","name":"Channels","value":"Channels","type":"text","color":"#667684","orderindex":21,"workspace_id":null},{"id":"bc981c3a-0721-4a12-ab7b-2d001f55dd24","name":"Pipedrive","value":"Pipedrive","type":"text","color":"#667684","orderindex":22,"workspace_id":"4656098"},{"id":"4cf6bd42-fac1-4a29-8dad-155667cd8a35","name":"Sales Platform","value":"Sales Platform","type":"text","color":"#667684","orderindex":23,"workspace_id":"4656098"}]}}');
-        
+
     }
 
     public function searchProperties(Request $request){
@@ -83,14 +83,14 @@ class HomeController extends Controller
     public function index (Request $request) {
 
         $salesPersons = $this->salesPersons;
-        
+
         $salesPersonsList = [];
         if (isset($salesPersons->type_config->options)) {
             $salesPersonsList = $salesPersons->type_config->options;
         }
 
         $properties = [];
-        if ($request->filled('start_date') && $request->filled('end_date')) {
+        if ($request->filled('daterange')) {
 
             $where = ' WHERE 1 AND properties.ical_link IS NOT NULL ';
             if ($request->filled('city')) {
@@ -120,8 +120,9 @@ class HomeController extends Controller
                 }
             }
 
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'); //m/d/Y
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d');
+            list($startDate, $endDate) = explode(' - ', $request->daterange);
+            $startDate = Carbon::createFromFormat('m/d/Y', $startDate)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('m/d/Y', $endDate)->format('Y-m-d');
             $page = ($request->filled('page')) ? (int) $request->page : 1;
             $paginate = 50;
 
