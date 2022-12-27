@@ -61,11 +61,11 @@
                                 <div class="ticket-dates">
                                     <div class="input-form">
                                         <input type="text" autocomplete="off" name="start_date" placeholder="From" class="datepicker">
-                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                        <img class="downarrow open-datepicker" src="{{ asset('img/down-arrow.png') }}">
                                     </div>
                                     <div class="input-form">
                                         <input type="text" autocomplete="off" name="end_date" placeholder="To" class="datepicker">
-                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                        <img class="downarrow open-datepicker" src="{{ asset('img/down-arrow.png') }}">
                                     </div>
                                 </div>
                                 <p>Property ID</p>
@@ -127,7 +127,7 @@
                                     </div>
                                 </div>
                                 <div class="col-auto search-input d-flex">
-                                    <input class="calendar" type="text" name="daterange" value="{{ @request()->start_date ?? date('m/d/Y') }} - {{ @request()->end_date ?? date('m/d/Y') }}"
+                                    <input class="calendar" type="text" name="daterange" value="{{ @request()->daterange ?? date('m/d/Y') . ' - ' . date('m/d/Y') }}"
                                             style="color: #636366; font-size: 9px; font-weight: 500; font-family: Inter-Regular;
                                                     border: 1px solid #8e8e93; border-radius: 3px;     padding: 9px 12px;"/>
                                 </div>
@@ -305,8 +305,12 @@
                     $('form.search-form').submit();
                 });
 
-                $( ".datepicker" ).datepicker({
+                $(".datepicker").datepicker({
                     dateFormat: "dd-mm-yy"
+                });
+
+                $('.ticket-dates img.open-datepicker').click(function(){
+                    $(this).prev('.datepicker').datepicker("show");
                 });
 
                 $(".ticket-send").click(function(e){
