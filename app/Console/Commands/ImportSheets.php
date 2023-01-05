@@ -50,10 +50,10 @@ class ImportSheets extends Command
      */
     public function handle()
     {
-        $startDateTime = Carbon::now();
-	    Log::error('Import Sheets Started', [$startDateTime->format('d-m-Y h:i A')]);
+        //$startDateTime = Carbon::now();
+	    //Log::error('Import Sheets Started', [$startDateTime->format('d-m-Y h:i A')]);
         Sheet::truncate();
-        $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
+        //$this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $spreadsheetId = $this->spreadsheetId;
         $sheets = Sheets::spreadsheet($spreadsheetId)
@@ -66,9 +66,9 @@ class ImportSheets extends Command
             ]);
         }
         $endDateTime = Carbon::now();
-        $this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
+        //$this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
-        $this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
+        //$this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
 
         return 0;
     }

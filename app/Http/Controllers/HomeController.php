@@ -219,7 +219,7 @@ class HomeController extends Controller
         $sheet = Sheet::where('name', $sheetId)->first();
         if ($sheet) {
             $this->savePropertyData($sheet);
-            dd('Property Imported');
+            //dd('Property Imported');
         } else {
             $sheets = Sheet::get();
             foreach ($sheets as $sheet) {
@@ -227,7 +227,7 @@ class HomeController extends Controller
             }
         }
 
-        dd('Properties Imported');
+        //dd('Properties Imported');
     }
 
     /**
@@ -241,7 +241,7 @@ class HomeController extends Controller
         $property = Property::where('property_id', $propertyId)->first();
         if ($propertyId != 0 && $property) {
             $this->getEventsFromIcsFile($property);
-            dd('Calander Imported');
+            //dd('Calander Imported');
         } else {
             $properties = Property::get();
             foreach($properties as $property) {
@@ -249,7 +249,7 @@ class HomeController extends Controller
             }
         }
 
-        dd('Calanders Imported');
+        //dd('Calanders Imported');
     }
 
     /**
@@ -298,7 +298,7 @@ class HomeController extends Controller
                             'property_pdf_notes' => @$property['PropertyPDF Notes'],
                         ];
 
-                        Log::Error('PropertyData', $propertyData);
+                        //Log::Error('PropertyData', $propertyData);
 
                         $propertyCompleteData = array_merge($propertyData, $propertyInformation);
 
@@ -307,7 +307,7 @@ class HomeController extends Controller
                 }
             }
         } catch (\Exception $e) {
-            Log::Error('savePropertyData', [$e]);
+            //Log::Error('savePropertyData', [$e]);
         }
     }
 
@@ -379,7 +379,7 @@ class HomeController extends Controller
                     break;
                 }
             } catch (\Exception $e) {
-                Log::Error('getPropertyInformation', [$e]);
+                //Log::Error('getPropertyInformation', [$e]);
             }
         }
 
@@ -442,25 +442,22 @@ class HomeController extends Controller
 
             $uIDs[] = $event->uid;
 
-            $eventDb = EventModel::where($where)->first();
-            if(!$eventDb) {
-                EventModel::updateOrCreate($where,
-                [
-                    'name' => $event->summary,
-                    'duration' => $event->duration,
-                    'start' => $dtstart->format('Y-m-d H:i:s'),
-                    'end' => $dtend->format('Y-m-d H:i:s'),
-                    'description' => $event->description,
-                    'location' => $event->location,
-                    'status' => $event->status,
-                    'transp' => $event->transp,
-                ]);
-            }
+            EventModel::updateOrCreate($where,
+            [
+                'name' => $event->summary,
+                'duration' => $event->duration,
+                'start' => $dtstart->format('Y-m-d H:i:s'),
+                'end' => $dtend->format('Y-m-d H:i:s'),
+                'description' => $event->description,
+                'location' => $event->location,
+                'status' => $event->status,
+                'transp' => $event->transp,
+            ]);
         }
         $eventsToBeDeleted = EventModel::where('property_id', $propertyDb->id)->whereNotIn('uid', $uIDs);
         if($eventsToBeDeleted->count() > 0){
-            Log::Error('DeletingPropertyEvents', [$propertyDb]);
-            Log::Error('DeletingEvents', [$eventsToBeDeleted->get()]);
+            //Log::Error('DeletingPropertyEvents', [$propertyDb]);
+            //Log::Error('DeletingEvents', [$eventsToBeDeleted->get()]);
             $eventsToBeDeleted->delete();
         }
 
@@ -502,8 +499,7 @@ class HomeController extends Controller
     {
         $this->validate($request, [
             'property_id' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'daterange_mobile' => 'required',
             'requestee_id' => 'required'
         ]);
 
@@ -512,6 +508,8 @@ class HomeController extends Controller
             $requesteeValue = $request->requestee_id;
         }
 
+        list($startDate, $endDate) = explode(' - ', $request->daterange_mobile);
+
         $url = config('app.clickup_base_url').'list/'.config('app.clickup_list_id').'/task';
         $requestData = [
             'name' => $request->property_id . ' - Sales Platform Unavailability',
@@ -519,7 +517,7 @@ class HomeController extends Controller
             'custom_fields' => [
                 [
                     'id' => config('app.clickup_custom_field_request_desc_id'),
-                    'value' => 'Please mark this house NOT available from ' . $request->start_date.' until ' . $request->end_date
+                    'value' => 'Please mark this house NOT available from ' . $startDate.' until ' . $endDate
                 ],
                 [
                     'id' => config('app.clickup_custom_field_request_type_id'),

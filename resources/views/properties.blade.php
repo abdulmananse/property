@@ -58,15 +58,16 @@
                             <form method="post" action="{{ url('index.php/create-task') }}" class="creteTicketForm" >
                                 @csrf
                                 <p>Please close the dates:</p>
-                                <div class="ticket-dates">
-                                    <div class="input-form">
-                                        <input type="text" autocomplete="off" name="start_date" placeholder="From" class="datepicker">
-                                        <img class="downarrow open-datepicker" src="{{ asset('img/down-arrow.png') }}">
-                                    </div>
-                                    <div class="input-form">
-                                        <input type="text" autocomplete="off" name="end_date" placeholder="To" class="datepicker">
-                                        <img class="downarrow open-datepicker" src="{{ asset('img/down-arrow.png') }}">
-                                    </div>
+                                <div class="col-auto search-input d-flex">
+
+                                    <input type="text" name="daterange_mobile" value="{{ @request()->daterange_mobile }}" class="regervation" placeholder="Please select"
+                                            inputmode="none"
+                                            style="color: #636366; font-size: 9px; font-weight: 500; font-family: Inter-Regular;
+                                                    border: 1px solid #8e8e93; border-radius: 3px; padding: 9px 12px; width: 100%!important;margin-bottom: 17px;"/>
+                                    <!-- <input class="calendar daterange" type="text" name="daterange_mobile" value="{{ @request()->daterange_mobile ?? date('m/d/Y') . ' - ' . date('m/d/Y') }}"
+                                            style="color: #636366; font-size: 9px; font-weight: 500; font-family: Inter-Regular;
+                                                    border: 1px solid #8e8e93; border-radius: 3px; padding: 9px 12px; width:100%!important;
+                                                    text-align: center; margin-bottom: 17px;"/> -->
                                 </div>
                                 <p>Property ID</p>
                                 <div class="ticket-id">
@@ -127,9 +128,13 @@
                                     </div>
                                 </div>
                                 <div class="col-auto search-input d-flex">
-                                    <input class="calendar" type="text" name="daterange" value="{{ @request()->daterange ?? date('m/d/Y') . ' - ' . date('m/d/Y') }}"
+                                   <!--  <input class="calendar daterange" type="text" name="daterange" value="{{ @request()->daterange ?? date('m/d/Y') . ' - ' . date('m/d/Y') }}"
                                             style="color: #636366; font-size: 9px; font-weight: 500; font-family: Inter-Regular;
-                                                    border: 1px solid #8e8e93; border-radius: 3px;     padding: 9px 12px;"/>
+                                                    border: 1px solid #8e8e93; border-radius: 3px;     padding: 9px 12px;"/> -->
+                                <input type="text" name="daterange" value="{{ @request()->daterange }}" class="regervation"
+                                        placeholder="Please select" inputmode="none"
+                                        style="color: #636366; font-size: 9px; font-weight: 500; font-family: Inter-Regular;
+                                border: 1px solid #8e8e93; border-radius: 3px;     padding: 9px 12px;"/>
                                 </div>
                                 <div class="col-auto baderooms">
                                     <div class="select">
@@ -290,6 +295,7 @@
             const ticketFormThanks = document.querySelector('.class-thanks');
             const seacrhHeader = document.querySelector('.searchHeader');
 
+
             $(document).ready(function(){
 
                 $('.select-destination-name').click(function(){
@@ -303,14 +309,6 @@
                 $('.select-sortby').click(function(){
                     $('input[name=sort_by]').val($(this).attr('data-value'));
                     $('form.search-form').submit();
-                });
-
-                $(".datepicker").datepicker({
-                    dateFormat: "dd-mm-yy"
-                });
-
-                $('.ticket-dates img.open-datepicker').click(function(){
-                    $(this).prev('.datepicker').datepicker("show");
                 });
 
                 $(".ticket-send").click(function(e){
@@ -448,6 +446,51 @@
                 ticketBtn.classList.remove('d-none')
                 closeSearch()
                 closeTicket()
+            })
+
+            const regervation = document.querySelector('.regervation');
+            const applayBtn = document.querySelector('.btn-primary');
+            let clickCalendar = '';
+
+            window.addEventListener('click', function(e){
+                if (regervation) {
+                    regervation.addEventListener('click', function() {
+                        clickCalendar = 'click';
+                    });
+                }
+                if (applayBtn) {
+                    applayBtn.addEventListener('click', function() {
+                    console.log(applayBtn)
+                        clickCalendar = '';
+                    });
+                }
+
+                width = window.screen.availWidth;
+                if(width < mobileWidth){
+                    if (!document.getElementById('searchHeader').contains(e.target) &&
+                        !document.getElementById('mobileSearch').contains(e.target) &&
+                        !document.getElementById('ticket-btn').contains(e.target) &&
+                        !document.getElementById('ticket-form').contains(e.target) &&
+                        !document.getElementById('ticket-thanks').contains(e.target) &&
+                        !document.getElementById('ui-datepicker-div').contains(e.target)){
+                        closeSearch();
+                        closeTicket();
+                    }
+                }else{
+                    if (!document.getElementById('searchHeader').contains(e.target) &&
+                        !document.getElementById('mobileSearch').contains(e.target)){
+                        closeSearch();
+                    }
+                    if(!document.getElementById('ticket-btn').contains(e.target) &&
+                        !document.getElementById('ticket-form').contains(e.target) &&
+                        !document.getElementById('ticket-thanks').contains(e.target) &&
+                        !document.getElementById('ui-datepicker-div').contains(e.target) &&
+                        clickCalendar != 'click'
+                        ){
+                        closeTicket();
+                    }
+
+                }
             })
 
 
@@ -590,12 +633,34 @@
 
 
             $(function() {
-                $('input[name="daterange"]').daterangepicker({
+                $('input.daterange').daterangepicker({
                     opens: 'left'
                 }, function(start, end, label) {
                 });
             });
 
+        </script>
+        <script>
+            $(function() {
+                $('.regervation').daterangepicker({
+                    "autoapply": true,
+                    "linkedCalendars": false,
+                },
+                function(start, end, label) {
+                    $('#displayRegervation').text('Registration date is: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                });
+                $('.drp-calendar.right').hide();
+                $('.drp-calendar.left').addClass('single');
+
+                $('.calendar-table').on('DOMSubtreeModified', function() {
+                    var el = $(".prev.available").parent().children().last();
+                    if (el.hasClass('next available')) {
+                        return;
+                    }
+                    el.addClass('next available');
+                    el.append('<span></span>');
+                });
+            });
         </script>
     </body>
 </html>

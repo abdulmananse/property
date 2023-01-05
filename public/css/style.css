@@ -105,7 +105,6 @@ select, input{
 }
 .search-input{
     display: grid;
-    grid-template-columns: auto auto;
     padding: 0px!important;
 }
 .description{
@@ -747,6 +746,15 @@ a.disabled{
     text-decoration: none;
 }
 
+/*datepicker*/
+.btn-primary,
+.daterangepicker td.active, .daterangepicker td.active:hover{
+    background-color: #1fb797!important;
+}
+.drp-calendar{
+    width: 100%;
+}
+
 
 @media (max-width: 1430px) {
     .col-xl-4{
@@ -801,6 +809,14 @@ a.disabled{
     .box img{
         width: 136.7px;
         object-position: left;
+    }
+}
+@media (max-width: 1020px) {
+    .daterangepicker{
+        width: 278px!important;
+    }
+    .drp-calendar{
+        width: 100%;
     }
 }
 @media (max-width: 970px) {

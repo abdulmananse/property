@@ -52,9 +52,9 @@ class ImportProperties extends Command
     {
         ini_set('max_execution_time', 0);
 
-        $startDateTime = Carbon::now();
-	    Log::error('Import Properties Started', [$startDateTime->format('d-m-Y h:i A')]);
-        $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
+        //$startDateTime = Carbon::now();
+	    //Log::error('Import Properties Started', [$startDateTime->format('d-m-Y h:i A')]);
+        //$this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $sheetName = $this->argument('sheet');
 
@@ -64,19 +64,19 @@ class ImportProperties extends Command
 
         $sheet = Sheet::where('name', $sheetName)->first();
         if ($sheet) {
-            $this->info($sheet->name . ' Sheet Property Importing');
+            //$this->info($sheet->name . ' Sheet Property Importing');
             $homeController->savePropertyData($sheet);
         } else {
             $sheets = Sheet::get();
             foreach ($sheets as $sheet) {
-                $this->info($sheet->name . ' Sheet Property Importing');
+                //$this->info($sheet->name . ' Sheet Property Importing');
                 $homeController->savePropertyData($sheet);
             }
         }
         $endDateTime = Carbon::now();
-        $this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
+        //$this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
-        $this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
+        //$this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
 
         return 0;
     }

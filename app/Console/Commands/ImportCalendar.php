@@ -44,9 +44,9 @@ class ImportCalendar extends Command
     {
         ini_set('max_execution_time', 0);
 
-        $startDateTime = Carbon::now();
-	    Log::error('Import Calendars Started', [$startDateTime->format('d-m-Y h:i A')]);
-        $this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
+        //$startDateTime = Carbon::now();
+	    //Log::error('Import Calendars Started', [$startDateTime->format('d-m-Y h:i A')]);
+        //$this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $propertyId = $this->argument('property_id');
 
@@ -55,21 +55,21 @@ class ImportCalendar extends Command
         $property = Property::where('property_id', $propertyId)->first();
         if ($propertyId !== 0 && $property) {
             EventModel::where('property_id', $property->id)->delete();
-            $this->info($property->name . ' Calendar Importing');
+            //$this->info($property->name . ' Calendar Importing');
             $homeController->getEventsFromIcsFile($property);
-            $this->info($property->name . ' Calendar Imported');
+            //$this->info($property->name . ' Calendar Imported');
         } else {
             $properties = Property::get();
             foreach($properties as $property) {
                 //EventModel::where('property_id', $property->id)->delete();
-                $this->info($property->name . ' Calendar Importing');
+                //$this->info($property->name . ' Calendar Importing');
                 $homeController->getEventsFromIcsFile($property);
             }
         }
         $endDateTime = Carbon::now();
-        $this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
+        //$this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
-        $this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
+        //$this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
 
         return 0;
     }
