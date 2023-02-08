@@ -225,8 +225,8 @@ select, input{
 .custom-options {
     position: absolute;
     display: block;
-    top: -69px;
-    right: -159px;
+    top: 34px;
+    right: -1px;
     border-radius: 3px;
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
     border: solid 1px #8e8e93;
@@ -308,7 +308,9 @@ select, input{
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.property-ID{
+.property-ID,
+.average-price p,
+.date-price{
     font-size: 12px;
     font-weight: bold;
     font-stretch: normal;
@@ -319,8 +321,26 @@ select, input{
     font-family: InriaSerif;
 
 }
+.average-price p{
+    margin: 0px;
+}
 .bed{
     justify-self: right;
+}
+.average-price{
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 5px;
+    text-align: right;
+}
+.bed-number{
+    text-align: right;
+}
+.average-price img{
+    width: 10px!important;
+    height: 10px;
+    place-self: center;
+    margin-bottom: 2px!important;
 }
 .info-top{
     display: grid;
@@ -350,6 +370,71 @@ select, input{
     font-style: normal;
     line-height: normal;
     color: #000000;
+}
+/* .information-mobile{
+    display: none;
+} */
+.information{
+    padding: 15px;
+    position: absolute;
+    border-radius: 3px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+    border: solid 1px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    z-index: 1;
+    top: 43px;
+    right: -182px;
+    display: none;
+}
+.information.open{
+    display: block;
+}
+.total{
+    border-top: 1px solid black;
+}
+.note-card{
+    font-size: 9px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #636366;
+}
+.note-card p{
+    margin: 0px;
+}
+.order,
+.total{
+  font-family: Inter-Regular_Medium;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.1px;
+  color: black;
+}
+.order,
+.date-price,
+.total{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.date-price p,
+.order p{
+    margin-bottom: 10px;
+}
+.total p{
+    margin-top: 10px;
+    margin-bottom: 21px;
+
+}
+.information img{
+    width: 8px;
+    height: 8px;
+    margin-bottom: 15px;
 }
 .result span{
     color: #1fb797;
@@ -428,7 +513,7 @@ a.disabled{
     display: none;
     z-index: 1;
 }
-.search-dropdown.open{
+.search-dropdown.display{
     display: block;
 }
 .search-element{
@@ -756,6 +841,8 @@ a.disabled{
 }
 
 
+
+
 @media (max-width: 1430px) {
     .col-xl-4{
         width: 33.333333%!important;
@@ -791,11 +878,10 @@ a.disabled{
         margin-right: -4px;
     }
     .custom-options{
-        right: -157px;
         width: 113px;
     }
     .select-click .select .custom-options{
-        width: 150px;
+        width: 113px;
     }
     .description .custom-options{
         right: -1px;
@@ -837,17 +923,16 @@ a.disabled{
     }
     .custom-options{
         width: 110px;
-        right: -127px;
     }
     .select-click {
         margin-right: -2px;
     }
     .select-click .select .custom-options{
-        width: 120px;
+        width: 110px;
     }
 }
 
-@media (max-width: 810px) {
+@media (max-width: 930px) {
 
     .col-sm-6 {
         flex: 0 0 auto;
@@ -942,6 +1027,12 @@ a.disabled{
         height: 10.9px!important;
         margin-top: 9.5px;
     }
+    .droparrow.display{
+        display: block;
+        width: 10.6px!important;
+        height: 10.9px!important;
+        margin-top: 9.5px;
+    }
     .droparrow-wrapper{
         border-radius: 3px;
         border: solid 1px rgba(0, 0, 0, 0.15);
@@ -953,9 +1044,11 @@ a.disabled{
         height: 30px;
         text-align: -webkit-center;
     }
-    .logo.open,
+    .logo.display{
+        display: none!important;
+    }
     .logo-class.open p{
-        display: none;
+        display: none!important;
     }
     .searchClass.open{
         display: block!important;
@@ -1083,9 +1176,40 @@ a.disabled{
         overflow: hidden;
     }
 
+    .card{
+        position: unset;
+    }
+    .card-name a{
+        width: 200px;
+    }
+    .information.open{
+        right: -16px;
+    }
+    .order, .total{
+        gap: 0px;
+        min-width: 115px;
+    }
+    .date-price{
+        display: block;
+    }
+    .date-price p{
+        margin-bottom: 0px;
+    }
+    .total p{
+        margin: 5px 0px;
+
+    }
+    .bed{
+        position: relative;
+    }
+    .date-price{
+        gap: 40px;
+        margin-bottom: 10px;
+    }
+
 }
-
-
-
-
-
+@media (max-width: 400px) {
+    .card-name a{
+        width: 140px;
+    }
+}

@@ -4,16 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
-class Property extends Model
+class DuplicateProperty extends Model
 {
     use HasFactory;
-
-    public function getShortDescriptionAttribute()
-    {
-        return Str::words($this->description, 50, '...');
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -88,7 +82,7 @@ class Property extends Model
      */
     public function events()
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(DuplicateEvent::class);
     }
 
 }

@@ -17,7 +17,7 @@
         <!-- Styles -->
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/jquery-ui.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/style.css?v=' . rand(1111,999999)) }}" rel="stylesheet">
 
         <!-- Scripts -->
         <script type='text/javascript' src='{{ asset('js/jquery.min.js') }}'></script>
@@ -46,7 +46,7 @@
                         <div class="droparrow-wrapper">
                             <img class="droparrow" src="{{ asset('img/down-arrow-black.png') }}">
                         </div>
-                        <a href="{{ config('app.url') }}"><img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}"></a>
+                        <a href="{{ url('') }}"><img class="logo" src="{{ asset('img/tripwix_logo_caribbeangreen6.png') }}"></a>
                     </div>
 
                     <div class="header-right">
@@ -111,7 +111,7 @@
                     <div class="form-class">
                         <h1>Find homes quickly</h1>
                         <div class="form-wrapper">
-                            <form class="row g-3 form-input search-form">
+                            <form method="GET" action="{{ url('') }}" class="row g-3 form-input search-form">
                                 <div class="col-auto description">
                                     <div class="select">
                                         <div class="select__trigger destination-label">
@@ -119,7 +119,6 @@
                                             <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                                         </div>
                                         <div class="form-control custom-options">
-                                            <span selected class="custom-option select-destination-name" data-value="">Destination</span>
                                             @foreach($cities as $city)
                                             <span class="custom-option select-destination-name" data-value="{{ $city }}">{{ $city }}</span>
                                             @endforeach
@@ -166,6 +165,8 @@
                                     <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                                 </div>
                                 <div class="form-control custom-options">
+                                    <span selected class="custom-option select-sortby" data-value="Community Ascending">Community Ascending</span>
+                                    <span selected="" class="custom-option select-sortby" data-value="Price Low to High">Price Low to High</span>
                                     <span selected class="custom-option select-sortby" data-value="Property Name A to Z">Property Name A to Z</span>
                                     <span selected class="custom-option select-sortby" data-value="No. of Bedrooms">No. of Bedrooms</span>
                                     <span selected class="custom-option select-sortby" data-value="Property Type">Property Type</span>
@@ -188,16 +189,92 @@
                                                     <a href="javascript:void(0)">{{ $property->name }}</a>
                                                     <span class="property-ID">{{ $property->property_id }}</span>
                                                 </div>
-                                                <div class="bed">
-                                                    <img src="{{ asset('img/bed.png') }}">
-                                                    <span>{{ $property->no_of_bedrooms }}</span>
+                                                <div class="bed" style="position: relative;">
+                                                    <div class="bed-number">
+                                                        <img src="{{ asset('img/bed.png') }}">
+                                                        <span>{{ $property->no_of_bedrooms }}</span>
+                                                    </div>
+                                                    <div class="average-price">
+                                                        <div class="average-night">
+                                                            @if($property->average > 0)
+                                                            <p>{!! $property->currency_symbol !!}{{ number_format($property->average, 2) }}</p>
+                                                            <p>Average/Night</p>
+                                                            @else
+                                                            <p>N/A</p>
+                                                            @endif
+                                                        </div>
+                                                        <img class="infoImage" src="{{ asset('img/icon-info@3x.png') }}">
+                                                    </div>
+
+                                                    <div class="information">
+                                                        <img class="infoClose" src="{{ asset('img/icon-xmark@3x.png') }}">
+                                                        <div class="date-price">
+                                                            <p>Breakdown:</p>
+                                                            <p>{{ date('M d', strtotime(@$startDate)) }} - {{ date('M d', strtotime(@$endDate)) }}</p>
+                                                        </div>
+                                                        <div class="average-price-date">
+                                                            @foreach($property->prices as $key => $price)
+                                                            <div class="order">
+                                                                <p>{{ date('M d', strtotime($key)) }}</p>
+                                                                @if($price > 0)
+                                                                <p>{!! $property->currency_symbol !!}{{ number_format($price, 2) }}</p>
+                                                                @else
+                                                                <p>N/A</p>
+                                                                @endif
+                                                            </div>
+                                                            @endforeach
+                                                        </div>
+                                                        <div class="total">
+                                                            <p>Total</p>
+                                                            @if($property->total_price > 0)
+                                                            <p>{!! $property->currency_symbol !!}{{ number_format($property->total_price, 2) }}</p>
+                                                            @else
+                                                            <p>N/A</p>
+                                                            @endif
+                                                        </div>
+                                                        <div class="note-card">
+                                                            @if($property->total_price > 0)
+                                                            <p>*Add VAT/Fees when sending client</p>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+
+                                                <!--<div class="information-mobile">
+                                                        <p class="breakdown">Breakdown:</p>
+                                                        <p class="date-mobile">{{ date('M d', strtotime(@$startDate)) }} - {{ date('M d', strtotime(@$endDate)) }}</p>
+                                                        <div class="note-card">
+                                                            @if($property->total_price > 0)
+                                                            <p>*Add VAT/Fees when sending client</p>
+                                                            @endif
+                                                        </div>
+                                                        <div class="average-price-date">
+                                                            @foreach($property->prices as $key => $price)
+                                                            <div class="order">
+                                                                <p>{{ date('M d', strtotime($key)) }}</p>
+                                                                @if($price > 0)
+                                                                <p>{!! $property->currency_symbol !!} {{ number_format($price, 2) }}</p>
+                                                                @else
+                                                                <p>N/A</p>
+                                                                @endif
+                                                            </div>
+                                                            @endforeach
+                                                        </div>
+                                                        <div class="total">
+                                                            <p>Total</p>
+                                                            @if($property->total_price > 0)
+                                                            <p>{!! $property->currency_symbol !!} {{ number_format($property->total_price, 2) }}</p>
+                                                            @else
+                                                            <p>N/A</p>
+                                                            @endif
+                                                        </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                             <div class="info-bottom">
                                                 <div>
                                                     <div class="result">
-                                                        <b>Destination:</b>
-                                                        <span>{{ $property->destination }}</span>
+                                                        <b>Community:</b>
+                                                        <span>{{ ucwords(strtolower($property->community)) }}</span>
                                                     </div>
                                                     <div class="result">
                                                         <b>Max Guests:</b>
@@ -276,8 +353,18 @@
                                 <img src="{{ asset('img/box-4.png') }}">
                                 <div class="box-right">
                                     <img src="{{ asset('img/simpol-4.png') }}">
-                                    <h2>Request Feature</h2>
-                                    <p>Ask for feature or request bugs on the Sales Platform.</p>
+                                    <h2>Request Change</h2>
+                                    <p>Ask for a new feature or report a bug.</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{{ config('app.url') . '/index.php/error_logs' }}" target="_blank" role="button">
+                            <div class="box">
+                                <img src="{{ asset('img/error-icon.png') }}">
+                                <div class="box-right">
+                                    <img src="{{ asset('img/error-icon.png') }}">
+                                    <h2>Error Logs</h2>
+                                    <p>Displays error occured while reading google sheets.</p>
                                 </div>
                             </div>
                         </a>
@@ -393,13 +480,63 @@
             const searchMobile = document.querySelector('.searchMobile');
             const salesPlatform = document.querySelector('.sales-platform');
             const body = document.querySelector('body');
+            var scrollPos;
+            // const infoMobile = ;
+
+
+            const infoIcon = document.querySelectorAll('.average-price img');
+            const infoCard = document.querySelectorAll('.information');
+            const informationClose = document.querySelectorAll('.infoClose');
+            // const informationMobile = document.querySelectorAll('.information-mobile');
+
+
+            for(const info of infoIcon){
+                info.addEventListener('click',function(){
+                    const averagePrice = info.parentElement;
+                    const informationCard = averagePrice.nextElementSibling;
+                    informationCard.classList.add('open')
+                })
+            }
+            for(const iClose of informationClose){
+                iClose.addEventListener('click',function(){
+                    for(const card of infoCard){
+                        card.classList.remove('open')
+                    }
+                })
+            }
+
+            // if(width < mobileWidth){
+            //     for(const info of infoIcon){
+            //         info.addEventListener('click',function(){
+            //             const averagePrice = info.parentElement;
+            //             const informationCard = averagePrice.nextElementSibling;
+            //             const infoMobile = informationCard.nextElementSibling;
+
+            //             infoMobile.classList.add('open')
+            //             logo.classList.add('display')
+            //             ticketBtn.classList.add('open')
+            //             loupeParent.classList.add('open')
+            //             droparrowWrapper.classList.add('open')
+            //             droparrow.classList.add('open')
+            //             body.classList.toggle('open')
+            //             // save scroll position to a variable
+            //             scrollPos = $(window).scrollTop();
+            //             $('html, body').scrollTop($("#ticket-btn").offset().top);
+
+            //             droparrowWrapper.addEventListener('click',function(){
+            //                 infoMobile.classList.remove('open')
+            //                 $('html, body').scrollTop(scrollPos);
+            //             })
+            //         })
+            //     }
+            // }
 
             searchOpen.addEventListener('click',function(){
-                searchDrop.classList.toggle('open')
+                searchDrop.classList.toggle('display')
                 document.getElementById("webSearchResults").innerHTML = '';
                 document.getElementById("mobileSearchResults").innerHTML = '';
             })
-            loupe.addEventListener('click',function(){
+            seacrhHeader.addEventListener('click',function(){
                 openSearch();
             })
 
@@ -407,20 +544,20 @@
                 document.getElementById("webSearchResults").innerHTML = '';
                 document.getElementById("mobileSearchResults").innerHTML = '';
                 droparrow.classList.add('open')
-                logo.classList.add('open')
+                logo.classList.add('display')
                 logoClass.classList.add('open')
                 searchMobile.classList.add('open')
                 droparrowWrapper.classList.add('open')
+
                 if(width < mobileWidth){
                     salesPlatform.classList.add('d-none')
-                }
-                loupeParent.classList.add('d-none')
-                ticketBtn.classList.remove('open')
-                ticketBtn.classList.add('d-none')
-                ticketFormThanks.classList.remove('open')
-                ticketForm.classList.remove('open')
-                if(width < mobileWidth){
                     loupeParent.classList.add('d-none')
+                    loupeParent.classList.add('d-none')
+                    ticketBtn.classList.remove('open')
+                    ticketBtn.classList.add('d-none')
+                    ticketFormThanks.classList.remove('open')
+                    ticketForm.classList.remove('open')
+
                 }
             }
 
@@ -429,7 +566,7 @@
                 logo.classList.remove('open')
                 logoClass.classList.remove('open')
                 searchMobile.classList.remove('open')
-                searchDrop.classList.remove('open')
+                searchDrop.classList.remove('display')
                 salesPlatform.classList.remove('d-none')
 
                 if(width < mobileWidth){
@@ -439,11 +576,14 @@
                 $('#search').val('');
             }
 
-            droparrow.addEventListener('click',function(){
+            droparrowWrapper.addEventListener('click',function(){
                 droparrowWrapper.classList.remove('open')
                 seacrhHeader.classList.remove('open')
                 loupeParent.classList.remove('d-none')
                 ticketBtn.classList.remove('d-none')
+                logo.classList.remove('display')
+
+
                 closeSearch()
                 closeTicket()
             })
@@ -460,12 +600,11 @@
                 }
                 if (applayBtn) {
                     applayBtn.addEventListener('click', function() {
-                    console.log(applayBtn)
                         clickCalendar = '';
                     });
                 }
 
-                width = window.screen.availWidth;
+                width = window.innerWidth;
                 if(width < mobileWidth){
                     if (!document.getElementById('searchHeader').contains(e.target) &&
                         !document.getElementById('mobileSearch').contains(e.target) &&
@@ -514,10 +653,6 @@
             }
 
             function toggleTicket(){
-                droparrow.classList.toggle('open')
-                logo.classList.toggle('open')
-                logoClass.classList.toggle('open')
-                droparrowWrapper.classList.toggle('open')
                 ticketBtn.classList.toggle('open')
                 ticketFormThanks.classList.remove('open')
                 ticketForm.classList.toggle('open')
@@ -528,6 +663,12 @@
                     salesPlatform.classList.add('d-none')
                     loupeParent.classList.toggle('d-none')
                     body.classList.toggle('open');
+                    droparrowWrapper.classList.toggle('open')
+                    logo.classList.toggle('display');
+                    seacrhHeader.classList.toggle('open');
+                    droparrow.classList.add('display')
+
+
                 }
                 $('#ticket-form form')[0].reset()
             }

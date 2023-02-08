@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\CronJob;
 use Illuminate\Console\Command;
 
 use Revolution\Google\Sheets\Facades\Sheets;
@@ -58,14 +59,16 @@ class ImportSheets extends Command
         $spreadsheetId = $this->spreadsheetId;
         $sheets = Sheets::spreadsheet($spreadsheetId)
             ->sheetList();
+        CronJob::create(['command' => "Starting: import:sheets"]);
         foreach ($sheets as $id => $value) {
-            $this->info($value . ' Sheet Imported');
+            //$this->info($value . ' Sheet Imported');
             Sheet::updateOrCreate([
                 'sheet_id' => $id,
                 'name' => $value
             ]);
         }
-        $endDateTime = Carbon::now();
+        CronJob::create(['command' => "Completed: import:sheets"]);
+        //$endDateTime = Carbon::now();
         //$this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
         //$this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));

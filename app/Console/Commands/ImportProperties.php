@@ -6,7 +6,14 @@ use Illuminate\Console\Command;
 use App\Models\Sheet;
 use App\Models\Property;
 use App\Http\Controllers\HomeController;
+use App\Models\CronJob;
+use App\Models\DuplicateProperty;
+use App\Models\DuplicatePropertyPrice;
+use App\Models\Log as ModelsLog;
+use App\Models\PropertyPrice;
+// use App\Models\PropertyPrice;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ImportProperties extends Command
@@ -58,22 +65,62 @@ class ImportProperties extends Command
 
         $sheetName = $this->argument('sheet');
 
-        $homeController = app()->make(HomeController::class);
+        ModelsLog::where('type', 'property')->delete();
 
-        Property::truncate();
+        $homeController = app()->make(HomeController::class);
 
         $sheet = Sheet::where('name', $sheetName)->first();
         if ($sheet) {
+            DuplicateProperty::where('sheet_id', $sheet->id)->delete();
+            CronJob::create(['command' => "Starting: import:properties " . $sheetName]);
             //$this->info($sheet->name . ' Sheet Property Importing');
             $homeController->savePropertyData($sheet);
+            Property::where('sheet_id', $sheet->id)->delete();
+            DuplicateProperty::query()
+            ->where('sheet_id', $sheet->id)
+            ->each(function ($oldRecord) {
+                $newRecord = $oldRecord->replicate();
+                $newRecord->setTable('property');
+                $newRecord->save();
+
+                DuplicatePropertyPrice::query()
+                ->where('property_id', $oldRecord->property_id)
+                ->each(function ($oldPricing) {
+                    $newRecord = $oldPricing->replicate();
+                    $newRecord->setTable('property_pricing');
+                    $newRecord->save();
+                    $oldPricing->delete();
+                });
+
+                $oldRecord->delete();
+            });
+            CronJob::create(['command' => "Completed: import:properties " . $sheetName]);
         } else {
+            DuplicateProperty::truncate();
+            DuplicatePropertyPrice::truncate();
             $sheets = Sheet::get();
+            CronJob::create(['command' => "Starting: import:properties"]);
             foreach ($sheets as $sheet) {
                 //$this->info($sheet->name . ' Sheet Property Importing');
                 $homeController->savePropertyData($sheet);
             }
+            CronJob::create(['command' => "Completed: import:properties"]);
+
+            Property::truncate();
+            PropertyPrice::truncate();
+            $totalDestinations = count(DuplicateProperty::select('destination')->groupBy('destination')->get());
+            if(($totalDestinations) >= 32){
+                DB::statement("INSERT INTO properties SELECT * FROM duplicate_properties;");
+                DB::statement("INSERT INTO property_pricing SELECT * FROM duplicate_property_pricing;");
+            }else{
+                $message = "Unable to read all destinations. Parsed {TotalDestinations} $totalDestinations" . ' {ErrorMessage}';
+                $destinationName = '';
+                $pisLink = '';
+                $homeController->createDbErrorLog($destinationName, $pisLink, $message);
+            }
         }
-        $endDateTime = Carbon::now();
+
+        //$endDateTime = Carbon::now();
         //$this->info('End: ' . $endDateTime->format('d-m-Y h:i A'));
 
         //$this->info('Time Taken: ' . $startDateTime->diff($endDateTime)->format('%H:%I:%S'));
