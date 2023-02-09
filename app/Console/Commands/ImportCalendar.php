@@ -82,7 +82,7 @@ class ImportCalendar extends Command
 
                 DB::statement("INSERT INTO events SELECT * FROM duplicate_events;");
             }else{
-                $message = "Total destinations count not correct ignoring calendars import";
+                $message = "Total destinations count not correct ignoring calendars import" . " {ErrorMessage}";
                 $destinationName = '';
                 $pisLink = '';
                 $homeController->createDbErrorLog($destinationName, $pisLink, $message, 'calendar');
