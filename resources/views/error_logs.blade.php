@@ -45,6 +45,8 @@
                     <tr class="text-center border-2">
                         <th class="border-4">Sr#</th>
                         <th class="border-4">Datetime</th>
+                        <th class="border-4">Type</th>
+                        <th class="border-4">Team</th>
                         <th class="border-4">Message</th>
                         <th class="border-4">Destination</th>
                         <th class="border-4">Property</th>
@@ -55,6 +57,20 @@
                     <tr class="text-left border-2">
                         <td class="border-4">{{ ($key+1) }}</td>
                         <td class="border-4">{{ date('d M, Y H:i A', strtotime($errorLog->created_at)) }}</td>
+                        <td class="border-4" style="text-align: center;">
+                            @if($errorLog->error_type)
+                                @if($errorLog->error_type === 'warning')
+                                    <img src="{{ asset('img/warning.png') }}" width="40" />
+                                @else
+                                <img src="{{ asset('img/error.png') }}" width="50" />
+                                @endif
+                            @endif
+                        </td>
+                        <td class="border-4">
+                            @if($errorLog->error_category)
+                            {{ ($errorLog->error_category) }}
+                            @endif
+                        </td>
                         <?php
                             list($message, $error) =  explode('{ErrorMessage}', $errorLog->message);
                             $error = (isset($error) ? json_decode($error, true) : '');

@@ -236,12 +236,14 @@ class HomeController extends Controller
         return view('property-detail', compact('property'));
     }
 
-    public function createDbErrorLog($destinationName = '', $pisLink = '', $message = '', $type = 'property'){
+    public function createDbErrorLog($destinationName = '', $pisLink = '', $message = '', $type = 'property', $errorType = 'error', $erroCategory = 'Sales Team'){
         ModelsLog::create([
             'message' => $message,
             'destination_name' => $destinationName,
             'pis_link' => $pisLink,
-            'type' => $type
+            'type' => $type,
+            'error_type' => $errorType,
+            'error_category' => $erroCategory
         ]);
     }
 
@@ -266,7 +268,7 @@ class HomeController extends Controller
             $message = "Unable to read sheets using spreadsheet ID $spreadsheetId. {ErrorMessage} $error";
             $destinationName = '';
             $pisLink = '';
-            $this->createDbErrorLog($destinationName, $pisLink, $message);
+            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Tech Team');
         }
 
         //exit('Sheets Imported');
@@ -318,7 +320,7 @@ class HomeController extends Controller
             $message = "Unable to read calendars using property ID $propertyId. {ErrorMessage} $error";
             $destinationName = '';
             $pisLink = '';
-            $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar');
+            $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'error', 'Sales/Tech Team');
         }
 
 
@@ -394,14 +396,14 @@ class HomeController extends Controller
                             $message = "Unable to get property information. Skipping parsing. " . ' {ErrorMessage}';
                             $destinationName = $sheet->name;
                             $pisLink = $pisSheetId;
-                            $this->createDbErrorLog($destinationName, $pisLink, $message);
+                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
                         }
                     }
                 }else{
                     $message = "Property ID index not found. Skipping parsing." . ' {ErrorMessage}';
                     $destinationName = $sheet->name;
                     $pisLink = $pisSheetId;
-                    $this->createDbErrorLog($destinationName, $pisLink, $message);
+                    $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
                 }
             }
         } catch (\Exception $e) {
@@ -410,7 +412,7 @@ class HomeController extends Controller
             $message = "Unable to read properties using sheet $sheet. {ErrorMessage} $error";
             $destinationName = $sheet->name;
             $pisLink = $pisSheetId;
-            $this->createDbErrorLog($destinationName, $pisLink, $message);
+            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
 
             $skipProperties[] = $this->readProperty['Property ID'];
             $this->propertyImport($sheet, $properties, $skipProperties);
@@ -453,7 +455,7 @@ class HomeController extends Controller
                 $message = "Unable to read destiantion $sheet->name properties. {ErrorMessage} $error";
                 $destinationName = $sheet->name;
                 $pisLink = '';
-                $this->createDbErrorLog($destinationName, $pisLink, $message);
+                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
             }
             //Log::Error('savePropertyData', [$e]);
         }
@@ -484,7 +486,7 @@ class HomeController extends Controller
             $message = "Some error occured. {ErrorMessage} $error";
             $destinationName = '';
             $pisLink = '';
-            $this->createDbErrorLog($destinationName, $pisLink, $message);
+            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
         }
     }
 
@@ -566,7 +568,7 @@ class HomeController extends Controller
                                                             $message = "Invalid Date found. Date: " . $values[$index] . ' {ErrorMessage}';
                                                             $destinationName = $destination;
                                                             $pisLink = $pisSheetId;
-                                                            $this->createDbErrorLog($destinationName, $pisLink, $message);
+                                                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales Team');
                                                             $values[$index] = null;
                                                         }
                                                     }else if($values[$index]){
@@ -576,7 +578,7 @@ class HomeController extends Controller
                                                             $message = "Invalid Price found. Price: " . $values[$index] . ' {ErrorMessage}';
                                                             $destinationName = $destination;
                                                             $pisLink = $pisSheetId;
-                                                            $this->createDbErrorLog($destinationName, $pisLink, $message);
+                                                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales Team');
                                                             $values[$index] = null;
                                                         }
                                                     }else{
@@ -606,7 +608,7 @@ class HomeController extends Controller
                 $message = "Unable to read property information property id $pisSheetId, Sheet Id ".$this->readPropertySheet." . {ErrorMessage} $error";
                 $destinationName = $destination;
                 $pisLink = $pisSheetId;
-                $this->createDbErrorLog($destinationName, $pisLink, $message);
+                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
 
                 $skipIndexes[] = $this->readIndex;
                 $this->getPropertyInformation($destination, $pisSheetId, $skipIndexes);
@@ -651,14 +653,14 @@ class HomeController extends Controller
                         $message = "No calendar events found Destination ".$property->destination.", Property Name ".$property->name . ' {ErrorMessage}';
                         $destinationName = $property->destination;
                         $pisLink = $property->pis_sheet_id;
-                        $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar');
+                        $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'warning', 'Sales Team');
                     }
                 } catch (\Exception $e) {
                     $error = $this->parseException($e);
                     $message = "Unable to read calendar events from Google -  Destination ".$property->destination.", Property Name ".$property->name." . {ErrorMessage} $error";
                     $destinationName = $property->destination;
                     $pisLink = $property->pis_sheet_id;
-                    $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar');
+                    $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'error', 'Sales/Tech Team');
                 }
         }
     }

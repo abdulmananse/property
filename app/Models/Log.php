@@ -18,7 +18,9 @@ class Log extends Model
         'message',
         'destination_name',
         'pis_link',
-        'type'
+        'type',
+        'error_type',
+        'error_category'
     ];
 
 }
