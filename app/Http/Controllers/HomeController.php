@@ -49,10 +49,11 @@ class HomeController extends Controller
         $this->readIndex = '';
     }
 
-    public function searchProperties(Request $request){
+    public function searchProperties(Request $request)
+    {
         $searchString = $request->searchString;
         if ($searchString) {
-            $where = ' WHERE 1 AND properties.ical_link IS NOT NULL AND (properties.name LIKE "%'.$searchString.'%" OR properties.property_id LIKE "%'.$searchString.'%")';
+            $where = ' WHERE 1 AND properties.ical_link IS NOT NULL AND (properties.name LIKE "%' . $searchString . '%" OR properties.property_id LIKE "%' . $searchString . '%")';
             $orderBy = 'properties.name ASC';
             $query = 'SELECT
                     properties.clickup_id,
@@ -60,28 +61,28 @@ class HomeController extends Controller
                     properties.property_id
                 FROM properties
                 LEFT JOIN `events` ON events.property_id = properties.id
-                '. $where .'
+                ' . $where . '
                 GROUP BY
                     properties.id,properties.property_id
-                ORDER BY '.$orderBy.'
+                ORDER BY ' . $orderBy . '
                 LIMIT 10 ';
 
             $properties = DB::select(DB::raw($query));
 
             $searchElements = '';
-            foreach($properties as $property){
+            foreach ($properties as $property) {
                 $searchElements .= '<div class="search-element w-100 d-flex">
                 <div class="title-element w-75 text-left">
                     <h2>' . $property->name . ' </h2>
-                    <p>'. $property->property_id.'</p>
+                    <p>' . $property->property_id . '</p>
                     </div>
                     <div class="btnClick">
-                        <a class="'.($property->clickup_id ? 'active' : 'disabled').'" href="'.($property->clickup_id ? $property->clickup_id : 'javascript:void(0)').'" target="_blank">ClickUp</a>
+                        <a class="' . ($property->clickup_id ? 'active' : 'disabled') . '" href="' . ($property->clickup_id ? $property->clickup_id : 'javascript:void(0)') . '" target="_blank">ClickUp</a>
                         </div>
                     </div>';
             }
             return $searchElements;
-        }else{
+        } else {
             return '';
         }
     }
@@ -91,7 +92,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index (Request $request) {
+    public function index(Request $request)
+    {
 
         $salesPersons = $this->salesPersons;
 
@@ -137,7 +139,7 @@ class HomeController extends Controller
             $endDate = Carbon::createFromFormat('m/d/Y', $endDate)->format('Y-m-d');
 
             $rangeDatesArray = [];
-            while(strtotime($iterateStartDate) <= strtotime($endDate)){
+            while (strtotime($iterateStartDate) <= strtotime($endDate)) {
                 $rangeDatesArray[date('Ymd', strtotime($iterateStartDate))] = $iterateStartDate;
                 $iterateStartDate = date('Y-m-d', strtotime("+1 day", strtotime($iterateStartDate)));
             }
@@ -162,41 +164,41 @@ class HomeController extends Controller
                     properties.no_of_beds,
                     properties.no_of_bathrooms,
                     properties.no_of_bedrooms,
-                    SUM(IF((CAST("'.$startDate.'" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (CAST("'.$endDate.'" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (DATE(events.start) > CAST("'.$startDate.'" AS DATE) AND DATE_SUB(DATE(events.end), INTERVAL 1 DAY) < CAST("'.$endDate.'" AS DATE)), 1, 0)) as total_bookings
+                    SUM(IF((CAST("' . $startDate . '" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (CAST("' . $endDate . '" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (DATE(events.start) > CAST("' . $startDate . '" AS DATE) AND DATE_SUB(DATE(events.end), INTERVAL 1 DAY) < CAST("' . $endDate . '" AS DATE)), 1, 0)) as total_bookings
                 FROM properties
                 LEFT JOIN `events` ON events.property_id = properties.id
-                '. $where .'
+                ' . $where . '
                 GROUP BY
                     properties.id,properties.property_id
                 HAVING total_bookings = 0
-                ORDER BY '.$orderBy;
+                ORDER BY ' . $orderBy;
 
             $properties = DB::select(DB::raw($query));
 
 
-            foreach($properties as $key => $property){
+            foreach ($properties as $key => $property) {
                 $totalPrice = 0;
-                foreach($rangeDatesArray as $date){
+                foreach ($rangeDatesArray as $date) {
                     $prices = PropertyPrice::where(['property_id' => $property->id])->whereDate('from', '<=', $date)->whereDate('to', '>=', $date)->first();
-                    if($prices){
+                    if ($prices) {
                         $totalPrice += $prices->per_night_price;
                         $properties[$key]->prices[$date] = $prices->per_night_price;
-                    }else{
+                    } else {
                         $properties[$key]->prices[$date] = 0.00;
                     }
                 }
                 $properties[$key]->total_price = $totalPrice;
-                $properties[$key]->average = $totalPrice/count($rangeDatesArray);
+                $properties[$key]->average = $totalPrice / count($rangeDatesArray);
             }
 
-            $offset = ($page * $paginate) - $paginate ;
+            $offset = ($page * $paginate) - $paginate;
 
             if ($sortBy && $sortBy == 'Price Low to High') {
                 $properties = collect($properties)->sortBy('average')->toArray();
             }
 
-            $itemstoshow = array_slice($properties , $offset , $paginate);
-            $properties = new LengthAwarePaginator($itemstoshow, count($properties), $paginate, $page, ['path' => $request->url() ]);
+            $itemstoshow = array_slice($properties, $offset, $paginate);
+            $properties = new LengthAwarePaginator($itemstoshow, count($properties), $paginate, $page, ['path' => $request->url()]);
 
         }
 
@@ -206,19 +208,21 @@ class HomeController extends Controller
         return view('properties', compact('cities', 'properties', 'maxBedrooms', 'salesPersonsList', 'endDate', 'startDate'));
     }
 
-    public function errorLogs(Request $request){
+    public function errorLogs(Request $request)
+    {
 
         $errorLogs = ModelsLog::all();
 
         return view('error_logs', compact('errorLogs'));
     }
 
-    public function paginate($items , $perpage ){
+    public function paginate($items, $perpage)
+    {
         $total = count($items);
         $currentpage = \Request::get('page', 1);
-        $offset = ($currentpage * $perpage) - $perpage ;
-        $itemstoshow = array_slice($items , $offset , $perpage);
-        $p = new LengthAwarePaginator($itemstoshow ,$total ,$perpage);
+        $offset = ($currentpage * $perpage) - $perpage;
+        $itemstoshow = array_slice($items, $offset, $perpage);
+        $p = new LengthAwarePaginator($itemstoshow, $total, $perpage);
         $p->setPath(\Request::url());
 
         return $p;
@@ -229,14 +233,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show ($id) {
+    public function show($id)
+    {
 
         $property = Property::with('sheet', 'events');
 
         return view('property-detail', compact('property'));
     }
 
-    public function createDbErrorLog($destinationName = '', $pisLink = '', $message = '', $type = 'property', $errorType = 'error', $erroCategory = 'Sales Team'){
+    public function createDbErrorLog($destinationName = '', $pisLink = '', $message = '', $type = 'property', $errorType = 'error', $erroCategory = 'Data Team')
+    {
         ModelsLog::create([
             'message' => $message,
             'destination_name' => $destinationName,
@@ -252,17 +258,18 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function importSheets () {
+    public function importSheets()
+    {
         try {
             $spreadsheetId = $this->spreadsheetId;
             $sheets = Sheets::spreadsheet($spreadsheetId)
                 ->sheetList();
-                foreach ($sheets as $id => $value) {
-                    Sheet::updateOrCreate([
-                        'sheet_id' => $id,
-                        'name' => $value
-                    ]);
-                }
+            foreach ($sheets as $id => $value) {
+                Sheet::updateOrCreate([
+                    'sheet_id' => $id,
+                    'name' => $value
+                ]);
+            }
         } catch (\Exception $e) {
             $error = $this->parseException($e);
             $message = "Unable to read sheets using spreadsheet ID $spreadsheetId. {ErrorMessage} $error";
@@ -279,7 +286,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function importProperties ($sheetId = '') {
+    public function importProperties($sheetId = '')
+    {
         ini_set('max_execution_time', 0);
 
         $sheet = Sheet::where('name', $sheetId)->first();
@@ -301,7 +309,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function importCalander ($propertyId = 0) {
+    public function importCalander($propertyId = 0)
+    {
         ini_set('max_execution_time', 0);
 
         try {
@@ -311,7 +320,7 @@ class HomeController extends Controller
                 //dd('Calander Imported');
             } else {
                 $properties = Property::get();
-                foreach($properties as $property) {
+                foreach ($properties as $property) {
                     $this->getEventsFromIcsFile($property);
                 }
             }
@@ -320,16 +329,17 @@ class HomeController extends Controller
             $message = "Unable to read calendars using property ID $propertyId. {ErrorMessage} $error";
             $destinationName = '';
             $pisLink = '';
-            $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'error', 'Sales/Tech Team');
+            $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'error', 'Data/Tech Team');
         }
 
 
         //dd('Calanders Imported');
     }
 
-    private function propertyImport($sheet, $properties, $skipProperties = []){
+    private function propertyImport($sheet, $properties, $skipProperties = [])
+    {
         try {
-            foreach($properties as $key => $property) {
+            foreach ($properties as $key => $property) {
                 $pisSheetId = $this->getPisId($property);
                 $this->readProperty = $property;
                 if (isset($property['Property ID'])) {
@@ -342,7 +352,16 @@ class HomeController extends Controller
                             'property_id' => $propertyId
                         ];
                         $propertyInformation = $this->getPropertyInformation($sheet->name, $pisSheetId);
-                        if($propertyInformation){
+                        if ($propertyInformation) {
+
+                            if (!isset($property['Clickup ID']) || !$property['Clickup ID']) {
+                                $message = "Unable to get ClickUp ID. " . ' {ErrorMessage}';
+                                $destinationName = $sheet->name;
+                                $pisLink = $pisSheetId;
+                                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data Team');
+                            } else {
+                                $property['Clickup ID'] = null;
+                            }
 
                             $propertyData = [
                                 'clickup_id' => @$property['Clickup ID'],
@@ -378,12 +397,12 @@ class HomeController extends Controller
                                     break;
                             }
 
-                            DuplicateProperty::updateOrCreate($where,$propertyCompleteData);
+                            DuplicateProperty::updateOrCreate($where, $propertyCompleteData);
 
                             $propertyInfo = DuplicateProperty::where($where)->first();
                             DuplicatePropertyPrice::where('property_id', $propertyInfo->id)->delete();
-                            foreach($propertyPrices as $priceArray){
-                                if($priceArray['from'] || $priceArray['to']){
+                            foreach ($propertyPrices as $priceArray) {
+                                if ($priceArray['from'] || $priceArray['to']) {
                                     DuplicatePropertyPrice::create([
                                         'property_id' => $propertyInfo->id,
                                         'from' => $priceArray['from'],
@@ -392,18 +411,18 @@ class HomeController extends Controller
                                     ]);
                                 }
                             }
-                        }else{
+                        } else {
                             $message = "Unable to get property information. Skipping parsing. " . ' {ErrorMessage}';
                             $destinationName = $sheet->name;
                             $pisLink = $pisSheetId;
-                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
+                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data/Tech Team');
                         }
                     }
-                }else{
+                } else {
                     $message = "Property ID index not found. Skipping parsing." . ' {ErrorMessage}';
                     $destinationName = $sheet->name;
                     $pisLink = $pisSheetId;
-                    $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
+                    $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data Team');
                 }
             }
         } catch (\Exception $e) {
@@ -412,7 +431,7 @@ class HomeController extends Controller
             $message = "Unable to read properties using sheet $sheet. {ErrorMessage} $error";
             $destinationName = $sheet->name;
             $pisLink = $pisSheetId;
-            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
+            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data/Tech Team');
 
             $skipProperties[] = $this->readProperty['Property ID'];
             $this->propertyImport($sheet, $properties, $skipProperties);
@@ -425,14 +444,15 @@ class HomeController extends Controller
      * @param $sheet
      * @return \Illuminate\Http\Response
      */
-    public function savePropertyData ($sheet) {
+    public function savePropertyData($sheet)
+    {
 
         try {
             $sheetId = $sheet->name;
             $spreadsheetId = $this->spreadsheetId;
             $sheetData = Sheets::spreadsheet($spreadsheetId)
-                            ->sheet($sheetId)
-                            ->get();
+                ->sheet($sheetId)
+                ->get();
 
             $header = $sheetData->pull(0);
             $properties = Sheets::collection($header, $sheetData);
@@ -444,18 +464,18 @@ class HomeController extends Controller
                 $sheetId = ($sheetId[$sheetIdLastCharacterIndex] === '*') ? rtrim($sheetId, '*') : $sheetId . '*';
                 $spreadsheetId = $this->spreadsheetId;
                 $sheetData = Sheets::spreadsheet($spreadsheetId)
-                                ->sheet($sheetId)
-                                ->get();
+                    ->sheet($sheetId)
+                    ->get();
 
                 $header = $sheetData->pull(0);
                 $properties = Sheets::collection($header, $sheetData);
                 $this->propertyImport($sheet, $properties);
             } catch (\Exception $e) {
                 $error = $this->parseException($e);
-                $message = "Unable to read destiantion $sheet->name properties. {ErrorMessage} $error";
+                $message = "Unable to read destination $sheet->name properties. {ErrorMessage} $error";
                 $destinationName = $sheet->name;
                 $pisLink = '';
-                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
+                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data/Tech Team');
             }
             //Log::Error('savePropertyData', [$e]);
         }
@@ -467,7 +487,8 @@ class HomeController extends Controller
      * @param $property
      * @return \Illuminate\Http\Response
      */
-    private function getPisId ($property) {
+    private function getPisId($property)
+    {
         try {
             $pisSheetId = '';
             $pis = str_replace(" ", "", $property['PIS']);
@@ -483,14 +504,15 @@ class HomeController extends Controller
             return $pisSheetId;
         } catch (\Exception $e) {
             $error = $this->parseException($e);
-            $message = "Some error occured. {ErrorMessage} $error";
+            $message = "Some error occurred. {ErrorMessage} $error";
             $destinationName = '';
             $pisLink = '';
-            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
+            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data/Tech Team');
         }
     }
 
-    private function parseException($e){
+    private function parseException($e)
+    {
         return json_encode(json_decode(json_encode($e->getMessage()), true));
     }
 
@@ -500,18 +522,19 @@ class HomeController extends Controller
      * @param $pisSheetId
      * @return \Illuminate\Http\Response
      */
-    private function getPropertyInformation ($destination, $pisSheetId, $skipIndexes = []) {
+    private function getPropertyInformation($destination, $pisSheetId, $skipIndexes = [])
+    {
         $response = [];
         if (!empty($pisSheetId)) {
             $spreadsheetId = $pisSheetId;
 
             try {
                 $sheets = Sheets::spreadsheet($spreadsheetId)
-                                        ->sheetList();
+                    ->sheetList();
                 foreach ($sheets as $value) {
                     $this->readPropertySheet = $sheetId = $value;
 
-                    if(in_array($sheetId, config('sheets.sheets_to_be_imported'))){
+                    if (in_array($sheetId, config('sheets.sheets_to_be_imported'))) {
                         $sheetData = Sheets::spreadsheet($spreadsheetId)
                             ->sheet($sheetId)
                             ->get();
@@ -521,18 +544,18 @@ class HomeController extends Controller
 
                                 $verifyCalendar =
 
-                                $keys = config('sheets.keys_information');
+                                    $keys = config('sheets.keys_information');
 
-                                foreach($keys as $key) {
+                                foreach ($keys as $key) {
                                     $this->readIndex = $index = $key['index'] - 1;
-                                    $valueIndex = (isset($key['value_index']) ?  ($key['value_index'] - 1) : 4);
+                                    $valueIndex = (isset($key['value_index']) ? ($key['value_index'] - 1) : 4);
                                     $dbKey = $key['db_key'];
-                                    if(!in_array($index, $skipIndexes)){
-                                        if(isset($sheetData[$index][$valueIndex])) {
+                                    if (!in_array($index, $skipIndexes)) {
+                                        if (isset($sheetData[$index][$valueIndex])) {
                                             $response[$dbKey] = $sheetData[$index][$valueIndex];
 
                                             if ($dbKey == 'google_calendar_link') {
-                                                if(isset($sheetData[$index][10]) && $sheetData[$index][10] === '🚩'){
+                                                if (isset($sheetData[$index][10]) && $sheetData[$index][10] === '🚩') {
                                                     return false;
                                                 }
                                                 $googleCalendarLink = $sheetData[$index][$valueIndex];
@@ -545,54 +568,54 @@ class HomeController extends Controller
                                                 }
                                             }
                                         }
-                                    }else{
+                                    } else {
                                         $response[$dbKey] = '';
                                     }
                                 }
                                 break;
                             case '💰 Pricing':
                                 $response['pricing'] = [];
-                                foreach($sheetData as $i => $values){
-                                    if($i > 1){
+                                foreach ($sheetData as $i => $values) {
+                                    if ($i > 1) {
                                         $keys = config('sheets.keys_pricing');
-                                        foreach($keys as $key) {
+                                        foreach ($keys as $key) {
                                             $this->readIndex = $index = $key['index'];
                                             $dbKey = $key['db_key'];
-                                            if(!in_array($index, $skipIndexes)){
-                                                if(isset($values[$index]) && $values[$index]) {
-                                                    if(in_array($dbKey, array('from', 'to')) && $values[$index]){
+                                            if (!in_array($index, $skipIndexes)) {
+                                                if (isset($values[$index]) && $values[$index]) {
+                                                    if (in_array($dbKey, array('from', 'to')) && $values[$index]) {
                                                         $values[$index] = str_replace(' ', ' ', $values[$index]);
-                                                        if(preg_match("/([1-9]|0[1-9]|1[0-2]|2[0-9]|3[0-1])+\s[A-Za-z]{3}\s[0-9]{4}/i", $values[$index])){
+                                                        if (preg_match("/([1-9]|0[1-9]|1[0-2]|2[0-9]|3[0-1])+\s[A-Za-z]{3}\s[0-9]{4}/i", $values[$index])) {
                                                             $values[$index] = @Carbon::createFromFormat('d M Y', $values[$index])->format('Y-m-d');
-                                                        }else{
+                                                        } else {
                                                             $message = "Invalid Date found. Date: " . $values[$index] . ' {ErrorMessage}';
                                                             $destinationName = $destination;
                                                             $pisLink = $pisSheetId;
-                                                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales Team');
+                                                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data Team');
                                                             $values[$index] = null;
                                                         }
-                                                    }else if($values[$index]){
-                                                        if(preg_match("/(\d+)(\,?)(\d?)\.[0-9]{2}/i", $values[$index])){
+                                                    } else if ($values[$index]) {
+                                                        if (preg_match("/(\d+)(\,?)(\d?)\.[0-9]{2}/i", $values[$index])) {
                                                             $values[$index] = str_replace(',', '', $values[$index]);
-                                                        }else{
+                                                        } else {
                                                             $message = "Invalid Price found. Price: " . $values[$index] . ' {ErrorMessage}';
                                                             $destinationName = $destination;
                                                             $pisLink = $pisSheetId;
-                                                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales Team');
+                                                            $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data Team');
                                                             $values[$index] = null;
                                                         }
-                                                    }else{
+                                                    } else {
                                                         $values[$index] = null;
                                                     }
-                                                }else{
+                                                } else {
                                                     $values[$index] = null;
                                                 }
-                                            }else{
+                                            } else {
                                                 $values[$index] = null;
                                             }
-                                            if(isset($response['pricing'][$i])){
+                                            if (isset($response['pricing'][$i])) {
                                                 $response['pricing'][$i] = array_merge($response['pricing'][$i], [$dbKey => $values[$index]]);
-                                            }else{
+                                            } else {
                                                 $response['pricing'][$i] = [$dbKey => $values[$index]];
                                             }
                                         }
@@ -605,11 +628,12 @@ class HomeController extends Controller
                 }
             } catch (\Exception $e) {
                 $error = $this->parseException($e);
-                $message = "Unable to read property information property id $pisSheetId, Sheet Id ".$this->readPropertySheet." . {ErrorMessage} $error";
+                $message = "Unable to read property information property id $pisSheetId, Sheet Id " . $this->readPropertySheet . " . {ErrorMessage} $error";
                 $destinationName = $destination;
                 $pisLink = $pisSheetId;
-                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Sales/Tech Team');
-
+                $errorEncoded = json_decode($e->getMessage(), true);
+                $errorCategory = ((isset($errorEncoded['error']) && isset($errorEncoded['error']['code'])) || strpos($e->getMessage(), '</html>') !== FALSE) ? 'Tech Team' : 'Data Team';
+                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', $errorCategory);
                 $skipIndexes[] = $this->readIndex;
                 $this->getPropertyInformation($destination, $pisSheetId, $skipIndexes);
             }
@@ -624,44 +648,54 @@ class HomeController extends Controller
      * @param $property
      * @return \Illuminate\Http\Response
      */
-    public function getEventsFromIcsFile ($property) {
+    public function getEventsFromIcsFile($property)
+    {
 
-            if (@$property->ical_link) {
+        if (@$property->ical_link) {
 
-                $icalLink = $property->ical_link;
+            $icalLink = $property->ical_link;
 
-                try {
-                    $ical = new ICal($icalLink,
+            try {
+                $ical = new ICal(
+                    $icalLink,
                     [
-                        'defaultSpan'                 => 2,     // Default value
-                        'defaultTimeZone'             => 'UTC',
-                        'defaultWeekStart'            => 'MO',  // Default value
-                        'disableCharacterReplacement' => false, // Default value
-                        'filterDaysAfter'             => null,  // Default value
-                        'filterDaysBefore'            => null,  // Default value
-                        'httpUserAgent'               => null,  // Default value
-                        'skipRecurrence'              => false, // Default value
-                    ]);
+                        'defaultSpan' => 2,
+                        // Default value
+                        'defaultTimeZone' => 'UTC',
+                        'defaultWeekStart' => 'MO',
+                        // Default value
+                        'disableCharacterReplacement' => false,
+                        // Default value
+                        'filterDaysAfter' => null,
+                        // Default value
+                        'filterDaysBefore' => null,
+                        // Default value
+                        'httpUserAgent' => null,
+                        // Default value
+                        'skipRecurrence' => false,
+                        // Default value
+                    ]
+                );
 
-                    if ($ical->hasEvents()) {
-                        $events = $ical->events();
-                        //Log::Error("Events", [$events]);
-                        //Log::Error("Ical", [$ical]);
-                        //Log::Error("Property", [$property]);
-                        $this->createOrUpdateEvents($events, $ical, $property);
-                    }else{
-                        $message = "No calendar events found Destination ".$property->destination.", Property Name ".$property->name . ' {ErrorMessage}';
-                        $destinationName = $property->destination;
-                        $pisLink = $property->pis_sheet_id;
-                        $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'warning', 'Sales Team');
-                    }
-                } catch (\Exception $e) {
-                    $error = $this->parseException($e);
-                    $message = "Unable to read calendar events from Google -  Destination ".$property->destination.", Property Name ".$property->name." . {ErrorMessage} $error";
+                if ($ical->hasEvents()) {
+                    $events = $ical->events();
+                    //Log::Error("Events", [$events]);
+                    //Log::Error("Ical", [$ical]);
+                    //Log::Error("Property", [$property]);
+                    $this->createOrUpdateEvents($events, $ical, $property);
+                } else {
+                    $message = "No calendar events found Destination " . $property->destination . ", Property Name " . $property->name . ' {ErrorMessage}';
                     $destinationName = $property->destination;
                     $pisLink = $property->pis_sheet_id;
-                    $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'error', 'Sales/Tech Team');
+                    $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'warning', 'Sales Team');
                 }
+            } catch (\Exception $e) {
+                $error = $this->parseException($e);
+                $message = "Unable to read calendar events from Google -  Destination " . $property->destination . ", Property Name " . $property->name . " . {ErrorMessage} $error";
+                $destinationName = $property->destination;
+                $pisLink = $property->pis_sheet_id;
+                $this->createDbErrorLog($destinationName, $pisLink, $message, 'calendar', 'error', 'Data/Tech Team');
+            }
         }
     }
 
@@ -673,9 +707,10 @@ class HomeController extends Controller
      * @param $propertyDb
      * @return \Illuminate\Http\Response
      */
-    private function createOrUpdateEvents ($events, $ical, $propertyDb) {
+    private function createOrUpdateEvents($events, $ical, $propertyDb)
+    {
         $uIDs = [];
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $dtstart = $ical->iCalDateToDateTime($event->dtstart_array[3]);
             $dtend = $ical->iCalDateToDateTime($event->dtend_array[3]);
 
@@ -686,20 +721,22 @@ class HomeController extends Controller
 
             $uIDs[] = $event->uid;
 
-            DuplicateEvent::updateOrCreate($where,
-            [
-                'name' => $event->summary,
-                'duration' => $event->duration,
-                'start' => $dtstart->format('Y-m-d H:i:s'),
-                'end' => $dtend->format('Y-m-d H:i:s'),
-                'description' => $event->description,
-                'location' => $event->location,
-                'status' => $event->status,
-                'transp' => $event->transp,
-            ]);
+            DuplicateEvent::updateOrCreate(
+                $where,
+                [
+                    'name' => $event->summary,
+                    'duration' => $event->duration,
+                    'start' => $dtstart->format('Y-m-d H:i:s'),
+                    'end' => $dtend->format('Y-m-d H:i:s'),
+                    'description' => $event->description,
+                    'location' => $event->location,
+                    'status' => $event->status,
+                    'transp' => $event->transp,
+                ]
+            );
         }
         $eventsToBeDeleted = DuplicateEvent::where('property_id', $propertyDb->id)->whereNotIn('uid', $uIDs);
-        if($eventsToBeDeleted->count() > 0){
+        if ($eventsToBeDeleted->count() > 0) {
             $eventsToBeDeleted->delete();
         }
 
@@ -713,7 +750,8 @@ class HomeController extends Controller
      * @param string $searchTerm
      * @return bool
      */
-    private function like($str, $searchTerm) {
+    private function like($str, $searchTerm)
+    {
         $searchTerm = strtolower($searchTerm);
         $str = strtolower($str);
         $pos = strpos($str, $searchTerm);
@@ -726,7 +764,8 @@ class HomeController extends Controller
 
 
 
-    public function edit($id) {
+    public function edit($id)
+    {
 
 
         User::find(1);
@@ -752,14 +791,14 @@ class HomeController extends Controller
 
         list($startDate, $endDate) = explode(' - ', $request->daterange_mobile);
 
-        $url = config('app.clickup_base_url').'list/'.config('app.clickup_list_id').'/task';
+        $url = config('app.clickup_base_url') . 'list/' . config('app.clickup_list_id') . '/task';
         $requestData = [
             'name' => $request->property_id . ' - Sales Platform Unavailability',
             'status' => config('app.clickup_status'),
             'custom_fields' => [
                 [
                     'id' => config('app.clickup_custom_field_request_desc_id'),
-                    'value' => 'Please mark this house NOT available from ' . $startDate.' until ' . $endDate
+                    'value' => 'Please mark this house NOT available from ' . $startDate . ' until ' . $endDate
                 ],
                 [
                     'id' => config('app.clickup_custom_field_request_type_id'),
@@ -774,9 +813,9 @@ class HomeController extends Controller
         try {
 
             $response = Http::withHeaders([
-                        'Content-Type' => 'application/json',
-                        'Authorization' => config('app.clickup_api_key')
-                    ])->post($url, $requestData);
+                'Content-Type' => 'application/json',
+                'Authorization' => config('app.clickup_api_key')
+            ])->post($url, $requestData);
 
             if ($response->status() == 200) {
                 return response()->json(['success' => true], 200);

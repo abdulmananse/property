@@ -49,7 +49,7 @@ class ImportCalendar extends Command
         ini_set('max_execution_time', 0);
 
         //$startDateTime = Carbon::now();
-	    //Log::error('Import Calendars Started', [$startDateTime->format('d-m-Y h:i A')]);
+        //Log::error('Import Calendars Started', [$startDateTime->format('d-m-Y h:i A')]);
         //$this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $propertyId = $this->argument('property_id');
@@ -70,18 +70,18 @@ class ImportCalendar extends Command
         } else {
 
             $totalDestinations = count(Property::select('destination')->groupBy('destination')->get());
-            if($totalDestinations >= 32){
+            if ($totalDestinations >= 30) {
                 EventModel::truncate();
                 DuplicateEvent::truncate();
                 $properties = Property::get();
                 CronJob::create(['command' => "Starting: import:calendar"]);
-                foreach($properties as $property) {
+                foreach ($properties as $property) {
                     //$this->info($property->name . ' Calendar Importing');
                     $homeController->getEventsFromIcsFile($property);
                 }
 
                 DB::statement("INSERT INTO events SELECT * FROM duplicate_events;");
-            }else{
+            } else {
                 $message = "Total destinations count not correct ignoring calendars import" . " {ErrorMessage}";
                 $destinationName = '';
                 $pisLink = '';
