@@ -358,13 +358,12 @@ class HomeController extends Controller
                                 $message = "Unable to get ClickUp ID. " . ' {ErrorMessage}';
                                 $destinationName = $sheet->name;
                                 $pisLink = $pisSheetId;
-                                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data Team');
-                            } else {
                                 $property['Clickup ID'] = null;
+                                $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', 'Data Team');
                             }
 
                             $propertyData = [
-                                'clickup_id' => @$property['Clickup ID'],
+                                'clickup_id' => @$property['Clickup ID'], //'Clickup ID'
                                 'name' => @$property['Property Name'],
                                 'account' => @$property['Account'],
                                 'pis' => @$property['PIS'],
@@ -631,9 +630,10 @@ class HomeController extends Controller
                 $message = "Unable to read property information property id $pisSheetId, Sheet Id " . $this->readPropertySheet . " . {ErrorMessage} $error";
                 $destinationName = $destination;
                 $pisLink = $pisSheetId;
-                $errorEncoded = json_decode($e->getMessage(), true);
-                $errorCategory = ((isset($errorEncoded['error']) && isset($errorEncoded['error']['code'])) || strpos($e->getMessage(), '</html>') !== FALSE) ? 'Tech Team' : 'Data Team';
+                $errorEncoded = json_decode(json_encode($e->getMessage()), true);
+                $errorCategory = (isset($errorEncoded['error']['code'])) ? 'Tech Team' : 'Data Team';
                 $this->createDbErrorLog($destinationName, $pisLink, $message, 'property', 'error', $errorCategory);
+
                 $skipIndexes[] = $this->readIndex;
                 $this->getPropertyInformation($destination, $pisSheetId, $skipIndexes);
             }
