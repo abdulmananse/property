@@ -297,7 +297,7 @@ function addprice() {
             }
             $("#prices").append('<div class="priceItem">            <div class="row">                <div class="date"> <span>' + date_from + '</span> <span>-</span><span> ' + date_to + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price +
                         ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-                        + season + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i> <p data-index="' + countDelete +'" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>');
+                        + season + '</span>                </div>                <div class="icon"><p data-index="' + countDelete +'" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>');
 
             exampleModalCenter.classList.remove('open');
             exampleModalCenter.classList.remove('show');
@@ -470,43 +470,43 @@ function continue1Back() {
 
     var priceItem1 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_1 + '</span> <span>-</span><span> ' + to_1 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_1 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_1 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="1" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_1 + '</span>                </div>                <div class="icon"><p data-index="1" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem2 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_2 + '</span> <span>-</span><span> ' + to_2 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_2 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_2 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="2" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_2 + '</span>                </div>                <div class="icon"><p data-index="2" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem3 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_3 + '</span> <span>-</span><span> ' + to_3 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_3 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_3 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="3" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_3 + '</span>                </div>                <div class="icon"><p data-index="3" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem4 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_4 + '</span> <span>-</span><span> ' + to_4 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_4 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_4 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="4" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_4 + '</span>                </div>                <div class="icon"><p data-index="4" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem5 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_5 + '</span> <span>-</span><span> ' + to_5 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_5 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_5 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="5" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_5 + '</span>                </div>                <div class="icon"><p data-index="5" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem6 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_6 + '</span> <span>-</span><span> ' + to_6 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_6 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_6 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="6" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_6 + '</span>                </div>                <div class="icon"><p data-index="6" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem7 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_7 + '</span> <span>-</span><span> ' + to_7 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_8 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_7 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="7" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_7 + '</span>                </div>                <div class="icon"><p data-index="7" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem8 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_8 + '</span> <span>-</span><span> ' + to_8 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_8 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_8 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="8" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_8 + '</span>                </div>                <div class="icon"><p data-index="8" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem9 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_9 + '</span> <span>-</span><span> ' + to_9 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_9 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_9 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="9" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_9 + '</span>                </div>                <div class="icon"><p data-index="9" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
     var priceItem10 = '<div class="priceItem">            <div class="row">                <div class="date"> <span>' + from_10 + '</span> <span>-</span><span> ' + to_10 + ' </span>                    <p class="date_p" style="font-size: 12px; margin: 0; padding: 0; height: 16px;">' + price_10 +
     ' </p> <span class="date_season"                        style="color: rgba(0, 0, 0, 0.5); text-transform: uppercase; font-size: 12px; margin: 0; padding: 0;">'
-    + season_10 + '</span>                </div>                <div class="icon"><i class="bi bi-calendar3"></i><p data-index="10" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
+    + season_10 + '</span>                </div>                <div class="icon"><p data-index="10" class="delete-price" onclick="deletePrice(event)">Delete</p></div>            </div>        </div>';
 
 
     setTimeout(function () {

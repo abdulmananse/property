@@ -85,12 +85,13 @@ class ImportProperties extends Command
 
                     DuplicatePropertyPrice::query()
                         ->where('property_id', $oldRecord->property_id)
-                        ->each(function ($oldPricing) {
-                                $newRecord = $oldPricing->replicate();
-                                $newRecord->setTable('property_pricing');
-                                $newRecord->save();
-                                $oldPricing->delete();
-                            }
+                        ->each(
+                            function ($oldPricing) {
+                                    $newRecord = $oldPricing->replicate();
+                                    $newRecord->setTable('property_pricing');
+                                    $newRecord->save();
+                                    $oldPricing->delete();
+                                }
                         );
 
                     $oldRecord->delete();

@@ -66,6 +66,7 @@ class HomeController extends Controller
                     properties.id,properties.property_id
                 ORDER BY ' . $orderBy . '
                 LIMIT 10 ';
+
             $properties = DB::select(DB::raw($query));
 
             $searchElements = '';
@@ -171,7 +172,6 @@ class HomeController extends Controller
                     properties.id,properties.property_id
                 HAVING total_bookings = 0
                 ORDER BY ' . $orderBy;
-            //echo $query;
 
             $properties = DB::select(DB::raw($query));
 

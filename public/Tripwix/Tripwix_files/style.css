@@ -1224,7 +1224,7 @@ Step 2/3
         margin-top: 20px;
     }
     .welcome {
-        grid-template-rows: 60% 40%;
+        grid-template-rows: 50% 50%;
         grid-template-columns: none;
     }
     .logo{
@@ -1239,10 +1239,10 @@ Step 2/3
         padding: 0px;
     }
     h1.main_heading{
-        margin-bottom: 22px;
+        margin-bottom: 8px;
     }
     .rate-update{
-        padding: 37px 60px 45px 60px;
+        padding: 25px 60px 0px 60px;
     }
     .button{
         text-align: center;
@@ -1253,7 +1253,7 @@ Step 2/3
     .btn_main1, #continue1, #continue2{
         width: 80%!important;
         padding: 20.5px 50px 14.5px 50px!important;
-        margin: 30px 0px 25px 0px;
+        margin: 20px 0px 10px 0px;
     }
     .step_content .button{
         margin: 0px -30px;
@@ -1267,9 +1267,6 @@ Step 2/3
         border-radius: 100px;
         margin-bottom: 10px;
     }
-    .info-bottom{
-        display: none;
-    }
     .main_img.removeImage{
         display: none;
     }
@@ -1282,14 +1279,20 @@ Step 2/3
     .form-control, .btn_main {
         width: 100%!important;
     }
+    .main_img{
+        background-position: center;
+    }
+    .info-bottom p{
+        font-size: 11px;
+    }
 
 }
 @media only screen and (max-width: 415px) {
     h1.main_heading{
-        font-size: 43px;
+        font-size: 40px;
     }
     p.main_para {
-        font-size: 18px;
+        font-size: 16px;
     }
     .logo{
         left: 28px;
@@ -1299,6 +1302,9 @@ Step 2/3
     .logo img{
         width: 78.6px;
         height: 19px;
+    }
+    .info-bottom p{
+        font-size: 10px;
     }
     
     
