@@ -171,7 +171,7 @@ class HomeController extends Controller
                     properties.id,properties.property_id
                 HAVING total_bookings = 0
                 ORDER BY ' . $orderBy;
-            echo $query;
+            //echo $query;
 
             $properties = DB::select(DB::raw($query));
 
