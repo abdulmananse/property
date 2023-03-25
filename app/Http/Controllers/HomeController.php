@@ -189,12 +189,22 @@ class HomeController extends Controller
                     }
                 }
                 $properties[$key]->total_price = $totalPrice;
-                $properties[$key]->average = $totalPrice / count($rangeDatesArray);
+                $average = $totalPrice / count($rangeDatesArray);
+                if ($average > 0) {
+                    $properties[$key]->average = $average;
+                } else {
+                    $properties[$key]->average = '99999999999999999999';
+                }
+                
             }
 
             $offset = ($page * $paginate) - $paginate;
 
             if ($sortBy && $sortBy == 'Price Low to High') {
+                $properties = collect($properties)->sortBy('average')->toArray();
+            }
+
+            if (!$sortBy) {
                 $properties = collect($properties)->sortBy('average')->toArray();
             }
 

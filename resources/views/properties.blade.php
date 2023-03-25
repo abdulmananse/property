@@ -221,12 +221,12 @@
                                                     </div>
                                                     <div class="average-price">
                                                         <div class="average-night">
-                                                            @if ($property->average > 0)
+                                                            @if ($property->average == '99999999999999999999')
+                                                                <p>N/A</p>
+                                                            @else
                                                                 <p>{!! $property->currency_symbol !!}{{ number_format($property->average, 2) }}
                                                                 </p>
                                                                 <p>Average/Night</p>
-                                                            @else
-                                                                <p>N/A</p>
                                                             @endif
                                                         </div>
                                                         <img class="infoImage"
