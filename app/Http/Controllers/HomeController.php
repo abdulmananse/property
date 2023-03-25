@@ -162,7 +162,10 @@ class HomeController extends Controller
                     properties.no_of_beds,
                     properties.no_of_bathrooms,
                     properties.no_of_bedrooms,
-                    SUM(IF((CAST("' . $startDate . '" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (CAST("' . $endDate . '" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (DATE(events.start) > CAST("' . $startDate . '" AS DATE) AND DATE_SUB(DATE(events.end), INTERVAL 1 DAY) < CAST("' . $endDate . '" AS DATE)), 1, 0)) as total_bookings
+                    properties.pis,
+                    properties.google_calendar_link,
+                    SUM(IF((CAST("' . $startDate . '" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (CAST("' . $endDate . '" AS DATE) BETWEEN DATE(events.start) and DATE_SUB(DATE(events.end), INTERVAL 1 DAY)) OR (DATE(events.start) > CAST("' . $startDate . '" AS DATE) AND DATE_SUB(DATE(events.end), INTERVAL 1 DAY) < CAST("' . $endDate . '" AS DATE)), 1, 0)) as total_bookings,
+                    SUM(IF(DATE(events.start) >= "' . date('Y-m-d') . '", 1, 0)) as future_events
                 FROM properties
                 LEFT JOIN `events` ON events.property_id = properties.id
                 ' . $where . '

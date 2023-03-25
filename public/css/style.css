@@ -839,7 +839,26 @@ a.disabled{
 .drp-calendar{
     width: 100%;
 }
-
+.drp-calendar{
+    width: 100%;
+}
+.clickup-icon{
+    width: 15px;
+}
+.p-icon{
+    width: 13px;
+}
+.calendar-icon{
+    width: 20px;
+}
+.mini-icons{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.mini-icons a{
+    padding: 7px 0px 0px 0px!important;
+}
 
 
 
