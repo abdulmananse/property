@@ -376,7 +376,7 @@
                             <div class="box">
                                 <img src="{{ asset('img/box-1.png') }}">
                                 <div class="box-right">
-                                    <img src="{{ asset('img/invalid-name@3x.png') }}">
+                                    <img src="{{ asset('img/_invalid-name@3x.png') }}">
                                     <h2>Our Collection</h2>
                                     <p>See all our best homes soon...</p>
                                 </div>
@@ -416,13 +416,38 @@
                                 </div>
                             </div>
                         </a>
+
+                        <a href="https://doc.clickup.com/4656098/d/h/4e2z2-8720/970ca46603a3d1b" target="_blank"
+                            role="button">
+                            <div class="box">
+                                <img src="{{ asset('img/bitmap6@3x.png') }}">
+                                <div class="box-right">
+                                    <img src="{{ asset('img/icon-marketing1@3x.png') }}">
+                                    <h2>Current Marketing</h2>
+                                    <p>See which campaigns we have running. (Promos, offers, etc…)</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://doc.clickup.com/4656098/d/h/4e2z2-8740/86a51af83a6956d" target="_blank"
+                            role="button">
+                            <div class="box">
+                                <img src="{{ asset('img/bitmap7@3x.png') }}">
+                                <div class="box-right">
+                                    <img src="{{ asset('img/icon-contract@3x.png') }}">
+                                    <h2>Contracts</h2>
+                                    <p>Contracts for Sales</p>
+                                </div>
+                            </div>
+                        </a>
+
                         <a href="{{ config('app.url') . '/index.php/error_logs' }}" target="_blank" role="button">
                             <div class="box">
-                                <img src="{{ asset('img/error-icon.png') }}">
+                                <img src="{{ asset('img/bitmap8@3x.png') }}">
                                 <div class="box-right">
-                                    <img src="{{ asset('img/error-icon.png') }}">
+                                    <img src="{{ asset('img/icon-warning@3x.png') }}">
                                     <h2>Error Logs</h2>
-                                    <p>Displays error occured while reading google sheets.</p>
+                                    <p>Logs for our errors</p>
                                 </div>
                             </div>
                         </a>
