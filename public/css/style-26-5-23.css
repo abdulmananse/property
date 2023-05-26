@@ -196,9 +196,6 @@ select, input{
     font-size: 9px;
 }
 /* sort */
-.open-sort.open{
-    display: block;
-}
 .select {
     border-style: solid;
     width: 150px;
@@ -257,52 +254,15 @@ select, input{
     overflow-y: scroll;
 }
 .select.open .custom-options,
-.custom-options.open,
-.open-sort.open {
+.custom-options.open {
     opacity: 1;
     visibility: visible;
     pointer-events: all;
 }
 .select-click{
-    /*width: 150px;*/
+    width: 150px;
     margin-right: 18px;
-    display: flex;
-    justify-content: end;
 }
-.hidden {
-    display: none !important;
-}
-.iconblack-x{
-    width: 9px;
-    height: 9px;
-    object-fit: contain;
-    margin-right: 95%;
-    margin-bottom: 20px;
-  }
-  .iconblack-x.none{
-    display: none;
-  }
-.filter-form{
-    width: 235px;
-    border-radius: 3px;
-    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
-    border: solid 1px #8e8e93;
-    background-color: #fff;
-    position: absolute;
-    top: 60px;
-    left: 382px;
-    z-index: 2;
-    padding: 16px;
-    display: none;
-}
-.filter-form form{
-    margin-bottom: 0;
-}
-#filter-form.open{
-    display: block;
-}
-
-
 .custom-option {
     position: relative;
     display: block;
@@ -684,7 +644,6 @@ a.disabled{
     border-radius: 3px;
     border: solid 1px #8e8e93;
     margin-bottom: 10px;
-    background-color: white;
 }
 .ticket-id{
     margin-bottom: 17px;
@@ -705,7 +664,7 @@ a.disabled{
 .ticket-form.open{
     display: block;
 }
-.ticket-form p, .filter-form p{
+.ticket-form p{
     font-family: Inter-Regular;
     font-size: 12px;
     font-weight: 500;
@@ -799,9 +758,6 @@ a.disabled{
     max-width: 787px;
     /* text-align: center; */
     margin: auto auto;
-}
-.container-default .default-page{
-    padding-bottom: 100px;
 }
 .container-default.open{
     display: none;
@@ -959,9 +915,6 @@ a.disabled{
         width: 136.7px;
         object-position: left;
     }
-    .filter-form{
-        left: 253px;
-    }
 }
 @media (max-width: 1020px) {
     .daterangepicker{
@@ -996,28 +949,10 @@ a.disabled{
     .select-click .select .custom-options{
         width: 110px;
     }
-    .filter-form{
-        left: 208px;
-    }
 }
 
 @media (max-width: 930px) {
 
-    .filteri {
-        display: block;
-        margin-top: 70px !important;
-    }
-    .filter-form .ticket-send{
-        font-size: 12px;
-        min-height: 45px;
-    }
-    .filter-form .select-form select{
-        min-height: 45px;
-    }
-    .filter-form{
-        left: 0;
-        top: 40px;
-    }
     .col-sm-6 {
         flex: 0 0 auto;
         width: 100%!important;
@@ -1209,7 +1144,7 @@ a.disabled{
     }
 
     /*mobile-ticekt*/
-    .ticket-form, .filter-form{
+    .ticket-form{
         top: 44px;
         left: 0;
         width: 100%;
@@ -1231,13 +1166,10 @@ a.disabled{
     .ticket-dates input{
         height: 45px!important;
     }
-    .ticket-form, .filter-form{
+    .ticket-form{
         background-color: #f9f9f9;
         border: 0px;
         border-radius: 0px;
-    }
-    .filter-form{
-        position: fixed;
     }
     .ticket.open{
         display: none;

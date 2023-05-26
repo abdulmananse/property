@@ -108,7 +108,21 @@ class HomeController extends Controller
             if ($request->filled('city')) {
                 $destination = $request->city;
                 $where .= ' AND destination LIKE "%' . $destination . '%" ';
+
+                if ($request->filled('community')) {
+                    $community = $request->community;
+                    $where .= ' AND community LIKE "%' . $community . '%" ';
+                }
             }
+            
+            if ($request->filled('view_types')) {
+                $where .= ' AND view_types LIKE "%' . $request->view_types . '%" ';
+            }
+            
+            if ($request->filled('placement_types')) {
+                $where .= ' AND placement_types LIKE "%' . $request->placement_types . '%" ';
+            }
+
             if ($request->filled('bedrooms')) {
                 $bedrooms = (int) $request->bedrooms;
                 $where .= ' AND no_of_bedrooms = ' . $bedrooms . ' ';
@@ -214,9 +228,31 @@ class HomeController extends Controller
         }
 
         $cities = Property::whereNotNull('destination')->groupBy('destination')->pluck('destination');
+
+        $communities = [];
+        if ($request->filled('city')) {
+            $communities = Property::where('destination', $request->city)->distinct('community')->whereNotNull('community')->pluck('community');
+        }
+
         $maxBedrooms = Property::select(DB::raw('MAX(CAST(properties.no_of_bedrooms AS UNSIGNED)) as no_of_bedrooms'))->first()->no_of_bedrooms;
 
-        return view('properties', compact('cities', 'properties', 'maxBedrooms', 'salesPersonsList', 'endDate', 'startDate'));
+        $viewTypes = Property::whereNotNull('view_types')->distinct('view_types');
+        $placementTypes = Property::whereNotNull('placement_types')->distinct('placement_types');
+        
+        if ($request->filled('city')) {
+            $viewTypes->where('destination', $request->city);
+            $placementTypes->where('destination', $request->city);
+
+            if ($request->filled('community')) {
+                $viewTypes->where('community', $request->community);
+                $placementTypes->where('community', $request->community);
+            }
+        }
+
+        $viewTypes = $viewTypes->pluck('view_types');
+        $placementTypes = $viewTypes->pluck('placement_types');
+
+        return view('properties', compact('cities', 'properties', 'maxBedrooms', 'viewTypes', 'placementTypes', 'salesPersonsList', 'endDate', 'startDate', 'communities'));
     }
 
     public function errorLogs(Request $request)
@@ -838,5 +874,12 @@ class HomeController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false], 200);
         }
+    }
+
+
+    public function getCommunities (Request $request) {
+        $destination = $request->filled('destination') ? $request->destination : null;
+        $communities = Property::where('destination', $destination)->distinct('community')->whereNotNull('community')->pluck('community');
+        return response()->json(['success' => true, 'communities' => $communities], 200);
     }
 }

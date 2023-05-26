@@ -91,7 +91,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <button class="ticket-send">Send Ticket</button>
+                            <button class="ticket-send ticket-send-btn">Send Ticket</button>
                         </form>
                     </div>
                     <div class="ticket-form class-thanks" id="ticket-thanks">
@@ -140,6 +140,21 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-auto community-div">
+                                <div class="select">
+                                    <div class="select__trigger community-label">
+                                        <span>{{ @request()->community ? @request()->community : 'All Communities' }}</span>
+                                        <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                    </div>
+                                    <div class="form-control custom-options community-options">
+                                        @foreach ($communities as $community)
+                                            <span class="custom-option select-community-name"
+                                                data-value="{{ $community }}">{{ $community }}</span>
+                                        @endforeach
+                                    </div>
+                                    <input type="text" class="d-none community_input" name="community" value="{{ @request()->community }}" />
+                                </div>
+                            </div>
                             <div class="col-auto search-input d-flex">
                                 <!--  <input class="calendar daterange" type="text" name="daterange" value="{{ @request()->daterange ?? date('m/d/Y') . ' - ' . date('m/d/Y') }}"
                                             style="color: #636366; font-size: 9px; font-weight: 500; font-family: Inter-Regular;
@@ -164,11 +179,14 @@
                                         @endfor
                                         <input type="text" class="d-none" name="bedrooms"
                                             value="{{ @request()->bedrooms }}" />
-                                        <input type="text" class="d-none" name="sort_by"
-                                            value="{{ @request()->sort_by }}" />
                                     </div>
                                 </div>
                             </div>
+
+                            <input type="text" class="d-none" name="sort_by" value="{{ @request()->sort_by }}" />
+                            <input type="text" class="d-none" name="view_types" value="{{ @request()->view_types }}" />
+                            <input type="text" class="d-none" name="placement_types" value="{{ @request()->placement_types }}" />
+                            
                             <div class="col-auto search-btn">
                                 <button type="submit" class="btn btn-primary mb-3">Search</button>
                             </div>
@@ -178,13 +196,45 @@
             </div>
             <div class="container-sort{{ $properties ? ' d-block' : '' }}">
                 <div class="select-wrapper sort">
-                    <div class="col-auto select-click">
-                        <div class="select">
+
+                    <div class="col-auto select-click filteri">
+                        <div class="select  filterr">
+                            <div class="select__trigger" role="button">
+                                <span>Filters</span>
+                                <img class="downarrow" src="{{ asset('img/icon-filter@3x.png') }}">
+                            </div>
+                        </div>
+                        
+                        <div class="filter-form" id="filter-form">
+                            <img class="iconblack-x" src="{{ asset('img/iconblack-xmark@3x.png') }}">
+                            <p style="text-align: left;">View types</p>
+                            <div class="select-form">
+                                <select class="view_types">
+                                    <option value="">All view types</option>
+                                    @foreach($viewTypes as $viewType)
+                                    <option value="{{ $viewType }}" {{ (@request()->view_types == $viewType) ? 'selected' : '' }}>{{ $viewType }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <p style="text-align: left;">Placement Types</p>
+                            
+                            <div class="select-form">
+                                <select class="placement_types">
+                                    <option value="">All placement types</option>
+                                    @foreach($placementTypes as $placementType)
+                                    <option value="{{ $placementType }}" {{ (@request()->placement_types == $placementType) ? 'selected' : '' }}>{{ $placementType }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button class="ticket-send set-filters-btn" style="width:100%">Set Filters</button>
+                        </div>
+
+                        <div class="select sort-dropdown">
                             <div class="select__trigger">
                                 <span>{{ @request()->sort_by ? @request()->sort_by : 'Sort by' }}</span>
                                 <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
                             </div>
-                            <div class="form-control custom-options">
+                            <div class="form-control custom-options open-sort">
                                 <span selected class="custom-option select-sortby"
                                     data-value="Community Ascending">Community Ascending</span>
                                 <span selected="" class="custom-option select-sortby"
@@ -465,13 +515,47 @@
         const ticketFormThanks = document.querySelector('.class-thanks');
         const seacrhHeader = document.querySelector('.searchHeader');
 
-
         $(document).ready(function() {
 
             $('.select-destination-name').click(function() {
-                $('.destination-label span').html($(this).attr('data-value'));
-                $('input[name=city]').val($(this).attr('data-value'));
+                const value = $(this).attr('data-value');
+                $('.destination-label span').html(value);
+                $('input[name=city]').val(value);
+
+                const _self = $(".community-div");
+                _self.LoadingOverlay('show');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("get-communities") }}' + '?destination=' + value,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res) {
+                        console.log(res);
+                        if (res.success) {
+                            $(".community-options").html('');
+                            res.communities.map(function(community) {
+                                $(".community-options").append(`<span class="custom-option select-community-name" data-value="${community}">${community}</span>`);
+                            });
+                        }
+                    },
+                    error: function(request, status, error) {
+                        showAjaxErrorMessage(request);
+                    },
+                    complete: function(res) {
+                        $('.community-label span').html('All Communities');
+                        $('.community_input').val('');
+                        _self.LoadingOverlay('hide');
+                    }
+                });
+
             });
+
+            $(document).on('click', '.select-community-name', function() {
+                const value = $(this).attr('data-value');
+                $('.community-label span').html(value);
+                $('.community_input').val(value);
+            });
+
             $('.select-bedrooms').click(function() {
                 $('.bedrooms-label span').html($(this).attr('data-value'));
                 $('input[name=bedrooms]').val($(this).attr('data-value'));
@@ -480,8 +564,20 @@
                 $('input[name=sort_by]').val($(this).attr('data-value'));
                 $('form.search-form').submit();
             });
+            
+            $('.set-filters-btn').click(function() {
+                $('form.search-form').submit();
+            });
 
-            $(".ticket-send").click(function(e) {
+            $(".view_types").change(function() {
+                $("input[name=view_types]").val($(this).val());
+            });
+            
+            $(".placement_types").change(function() {
+                $("input[name=placement_types]").val($(this).val());
+            });
+
+            $(".ticket-send-btn").click(function(e) {
                 e.preventDefault();
                 const _self = $(this);
                 const _form = $('.creteTicketForm');
@@ -537,6 +633,14 @@
                 select.classList.remove('open');
             }
         });
+
+        document.querySelector('.community-div').addEventListener('click', function() {
+            this.querySelector('.select').classList.toggle('open');
+        })
+        
+        document.querySelector('.sort-dropdown').addEventListener('click', function() {
+            this.querySelector('.open-sort').classList.toggle('open');
+        })
 
         document.querySelector('.baderooms').addEventListener('click', function() {
             this.querySelector('.select').classList.toggle('open');
@@ -795,6 +899,50 @@
             salesPlatform.classList.remove('open')
         }
 
+
+        // filter js
+
+        const filterButton = document.querySelector('.filterr');
+        const filterForm = document.getElementById('filter-form');
+        const closeFilters = document.querySelector('.iconblack-x');
+
+        filterButton.addEventListener('click', function() {
+            toggleFilter();
+        });
+        closeFilters.addEventListener('click', function() {
+            closeFilter();
+        });
+
+        function toggleFilter() {
+            filterForm.classList.toggle('open');
+            closeFilters.classList.remove('none');
+
+        
+            if (width < mobileWidth) {
+                searchMobile.classList.remove('open')
+                loupeParent.classList.add('d-none')
+                loupeParent.classList.toggle('d-none')
+                body.classList.toggle('open');
+                droparrowWrapper.classList.toggle('open')
+                logo.classList.toggle('display');
+                seacrhHeader.classList.toggle('open');
+                droparrow.classList.add('display');
+                closeFilters.classList.add('none');
+                ticketBtn.classList.add('open')
+
+            }
+        }
+
+        function closeFilter() {
+            filterForm.classList.remove('open');
+
+            droparrow.classList.remove('open')
+            logo.classList.remove('open')
+            droparrowWrapper.classList.remove('open')
+            ticketBtn.classList.remove('open')
+            loupeParent.classList.remove('d-none')
+            body.classList.remove('open');
+        }
 
         /**
          * Show Ajax Error Message
