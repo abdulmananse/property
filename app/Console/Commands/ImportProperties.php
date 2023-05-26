@@ -60,7 +60,7 @@ class ImportProperties extends Command
         ini_set('max_execution_time', 0);
 
         //$startDateTime = Carbon::now();
-	    //Log::error('Import Properties Started', [$startDateTime->format('d-m-Y h:i A')]);
+        //Log::error('Import Properties Started', [$startDateTime->format('d-m-Y h:i A')]);
         //$this->info('Start: ' . $startDateTime->format('d-m-Y h:i A'));
 
         $sheetName = $this->argument('sheet');
@@ -77,23 +77,25 @@ class ImportProperties extends Command
             $homeController->savePropertyData($sheet);
             Property::where('sheet_id', $sheet->id)->delete();
             DuplicateProperty::query()
-            ->where('sheet_id', $sheet->id)
-            ->each(function ($oldRecord) {
-                $newRecord = $oldRecord->replicate();
-                $newRecord->setTable('property');
-                $newRecord->save();
-
-                DuplicatePropertyPrice::query()
-                ->where('property_id', $oldRecord->property_id)
-                ->each(function ($oldPricing) {
-                    $newRecord = $oldPricing->replicate();
-                    $newRecord->setTable('property_pricing');
+                ->where('sheet_id', $sheet->id)
+                ->each(function ($oldRecord) {
+                    $newRecord = $oldRecord->replicate();
+                    $newRecord->setTable('property');
                     $newRecord->save();
-                    $oldPricing->delete();
-                });
 
-                $oldRecord->delete();
-            });
+                    DuplicatePropertyPrice::query()
+                        ->where('property_id', $oldRecord->property_id)
+                        ->each(
+                            function ($oldPricing) {
+                                    $newRecord = $oldPricing->replicate();
+                                    $newRecord->setTable('property_pricing');
+                                    $newRecord->save();
+                                    $oldPricing->delete();
+                                }
+                        );
+
+                    $oldRecord->delete();
+                });
             CronJob::create(['command' => "Completed: import:properties " . $sheetName]);
         } else {
             DuplicateProperty::truncate();
@@ -109,10 +111,10 @@ class ImportProperties extends Command
             Property::truncate();
             PropertyPrice::truncate();
             $totalDestinations = count(DuplicateProperty::select('destination')->groupBy('destination')->get());
-            if(($totalDestinations) >= 32){
+            if (($totalDestinations) >= 30) {
                 DB::statement("INSERT INTO properties SELECT * FROM duplicate_properties;");
                 DB::statement("INSERT INTO property_pricing SELECT * FROM duplicate_property_pricing;");
-            }else{
+            } else {
                 $message = "Unable to read all destinations. Parsed {TotalDestinations} $totalDestinations" . ' {ErrorMessage}';
                 $destinationName = '';
                 $pisLink = '';
