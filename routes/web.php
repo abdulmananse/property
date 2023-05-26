@@ -23,3 +23,4 @@ Route::get('import-sheets', [HomeController::class, 'importSheets']);
 Route::get('import-properties/{sheetId?}', [HomeController::class, 'importProperties']);
 Route::get('import-calander/{propertyId?}', [HomeController::class, 'importCalander']);
 Route::get('/error_logs', [HomeController::class, 'errorLogs']);
+Route::get('get-communities', [HomeController::class, 'getCommunities']);

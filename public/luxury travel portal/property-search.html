@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/daterangepicker.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+  <title>Luxury travel portal</title>
+</head>
+<body style="background-color: #fff8f0; height: 100vh;">
+    <header>
+        <div class="container text-center">
+            <img src="./img/logo.png">
+            <div class="border-header agents-header"></div>
+        </div>
+    </header>
+
+    <section class="backgroundColor">
+        <div class="container">
+            <div class="agents-menu">
+                <a class="agents-a active">Property Search</a>
+                <a class="profile-a">Profile</a>
+                <a class="logout">Logout</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="backgroundColor">
+        <div class="container">
+            <div class="property">
+                <div class="d-flex drop-menu destination-drop">
+                    <p>DESTINATION</p>
+                    <div class="select-destionation">
+                        <p>test</p>
+                        <img src="./img/downninvalid-name@3x.png">
+                    </div>
+                    <div class="dropdown-open">
+                        <span>test</span>
+                        <span>test</span>
+                        <span>test</span>
+                        <span>test</span>
+                        <span>test</span>
+                        <span>test</span>
+                    </div>
+                </div>
+                <div class="date-input">
+                    <div class="d-flex drop-menu" style="flex-direction: row; justify-content: space-between;">
+                        <p>ARRIVAL</p>
+                        <p>DEPARTURE</p>
+                    </div>
+                    <input id="demo" type="text" name="datefilter" value="" />
+                </div>
+                <div class="d-flex drop-menu guests-border">
+                    <p>GUESTS</p>
+                    <div class="select-destionation">
+                        <p>test</p>
+                        <img src="./img/downninvalid-name@3x.png">
+                    </div>
+                </div>
+                <div class="d-flex drop-menu guests-border">
+                    <p>CLIENT BUDGET</p>
+                    <div class="select-destionation">
+                        <p>test</p>
+                        <img src="./img/downninvalid-name@3x.png">
+                    </div>
+                </div>
+                <div class="d-flex drop-menu">
+                    <button class="search-btn">Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="background-color">
+        <div class="container">
+            <div class="sort">
+                <div class="sort-filter">
+                    <div class="select-destionation sort-by">
+                        <p>Sort by</p>
+                        <img src="./img/downninvalid-name@3x.png">
+                    </div>
+                    <div class="dropdown-open">
+                        <span>Price Low - High</span>
+                        <span>No of Bedrooms</span>
+                        <span>Community Name A-Z</span>
+                    </div>
+                    <div class="select-drop show-filter">
+                        <p>Show filter</p>
+                        <img class="arrow-filter" src="./img/downninvalid-name@3x.png">
+                    </div>
+                </div>
+
+                <div class="property-filter">
+                    <div class="filter-menu">
+                        <div class="d-flex drop-menu" >
+                            <p>PROPERTY TYPE</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                        <div class="d-flex drop-menu">
+                            <p>BATHROOMS</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                        <div class="d-flex drop-menu">
+                            <p>DESTINATION</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                        <div class="d-flex drop-menu">
+                            <p>DESTINATION</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                        <div class="d-flex drop-menu">
+                            <p>DESTINATION</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                        <div class="d-flex drop-menu">
+                            <p>DESTINATION</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                        <div class="d-flex drop-menu">
+                            <p>DESTINATION</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open filter-drop">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                        <div class="d-flex drop-menu">
+                            <p>DESTINATION</p>
+                            <div class="select-destionation">
+                                <p>test</p>
+                                <img src="./img/downninvalid-name@3x.png">
+                            </div>
+                            <div class="dropdown-open">
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                                <span>test</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex drop-menu btn-filter">
+                        <button class="search-btn clear">Clear</button>
+                        <button class="search-btn applay">Applay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="background-color">
+        <div class="container availabile">
+            <h3>Available Properties</h3>
+
+            <div class="properties-card">
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                        <div class="properties-slide">
+                            <img src="./img/sliderinvalid-name@3x.png">
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                    <div class="download-card-open">
+                        <div class="arrow-back">
+                            <img src="./img/arrowinvalid-name@3x.png">
+                            <p>Back</p>
+                        </div>
+                        <div class="card-img download-card">
+                            <img src="./img/4sliderbitmap-copy-3@3x.png">
+                        </div>
+                        <div class="card-content">
+                            <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                            <h4>Download</h4>
+                            <div class="download-file">
+                                <div>
+                                    <p>PDF</p>
+                                    <button>Dowwnload</button>
+                                </div>
+                                <div>
+                                    <p>Rates</p>
+                                    <button>Dowwnload</button>
+                                </div>
+                                <div>
+                                    <p>HQ Photos</p>
+                                    <button>Dowwnload</button>
+                                </div>
+                            </div>
+                       
+                        </div>
+                        <div class="card-btn ical">
+                            <p>iCal link:</p>
+                            <div class="ical-link">
+                                <input placeholder="https://balbalbalbdnl/%@&£/&^(hdhbdhkjs….">
+                                <button>Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="download-card-request-open">
+                        <div class="arrow-back arrow-back-request">
+                            <img src="./img/arrowinvalid-name@3x.png">
+                            <p>Back</p>
+                        </div>
+                        <div class="card-img download-card">
+                            <img src="./img/4sliderbitmap-copy-3@3x.png">
+                        </div>
+                        <div class="card-content">
+                            <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                            <h4>Request to Book</h4>
+                            <div class="bedrooms">
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Checkin:</p>
+                                    <p>02 / Jan / 23</p>
+                                </div>
+                                <div class="publisher-contact d-flex icon-i">
+                                    <p class="contact-card">Guest Pays:</p>
+                                    <p>$19,567</p>
+                                    <img class="info-i" src="./img/infoinvalid-name@3x.png">
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Checkout:</p>
+                                    <p>06 / Jan / 23</p>
+                                </div>
+                                <div class="publisher-contact d-flex icon-i">
+                                    <p class="contact-card">Your Payout:</p>
+                                    <p>$1,700</p>
+                                    <img class="info-i" src="./img/infoinvalid-name@3x.png">
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Nights:</p>
+                                    <p>4</p>
+                                </div>
+                                <div class="publisher-contact d-flex icon-i">
+                                    <p class="contact-card">Property:</p>
+                                    <p>Villa Isabella</p>
+                                    <img class="info-i" src="./img/infoinvalid-name@3x.png">
+                                </div>
+                            </div>
+                            <div class="text-request">
+                                <p>Message for Roberto:</p>
+                                <textarea rows="4"></textarea>
+                                <p class="request-info">Roberto Carneiro from Tripwix will reach out to you.</p>
+                            </div>
+                        </div>
+                        <div class="card-btn-request">
+                            <button class="request download">Submit request</button>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/4sliderbitmap-copy-3@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <div class="card-img">
+                        <img src="./img/2slider1bitmap@3x.png">
+                    </div>
+                    <div class="card-content">
+                        <img class="profile-picture" src="./img/100k-ai-faces-6.jpg">
+                        <h4>Villa Isabella</h4>
+                        <div class="vila-info d-flex">
+                            <div class="name-vila col-lg-5">
+                                <p>Punta de Mita,<br>Los Veneros</p>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="publisher-contact d-flex">
+                                    <p class="publisher">Publisher:</p>
+                                    <p>Tripwix</p>
+                                </div>
+                                <div class="publisher-contact d-flex">
+                                    <p class="contact-card">Contact:</p>
+                                    <p>Roberto Carneiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bedrooms">
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bedrooms:</p>
+                                <p>2</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Max Guests:</p>
+                                <p>6</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Bathrooms:</p>
+                                <p>4</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Guest Total:</p>
+                                <p>$19,567</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Comission:</p>
+                                <p>10%</p>
+                            </div>
+                            <div class="publisher-contact d-flex">
+                                <p class="contact-card">Payout:</p>
+                                <p>$1,700</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-btn">
+                        <button class="request">Request</button>
+                        <button class="download">Download</button>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-container">
+                <button class="prev-btn">Previous</button>
+                <button class="next-btn">Next</button>
+            </div>
+            <div class="pagination"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-padding d-flex" style="flex-direction: column;">
+            <div class="d-flex footer-top" style="width: 100%;">
+                <div class=" col-lg-7 d-flex">
+                    <div class="col-lg-4">
+                        <h4>Links</h4>
+                        <p>Register as a Publisher</p>
+                        <p>Register as an Agency</p>
+                        <p>About Us</p>
+                        <p>Link Hover</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Other</h4>
+                        <p>About Us</p>
+                        <p>Careers</p>
+                        <p>Leadership</p>
+                        <p>Privacy Notice</p>
+                        <p>Cookie Policy</p>
+                        <p>Sustainability</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h4>Contact Us</h4>
+                        <p>Email Us</p>
+                        <p>+1 222 333-4444</p>
+                        <p>Link</p>
+                    </div>
+                </div>
+                <div class="col-lg-5 footer-right text-right">
+                    <img src="./img/logo-footer.png">
+                    <h5>Blakely Tower - Jumeirah Beach Road - Dubai Marina - Dubai - United Arab Emirates</h5>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between footer-bottom align-items-center" style="border-top: solid 1px #0b3841;">
+                <img src="./img/logo@3x.png" style="  width: 152px; height: 58px;">
+                <div class="social-icon">
+                    <img src="./img/iconmonstr-instagram-11@3x.png" style="width: 29px; height: 28px;">
+                    <img src="./img/iconmonstr-linkedin-1@3x.png" style="width: 29px; height: 29px;">
+                    <img src="./img/iconmonstr-youtube-6@3x.png" style="width: 30px; height: 26px;">
+                </div>
+                <p>Copyright 2023, LTP SYSTEMS OÜ</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="./js/script.js"></script>
+    <script>
+        $('#demo').daterangepicker({
+            "autoApply": true,
+            "startDate": "02/23/2023",
+            "endDate": "03/01/2023",
+            "opens": "center"
+        }, function(start, end, label) {
+        console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+        });
+    </script>
+</body>
+</html>
