@@ -228,13 +228,13 @@ class HomeController extends Controller
 
         $communities = [];
         if ($request->filled('city')) {
-            $communities = Property::where('destination', $request->city)->distinct('community')->whereNotNull('community')->orderBy('community', 'ASC')->pluck('community');
+            $communities = Property::select(DB::raw('TRIM(community) as community'))->where('destination', $request->city)->distinct('community')->whereNotNull('community')->orderBy('community', 'ASC')->pluck('community');
         }
 
         $maxBedrooms = Property::select(DB::raw('MAX(CAST(properties.no_of_bedrooms AS UNSIGNED)) as no_of_bedrooms'))->first()->no_of_bedrooms;
 
-        $viewTypes = Property::select('view_types')->whereNotNull('view_types')->orderBy('view_types', 'ASC')->distinct('view_types');
-        $placementTypes = Property::select('placement_types')->whereNotNull('placement_types')->orderBy('placement_types', 'ASC')->distinct('placement_types');
+        $viewTypes = Property::select(DB::raw('TRIM(view_types) as view_types'))->whereNotNull('view_types')->orderBy('view_types', 'ASC')->distinct('view_types');
+        $placementTypes = Property::select(DB::raw('TRIM(placement_types) as placement_types'))->whereNotNull('placement_types')->orderBy('placement_types', 'ASC')->distinct('placement_types');
 
         if ($request->filled('city')) {
             $viewTypes->where('destination', $request->city);
@@ -392,7 +392,6 @@ class HomeController extends Controller
 
                         $where = [
                             'sheet_id' => $sheet->id,
-                            'property_id' => $propertyId
                         ];
                         $propertyInformation = $this->getPropertyInformation($sheet->name, $pisSheetId);
                         if ($propertyInformation) {
@@ -407,8 +406,6 @@ class HomeController extends Controller
 
                             $propertyData = [
                                 'clickup_id' => @$property['Clickup ID'],
-                                //'Clickup ID'
-                                'name' => @$property['Property Name'],
                                 'account' => @$property['Account'],
                                 'pis' => @$property['PIS'],
                                 'pis_sheet_id' => $pisSheetId,
@@ -439,6 +436,8 @@ class HomeController extends Controller
                                     $propertyCompleteData['currency_symbol'] = '&pound;';
                                     break;
                             }
+
+                            $where['property_id'] = $propertyCompleteData['property_id'];
 
                             DuplicateProperty::updateOrCreate($where, $propertyCompleteData);
 
@@ -597,7 +596,7 @@ class HomeController extends Controller
                                     $dbKey = $key['db_key'];
                                     if (!in_array($index, $skipIndexes)) {
                                         if (isset($sheetData[$index][$valueIndex])) {
-                                            $response[$dbKey] = $sheetData[$index][$valueIndex];
+                                            $response[$dbKey] = trim($sheetData[$index][$valueIndex]);
 
                                             if ($dbKey == 'google_calendar_link') {
                                                 if (isset($sheetData[$index][10]) && $sheetData[$index][10] === '🚩') {
@@ -877,7 +876,7 @@ class HomeController extends Controller
     public function getCommunities(Request $request)
     {
         $destination = $request->filled('destination') ? $request->destination : null;
-        $communities = Property::where('destination', $destination)->distinct('community')->whereNotNull('community')->orderBy('community', 'ASC')->pluck('community');
+        $communities = Property::select(DB::raw('TRIM(community) as community'))->where('destination', $destination)->distinct('community')->whereNotNull('community')->orderBy('community', 'ASC')->pluck('community');
         return response()->json(['success' => true, 'communities' => $communities], 200);
     }
 }

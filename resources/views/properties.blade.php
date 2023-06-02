@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
-    <title>Property</title>
+    <title>Tripwix Salesplatform</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -508,7 +508,22 @@
     </section>
 
     @include('notification')
+    <script>
+    var elements = document.querySelectorAll(".select__trigger");
 
+    for (var i = 0; i < elements.length; i++) {
+    var element = elements[i];
+    var span = element.querySelector("span");
+        if (span.offsetWidth > 120) {
+            var text = span.textContent.trim();
+            var maxLength = 27;
+            if (text.length > maxLength) {
+            var truncatedText = text.slice(0, maxLength - 3) + "...";
+            span.textContent = truncatedText;
+            }
+        }
+    }
+    </script>
     <script>
         const ticketBtn = document.querySelector('.ticket');
         const ticketForm = document.querySelector('.ticket-form');
@@ -526,7 +541,7 @@
                 _self.LoadingOverlay('show');
                 $.ajax({
                     type: 'GET',
-                    url: '{{ url("get-communities") }}' + '?destination=' + value,
+                    url: '{{ url("index.php/get-communities") }}' + '?destination=' + value,
                     processData: false,
                     dataType: 'json',
                     success: function(res) {
@@ -551,8 +566,21 @@
             });
 
             $(document).on('click', '.select-community-name', function() {
+
+                let width = window.innerWidth;
+
                 const value = $(this).attr('data-value');
 				humanName = value.toLowerCase();
+                if (width < parseInt(mobileWidth)) {
+                    if(humanName.length > 62){
+                        humanName = humanName.substring(0,62) + '...';
+                    }
+                }
+                else{
+                    if(humanName.length > 22){
+                        humanName = humanName.substring(0,22) + '...';
+                    }
+                }
                 $('.community-label span').html(humanName);
                 $('.community_input').val(value);
             });
@@ -655,7 +683,9 @@
         });
 
 
-        let width = window.screen.availWidth;
+        // let width = window.screen.availWidth;
+        let width = window.innerWidth;
+
         const mobileWidth = '810';
         const searchOpen = document.querySelector('.searchClass');
         const searchDrop = document.querySelector('.search-dropdown');
@@ -774,6 +804,7 @@
 
             closeSearch()
             closeTicket()
+            closeFilter()
         })
 
         const regervation = document.querySelector('.regervation');
@@ -792,7 +823,6 @@
                 });
             }
 
-            width = window.innerWidth;
             if (width < mobileWidth) {
                 if (!document.getElementById('searchHeader').contains(e.target) &&
                     !document.getElementById('mobileSearch').contains(e.target) &&
@@ -929,7 +959,8 @@
                 seacrhHeader.classList.toggle('open');
                 droparrow.classList.add('display');
                 closeFilters.classList.add('none');
-                ticketBtn.classList.add('open')
+                ticketBtn.classList.add('open');
+                droparrowWrapper.classList.add('open')
 
             }
         }
@@ -947,7 +978,7 @@
 
         /**
          * Show Ajax Error Message
-         * @param response
+         * @param  response
          */
         function showAjaxErrorMessage(response, form = false) {
             const responseJson = JSON.parse(response.responseText);
@@ -967,8 +998,8 @@
 
         /**
          * Show Success Message
-         * @param message
-         * @param title
+         * @param  message
+         * @param  title
          */
         function successMessage(message, title) {
             if (!title) title = "Success!";
@@ -983,8 +1014,8 @@
 
         /**
          * Show Error Message
-         * @param message
-         * @param title
+         * @param  message
+         * @param  title
          */
         function errorMessage(message, title) {
             if (!title) title = "Error!";

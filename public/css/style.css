@@ -278,7 +278,8 @@ select, input{
     object-fit: contain;
     margin-right: 95%;
     margin-bottom: 20px;
-  }
+    cursor: pointer;
+}
   .iconblack-x.none{
     display: none;
   }
