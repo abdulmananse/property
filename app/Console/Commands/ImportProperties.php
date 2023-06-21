@@ -108,10 +108,10 @@ class ImportProperties extends Command
             }
             CronJob::create(['command' => "Completed: import:properties"]);
 
-            Property::truncate();
-            PropertyPrice::truncate();
             $totalDestinations = count(DuplicateProperty::select('destination')->groupBy('destination')->get());
             if (($totalDestinations) >= 30) {
+				Property::truncate();
+				PropertyPrice::truncate();
                 DB::statement("INSERT INTO properties SELECT * FROM duplicate_properties;");
                 DB::statement("INSERT INTO property_pricing SELECT * FROM duplicate_property_pricing;");
             } else {

@@ -1029,18 +1029,22 @@
         }
     </script>
     <script>
-        $('input[name="dates"]').daterangepicker();
+        $('input[name="dates"]').daterangepicker({
+			minDate:new Date()
+		});
 
 
         $(function() {
             $('input.daterange').daterangepicker({
-                opens: 'left'
+                opens: 'left',
+				minDate:new Date()
             }, function(start, end, label) {});
         });
     </script>
     <script>
         $(function() {
             $('.regervation').daterangepicker({
+					minDate:new Date(),
                     "autoapply": true,
                     "linkedCalendars": false,
                 },
