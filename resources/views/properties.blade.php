@@ -43,6 +43,70 @@
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             top: 6px;
         }
+
+        .available-filter {
+            margin-top: 20px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -186,6 +250,7 @@
                             <input type="text" class="d-none" name="sort_by" value="{{ @request()->sort_by }}" />
                             <input type="text" class="d-none" name="view_types" value="{{ @request()->view_types }}" />
                             <input type="text" class="d-none" name="placement_types" value="{{ @request()->placement_types }}" />
+                            <input type="text" class="d-none" name="availability" value="{{ @request()->availability }}" />
 
                             <div class="col-auto search-btn">
                                 <button type="submit" class="btn btn-primary mb-3">Search</button>
@@ -195,9 +260,20 @@
                 </div>
             </div>
             <div class="container-sort{{ $properties ? ' d-block' : '' }}">
+                
                 <div class="select-wrapper sort">
 
                     <div class="col-auto select-click filteri">
+
+                        <div class="available-filter">
+                            <b style="float: left;margin-right: 10px;">Full availability</b>
+                            <label class="switch">
+                                <input type="checkbox" class="availability" value="partial" {{ @request()->availability == 'partial' ? 'checked' : '' }}>
+                                <span class="slider round"></span>
+                            </label>
+                            <b style="float: right;margin-left: 10px;margin-right: 120px;">Partial availability</b>
+                        </div>
+
                         <div class="select  filterr">
                             <div class="select__trigger" role="button">
                                 <span>Filters</span>
@@ -604,6 +680,12 @@
 
             $(".placement_types").change(function() {
                 $("input[name=placement_types]").val($(this).val());
+            });
+            
+            $(".availability").change(function() {
+                const val = this.checked ? 'partial' : 'full';
+                $("input[name=availability]").val(val);
+                $('form.search-form').submit();
             });
 
             $(".ticket-send-btn").click(function(e) {
