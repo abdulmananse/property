@@ -146,6 +146,13 @@ class HomeController extends Controller
                 }
             }
 
+            $availability = 'full';
+            $having = 'HAVING total_bookings = 0';
+            if ($request->filled('availability') && $request->availability == 'partial') {
+                $availability = 'partial';
+                $having = 'HAVING total_bookings >= 0';
+            }
+
             list($startDate, $endDate) = explode(' - ', $request->daterange);
             $iterateStartDate = $startDate = Carbon::createFromFormat('m/d/Y', $startDate)->format('Y-m-d');
             $endDate = Carbon::createFromFormat('m/d/Y', $endDate)->format('Y-m-d');
@@ -185,29 +192,43 @@ class HomeController extends Controller
                 ' . $where . '
                 GROUP BY
                     properties.id,properties.property_id
-                HAVING total_bookings = 0
+                ' . $having . '
                 ORDER BY ' . $orderBy;
-
+            
             $properties = DB::select(DB::raw($query));
-
 
             foreach ($properties as $key => $property) {
                 $totalPrice = 0;
+                $properties[$key]->prices = [];
                 foreach ($rangeDatesArray as $date) {
-                    $prices = PropertyPrice::where(['property_id' => $property->id])->whereDate('from', '<=', $date)->whereDate('to', '>=', $date)->first();
-                    if ($prices) {
-                        $totalPrice += $prices->per_night_price;
-                        $properties[$key]->prices[$date] = $prices->per_night_price;
-                    } else {
-                        $properties[$key]->prices[$date] = 0.00;
+
+                    $checkPrice = true;
+                    if ($availability == 'partial') {
+                        $events = EventModel::where('property_id', $property->id)->whereDate('start', '<=', $date)->whereDate('end', '>=', $date)->first();
+                        $checkPrice = ($events) ? false : true;
+                    }
+
+                    if ($checkPrice) {
+                        $prices = PropertyPrice::where(['property_id' => $property->id])->whereDate('from', '<=', $date)->whereDate('to', '>=', $date)->first();
+                        if ($prices) {
+                            $totalPrice += $prices->per_night_price;
+                            $properties[$key]->prices[$date] = $prices->per_night_price;
+                        } else {
+                            $properties[$key]->prices[$date] = 0.00;
+                        }
                     }
                 }
+                
                 $properties[$key]->total_price = $totalPrice;
                 $average = $totalPrice / count($rangeDatesArray);
                 if ($average > 0) {
                     $properties[$key]->average = $average;
                 } else {
                     $properties[$key]->average = '99999999999999999999';
+                }
+
+                if (empty($properties[$key]->prices)) {
+                    unset($properties[$key]);
                 }
             }
 
