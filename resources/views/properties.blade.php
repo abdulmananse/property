@@ -55,7 +55,7 @@
             height: 25px;
         }
 
-        .switch input { 
+        .switch input {
             opacity: 0;
             width: 0;
             height: 0;
@@ -260,18 +260,18 @@
                 </div>
             </div>
             <div class="container-sort{{ $properties ? ' d-block' : '' }}">
-                
+
                 <div class="select-wrapper sort">
 
                     <div class="col-auto select-click filteri">
 
                         <div class="available-filter">
-                            <b style="float: left;margin-right: 10px;">Full availability</b>
+                            <b style="float: left;margin-right: 10px;">Full Availability</b>
                             <label class="switch">
                                 <input type="checkbox" class="availability" value="partial" {{ @request()->availability == 'partial' ? 'checked' : '' }}>
                                 <span class="slider round"></span>
                             </label>
-                            <b style="float: right;margin-left: 10px;margin-right: 120px;">Partial availability</b>
+                            <b style="float: right;margin-left: 10px;margin-right: 120px;">Partial Availability</b>
                         </div>
 
                         <div class="select  filterr">
@@ -681,7 +681,7 @@
             $(".placement_types").change(function() {
                 $("input[name=placement_types]").val($(this).val());
             });
-            
+
             $(".availability").change(function() {
                 const val = this.checked ? 'partial' : 'full';
                 $("input[name=availability]").val(val);
