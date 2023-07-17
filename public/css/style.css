@@ -265,9 +265,27 @@ select, input{
 }
 .select-click{
     /*width: 150px;*/
-    margin-right: 18px;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    margin: 0px 13px;
+}
+.available-filter{
+    margin-left: 13px;
+    align-self: center;
+    color: #163245;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: InriaSerif;
+    display: flex;
+}
+.available-filter .switch{
+    margin: 0px 10px;
+}
+input:checked + .slider{
+    background-color: #1fb797!important;
+}
+.sort-filter{
+    display: flex;
 }
 .hidden {
     display: none !important;
@@ -904,7 +922,9 @@ a.disabled{
 .mini-icons a{
     padding: 7px 0px 0px 0px!important;
 }
-
+.daterangepicker .drp-calendar {
+    max-width: 380px !important;
+}
 
 
 @media (max-width: 1430px) {
@@ -962,6 +982,9 @@ a.disabled{
     }
     .filter-form{
         left: 253px;
+    }
+    .available-filter{
+        font-size: 13px;
     }
 }
 @media (max-width: 1020px) {
@@ -1293,6 +1316,34 @@ a.disabled{
     .date-price{
         gap: 40px;
         margin-bottom: 10px;
+    }
+    .sort .filteri{
+        display: flex;
+        flex-direction: column;
+    }
+    .available-filter{
+        order: 2;
+        margin-right: auto;
+        margin-left: 0px;
+        margin-bottom: 8px;
+		width: 100%;
+		align-items: center;
+    }
+    .sort-filter{
+        order: 1;
+    }
+    .select{
+        margin-right: 0px;
+    }
+    .sort-filter .filterr{
+        margin-right: 7px;
+    }
+    .sort-filter .sort-dropdown{
+        margin-left: 7px;
+    }
+    select.monthselect,
+    select.yearselect{
+        width: 45% !important;
     }
 
 }

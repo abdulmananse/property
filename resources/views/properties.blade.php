@@ -44,10 +44,6 @@
             top: 6px;
         }
 
-        .available-filter {
-            margin-top: 20px;
-        }
-
         .switch {
             position: relative;
             display: inline-block;
@@ -266,61 +262,62 @@
                     <div class="col-auto select-click filteri">
 
                         <div class="available-filter">
-                            <b style="float: left;margin-right: 10px;">Full Availability</b>
+                            <b class="available-filter-left">Full Availability</b>
                             <label class="switch">
                                 <input type="checkbox" class="availability" value="partial" {{ @request()->availability == 'partial' ? 'checked' : '' }}>
                                 <span class="slider round"></span>
                             </label>
-                            <b style="float: right;margin-left: 10px;margin-right: 120px;">Partial Availability</b>
+                            <b class="available-filter-right">Partial Availability</b>
                         </div>
-
-                        <div class="select  filterr">
-                            <div class="select__trigger" role="button">
-                                <span>Filters</span>
-                                <img class="downarrow" src="{{ asset('img/icon-filter@3x.png') }}">
+                        <div class="sort-filter">
+                            <div class="select  filterr">
+                                <div class="select__trigger" role="button">
+                                    <span>Filters</span>
+                                    <img class="downarrow" src="{{ asset('img/icon-filter@3x.png') }}">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="filter-form" id="filter-form">
-                            <img class="iconblack-x" src="{{ asset('img/iconblack-xmark@3x.png') }}">
-                            <p style="text-align: left;">View types</p>
-                            <div class="select-form">
-                                <select class="view_types">
-                                    <option value="">All view types</option>
-                                    @foreach($viewTypes as $viewType)
-                                    <option value="{{ $viewType }}" {{ (@request()->view_types == $viewType) ? 'selected' : '' }}>{{ $viewType }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <p style="text-align: left;">Placement Types</p>
+                            <div class="filter-form" id="filter-form">
+                                <img class="iconblack-x" src="{{ asset('img/iconblack-xmark@3x.png') }}">
+                                <p style="text-align: left;">View types</p>
+                                <div class="select-form">
+                                    <select class="view_types">
+                                        <option value="">All view types</option>
+                                        @foreach($viewTypes as $viewType)
+                                        <option value="{{ $viewType }}" {{ (@request()->view_types == $viewType) ? 'selected' : '' }}>{{ $viewType }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <p style="text-align: left;">Placement Types</p>
 
-                            <div class="select-form">
-                                <select class="placement_types">
-                                    <option value="">All placement types</option>
-                                    @foreach($placementTypes as $placementType)
-                                    <option value="{{ $placementType }}" {{ (@request()->placement_types == $placementType) ? 'selected' : '' }}>{{ $placementType }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="select-form">
+                                    <select class="placement_types">
+                                        <option value="">All placement types</option>
+                                        @foreach($placementTypes as $placementType)
+                                        <option value="{{ $placementType }}" {{ (@request()->placement_types == $placementType) ? 'selected' : '' }}>{{ $placementType }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button class="ticket-send set-filters-btn" style="width:100%">Set Filters</button>
                             </div>
-                            <button class="ticket-send set-filters-btn" style="width:100%">Set Filters</button>
-                        </div>
 
-                        <div class="select sort-dropdown">
-                            <div class="select__trigger">
-                                <span>{{ @request()->sort_by ? @request()->sort_by : 'Sort by' }}</span>
-                                <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
-                            </div>
-                            <div class="form-control custom-options open-sort">
-                                <span selected class="custom-option select-sortby"
-                                    data-value="Community Ascending">Community Ascending</span>
-                                <span selected="" class="custom-option select-sortby"
-                                    data-value="Price Low to High">Price Low to High</span>
-                                <span selected class="custom-option select-sortby"
-                                    data-value="Property Name A to Z">Property Name A to Z</span>
-                                <span selected class="custom-option select-sortby" data-value="No. of Bedrooms">No. of
-                                    Bedrooms</span>
-                                <span selected class="custom-option select-sortby" data-value="Property Type">Property
-                                    Type</span>
+                            <div class="select sort-dropdown">
+                                <div class="select__trigger">
+                                    <span>{{ @request()->sort_by ? @request()->sort_by : 'Sort by' }}</span>
+                                    <img class="downarrow" src="{{ asset('img/down-arrow.png') }}">
+                                </div>
+                                <div class="form-control custom-options open-sort">
+                                    <span selected class="custom-option select-sortby"
+                                        data-value="Community Ascending">Community Ascending</span>
+                                    <span selected="" class="custom-option select-sortby"
+                                        data-value="Price Low to High">Price Low to High</span>
+                                    <span selected class="custom-option select-sortby"
+                                        data-value="Property Name A to Z">Property Name A to Z</span>
+                                    <span selected class="custom-option select-sortby" data-value="No. of Bedrooms">No. of
+                                        Bedrooms</span>
+                                    <span selected class="custom-option select-sortby" data-value="Property Type">Property
+                                        Type</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1112,14 +1109,16 @@
     </script>
     <script>
         $('input[name="dates"]').daterangepicker({
-			minDate:new Date()
+			minDate:new Date(),
+			showDropdowns: true,
 		});
 
 
         $(function() {
             $('input.daterange').daterangepicker({
                 opens: 'left',
-				minDate:new Date()
+				showDropdowns: true,
+				minDate:new Date(),
             }, function(start, end, label) {});
         });
     </script>
@@ -1127,6 +1126,7 @@
         $(function() {
             $('.regervation').daterangepicker({
 					minDate:new Date(),
+					showDropdowns: true,
                     "autoapply": true,
                     "linkedCalendars": false,
                 },
